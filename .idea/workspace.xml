@@ -5,20 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fdf05d9-d4fc-4652-899a-4c181ffb5ba2" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/product/controller/ProductController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/product/repository/ProductRepository.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/product/service/ProductService.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/enumeration/OrderStatus.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/study/springboot/domain/member/Member.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/com/study/springboot/domain/member/Member.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/classes/com/study/springboot/domain/member/QMember.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/com/study/springboot/domain/member/QMember.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/member/QMember.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/member/QMember.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/orderSystem/QOrderItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/orderSystem/QOrderItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/orderSystem/QOrderList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/orderSystem/QOrderList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/Member.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderItems.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/product/Product.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/product/Product.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
