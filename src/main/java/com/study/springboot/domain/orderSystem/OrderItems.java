@@ -38,8 +38,4 @@ public class OrderItems {
     private OrderList orderList;
 
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
-
 }

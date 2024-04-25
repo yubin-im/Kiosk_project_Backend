@@ -24,7 +24,6 @@ public class Product {
 
     @Column String productCode;
 
-
     @Column
     @Enumerated
     private CategoryProduct category;
