@@ -19,6 +19,9 @@ bin/
 
 ### IntelliJ IDEA ###
 **/application.properties.idea
+
 *.iws
 *.iml
+*.class
+*.properties
 
