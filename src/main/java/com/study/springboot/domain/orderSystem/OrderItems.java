@@ -8,6 +8,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
@@ -15,17 +18,28 @@ import lombok.NoArgsConstructor;
 public class OrderItems {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "order_items_id")
     private Long id;
+
+
+    @Column
+    private Integer orderPrice;
+
+    @Column
+    private Integer productAmount;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
 
     @ManyToOne
     @JoinColumn(name = "order_list_id")
     private OrderList orderList;
+
+
+    @ManyToOne
+    @JoinColumn(name = "member_id")
+    private Member member;
+
 }

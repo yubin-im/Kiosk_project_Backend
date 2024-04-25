@@ -1,6 +1,7 @@
 package com.study.springboot.domain.member;
 
 
+import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.enumeration.CategoryProduct;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -9,6 +10,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -35,5 +37,8 @@ public class Member {
     @Enumerated
     @Column
     private CategoryProduct category;
+
+    @OneToMany(mappedBy = "member")
+    private List<OrderList> orderList;
 
 }

@@ -11,12 +11,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table
-
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     @Column
     private String productName;
