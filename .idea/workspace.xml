@@ -5,14 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="7fdf05d9-d4fc-4652-899a-4c181ffb5ba2" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/member/QMember.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/orderSystem/QOrderItems.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/orderSystem/QOrderList.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/product/QProduct.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderItems.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderItem.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/OrderList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/repository/OrderItemsRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/repository/OrderItemRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/service/OrderItemsService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/orderSystem/service/OrderItemService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/Member.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/Member.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -118,7 +112,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.KioskBE [clean]">
+  <component name="RunManager" selected="Spring Boot.KioskProjectApplication">
     <configuration name="KioskBE [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />

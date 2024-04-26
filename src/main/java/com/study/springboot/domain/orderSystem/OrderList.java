@@ -22,7 +22,7 @@ public class OrderList {
     private Long id;
 
     @Column
-    private LocalDateTime orderListTime;
+    private LocalDateTime orderListTime = LocalDateTime.now();
 
     @Column
     private Integer orderListTotalPrice;

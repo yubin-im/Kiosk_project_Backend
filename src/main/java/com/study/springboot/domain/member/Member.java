@@ -16,20 +16,22 @@ import java.util.List;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@Table
-
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name="ID_MEMBER_ID_PW_CONSTRAINT", columnNames = {"id", "member_id", "member_pw"})
+})
 public class Member {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String memberId;
 
     @Column
     private String userName;
 
-    @Column
+
+    @Column(nullable = false)
     private String memberPw;
 
     @Column

@@ -10,7 +10,9 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table
+@Table(uniqueConstraints = {
+        @UniqueConstraint(name = "ID_PRODUCT_CODE_CONSTRAINT", columnNames = {"id", "product_code"})
+})
 public class Product {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +24,8 @@ public class Product {
     @Column
     private Integer productPrice;
 
-    @Column String productCode;
+    @Column(nullable = false)
+    private String productCode;
 
     @Column
     private String productImgUrl;
