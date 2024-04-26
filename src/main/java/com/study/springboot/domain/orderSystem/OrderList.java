@@ -1,7 +1,7 @@
 package com.study.springboot.domain.orderSystem;
 
 
-import com.study.springboot.domain.member.Member;
+import com.study.springboot.domain.member.User;
 import com.study.springboot.enumeration.OrderStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -32,8 +32,8 @@ public class OrderList {
     private OrderStatus orderStatus;
 
     @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
     private List<OrderItem>  orderItems = new ArrayList<>();

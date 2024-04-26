@@ -24,8 +24,6 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.study.springboot.domain.member.QMember member;
-
     public final ListPath<OrderItem, QOrderItem> orderItems = this.<OrderItem, QOrderItem>createList("orderItems", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
     public final DateTimePath<java.time.LocalDateTime> orderListTime = createDateTime("orderListTime", java.time.LocalDateTime.class);
@@ -33,6 +31,8 @@ public class QOrderList extends EntityPathBase<OrderList> {
     public final NumberPath<Integer> orderListTotalPrice = createNumber("orderListTotalPrice", Integer.class);
 
     public final EnumPath<com.study.springboot.enumeration.OrderStatus> orderStatus = createEnum("orderStatus", com.study.springboot.enumeration.OrderStatus.class);
+
+    public final com.study.springboot.domain.member.QUser user;
 
     public QOrderList(String variable) {
         this(OrderList.class, forVariable(variable), INITS);
@@ -52,7 +52,7 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public QOrderList(Class<? extends OrderList> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.member = inits.isInitialized("member") ? new com.study.springboot.domain.member.QMember(forProperty("member")) : null;
+        this.user = inits.isInitialized("user") ? new com.study.springboot.domain.member.QUser(forProperty("user")) : null;
     }
 
 }

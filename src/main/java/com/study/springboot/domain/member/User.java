@@ -2,7 +2,6 @@ package com.study.springboot.domain.member;
 
 
 import com.study.springboot.domain.orderSystem.OrderList;
-import com.study.springboot.enumeration.CategoryProduct;
 import com.study.springboot.enumeration.UserRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -19,7 +18,7 @@ import java.util.List;
 @Table(uniqueConstraints = {
         @UniqueConstraint(name="ID_MEMBER_ID_PW_CONSTRAINT", columnNames = {"id", "member_id", "member_pw"})
 })
-public class Member {
+public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -45,7 +44,7 @@ public class Member {
     @Column
     private UserRole userRole;
 
-    @OneToMany(mappedBy = "member")
+    @OneToMany(mappedBy = "user")
     private List<OrderList> orderList;
 
 }
