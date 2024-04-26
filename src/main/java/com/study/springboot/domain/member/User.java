@@ -73,7 +73,7 @@ public class User {
         return user;
     }
 
-    public static User makeUser(String userId, String userName, String userPw){
+    public static User makeUser(String userId, String userPw, String userName){
         User user = User.builder()
                 .userId(userId)
                 .userName(userName)
@@ -84,7 +84,7 @@ public class User {
         return user;
     }
 
-    public User updateUserInfo(String userId, String userName, String userPw){
+    public User updateUserInfo(String userId, String userPw, String userName){
         return User.builder()
                 .id(this.id)
                 .userId(userId)
@@ -123,6 +123,14 @@ public class User {
                 .orderList(this.orderList)
                 .userPoint(this.userPoint)
                 .build();
+    }
+
+    public Boolean isAdmin(){
+        return this.userRole.equals(UserRole.ADMIN);
+    }
+
+    public Boolean isUserPw(String userPw){
+        return this.userPw.equals(userPw);
     }
 
 }

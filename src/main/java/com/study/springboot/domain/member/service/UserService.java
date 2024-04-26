@@ -1,10 +1,10 @@
 package com.study.springboot.domain.member.service;
 
 
+import com.study.springboot.datas.KioskSession;
 import com.study.springboot.domain.member.User;
-import com.study.springboot.domain.member.dto.RequestLoginDto;
-import com.study.springboot.domain.member.dto.RequestUserDto;
-import com.study.springboot.domain.member.dto.UserDto;
+import com.study.springboot.domain.member.dto.RequestAddUserDto;
+import com.study.springboot.domain.member.dto.RequestEditUserDto;
 import com.study.springboot.domain.member.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,8 +20,8 @@ public class UserService {
 
 
     @Transactional
-    public User addUser(RequestUserDto dto){
-        User user = userRepository.save(dto.toEntity());
+    public User addUser(RequestAddUserDto dto){
+        User user = userRepository.save(dto.toUserEntity());
 
         try{
             if(user == null) throw new RuntimeException("멤버 추가 오류");
@@ -38,6 +38,20 @@ public class UserService {
     }
 
 
+    public KioskSession setSession(User user){
 
+        KioskSession session = null;
+
+        if(user.isAdmin()){
+            session = KioskSession.makeAdminSession(user.getUserId());
+        }
+        else{
+            session = KioskSession.makeUserSession(user.getUserId());
+        }
+
+        session.login();
+
+        return session;
+    }
 
 }

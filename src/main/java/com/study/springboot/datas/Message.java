@@ -11,6 +11,7 @@ public class Message {
     private String status;
     private String message;
 
+
     @Builder
     public Message(String status, String message) {
         this.status = status;
