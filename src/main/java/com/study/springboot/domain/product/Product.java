@@ -25,7 +25,10 @@ public class Product {
     @Column String productCode;
 
     @Column
-    @Enumerated
+    private String productImgUrl;
+
+    @Column
+    @Enumerated(EnumType.STRING)
     private CategoryProduct category;
 
 }
