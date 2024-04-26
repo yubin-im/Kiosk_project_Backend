@@ -24,21 +24,21 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String memberId;
+    private String userId;
 
     @Column
     private String userName;
 
 
     @Column(nullable = false)
-    private String memberPw;
+    private String userPw;
 
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate memberJoinDate;
+    private LocalDate userJoinDate;
 
     @Column
-    private Integer memberPoint;
+    private Integer userPoint;
 
     @Enumerated(EnumType.STRING)
     @Column
