@@ -84,4 +84,45 @@ public class User {
         return user;
     }
 
+    public User updateUserInfo(String userId, String userName, String userPw){
+        return User.builder()
+                .id(this.id)
+                .userId(userId)
+                .userName(userName)
+                .userPw(userPw)
+                .userJoinDate(this.userJoinDate)
+                .userRole(this.userRole)
+                .orderList(this.orderList)
+                .userPoint(this.userPoint)
+                .build();
+    }
+
+
+    public User addUserPoint(Integer point){
+        Integer updatedPoint = this.userPoint + point;
+        return User.builder()
+                .id(this.id)
+                .userId(userId)
+                .userName(userName)
+                .userPw(userPw)
+                .userJoinDate(this.userJoinDate)
+                .userRole(this.userRole)
+                .orderList(this.orderList)
+                .userPoint(updatedPoint)
+                .build();
+    }
+
+    public User updateUserJoinDate(LocalDate userJoinDate){
+        return User.builder()
+                .id(this.id)
+                .userId(userId)
+                .userName(userName)
+                .userPw(userPw)
+                .userJoinDate(userJoinDate)
+                .userRole(this.userRole)
+                .orderList(this.orderList)
+                .userPoint(this.userPoint)
+                .build();
+    }
+
 }
