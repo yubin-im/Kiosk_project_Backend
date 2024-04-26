@@ -25,6 +25,10 @@ public class OrderList {
     private LocalDateTime orderListTime;
 
     @Column
+    private Integer orderListTotalPrice;
+
+    @Column
+    @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
     @ManyToOne
@@ -32,6 +36,6 @@ public class OrderList {
     private Member member;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
-    private List<OrderItems>  orderItems = new ArrayList<>();
+    private List<OrderItem>  orderItems = new ArrayList<>();
 
 }

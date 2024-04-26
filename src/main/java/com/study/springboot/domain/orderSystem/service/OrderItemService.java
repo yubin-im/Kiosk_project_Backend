@@ -1,12 +1,12 @@
 package com.study.springboot.domain.orderSystem.service;
 
 
-import com.study.springboot.domain.orderSystem.repository.OrderItemsRepository;
+import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class OrderItemsService {
-    private final OrderItemsRepository orderItemsRepository;
+public class OrderItemService {
+    private final OrderItemRepository orderItemRepository;
 }
