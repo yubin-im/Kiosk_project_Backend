@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/member")
@@ -25,21 +27,22 @@ public class UserController {
         String userId = dto.getUserId();
         String userPw = dto.getUserPw();
 
-        //응답 메세지 생성
         Message message = userService.setLoginMessage(userId, userPw);
 
-        //생성된 응답코드에 따라 session 생성
-        StatusCode statusCode = message.getStatus();
         KioskSession kioskSession = null;
 
-        //응답코드가 관리자 로그인
-        if(statusCode.equals(StatusCode.ADMIN_LOGIN)){
+        //세션 setting
+        //응답 결과가 '관리자 로그인 성공'
+        if(message.getStatus().equals(StatusCode.ADMIN_LOGIN)){
             kioskSession = KioskSession.makeAdminSession(userId);
         }
-        //응답코드가 일반 유저 로그인
-        else if(statusCode.equals(StatusCode.USER_LOGIN)){
+
+        //응답 결과가 '유저 로그인 성공'
+        else if(message.getMessage().equals(StatusCode.USER_LOGIN)){
             kioskSession = KioskSession.makeUserSession(userId);
         }
+
+        session.setAttribute("sesseion", kioskSession);
 
         return ResponseEntity.ok(message);
     }

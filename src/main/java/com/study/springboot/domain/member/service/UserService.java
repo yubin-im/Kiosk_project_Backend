@@ -76,10 +76,9 @@ public class UserService {
 
     public Message setLoginMessage(String userId, String userPw){
 
-        Optional<User> optional = findByUserId(userId);
+        Optional<User> optional = userRepository.findByUserId(userId);
 
-
-        //유저  not found
+        //아이디가 없다면
         if(!optional.isPresent()){
             Message message = Message.userNotFound();
             return message;

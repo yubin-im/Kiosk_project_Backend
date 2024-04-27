@@ -2,11 +2,13 @@ package com.study.springboot.datas;
 
 
 import com.study.springboot.enumeration.error.StatusCode;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Message {
 
     private StatusCode status;
@@ -49,5 +51,13 @@ public class Message {
 
     public static Message adminLoginSuccess(){
         return new Message(StatusCode.ADMIN_LOGIN, StatusCode.ADMIN_LOGIN.getValue(), "관리자 로그인 성공");
+    }
+
+    public static Message adminNoPermission(){
+        return new Message(StatusCode.ADMIN_NO_PERMISSION, StatusCode.ADMIN_NO_PERMISSION.getValue(), "권한이 없습니다");
+    }
+
+    public static Message userNoPermission(){
+        return new Message(StatusCode.USER_NO_PERMISSION, StatusCode.USER_NO_PERMISSION.getValue(), "권한이 없습니다");
     }
 }

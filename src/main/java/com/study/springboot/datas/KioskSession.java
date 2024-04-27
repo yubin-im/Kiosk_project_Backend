@@ -2,6 +2,7 @@ package com.study.springboot.datas;
 
 import com.study.springboot.domain.member.User;
 import com.study.springboot.enumeration.UserRole;
+import jakarta.servlet.http.HttpSession;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -50,8 +51,16 @@ public class KioskSession {
         }
 
         session.login();
-
         return session;
+    }
+
+    private Boolean isAdmin(){
+        return this.userRole.equals(UserRole.ADMIN);
+    }
+
+    public static Boolean isAdmin(HttpSession session){
+        KioskSession kioskSession = (KioskSession) session.getAttribute("session");
+        return (kioskSession != null && kioskSession.isAdmin());
     }
 
 
