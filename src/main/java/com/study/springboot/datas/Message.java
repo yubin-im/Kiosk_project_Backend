@@ -42,4 +42,12 @@ public class Message {
     public static Message userRegisterSuccess(){
         return new Message(StatusCode.USER_REG_SUCCESS, StatusCode.USER_REG_SUCCESS.getValue(), "회원가입 성공");
     }
+
+    public static Message adminPwInvalid(){
+        return new Message(StatusCode.ADMIN_PW_INVALID, StatusCode.ADMIN_PW_INVALID.getValue(), "비밀번호가 틀렸습니다");
+    }
+
+    public static Message adminLoginSuccess(){
+        return new Message(StatusCode.ADMIN_LOGIN, StatusCode.ADMIN_LOGIN.getValue(), "관리자 로그인 성공");
+    }
 }

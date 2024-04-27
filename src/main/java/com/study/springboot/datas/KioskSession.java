@@ -25,14 +25,14 @@ public class KioskSession {
         isLogin = true;
     }
 
-    private static KioskSession makeAdminSession(String userId){
+    public static KioskSession makeAdminSession(String userId){
         return KioskSession.builder()
                 .userId(userId)
                 .userRole(UserRole.ADMIN)
                 .build();
     }
 
-    private static KioskSession makeUserSession(String userId){
+    public static KioskSession makeUserSession(String userId){
         return KioskSession.builder()
                 .userId(userId)
                 .userRole(UserRole.USER)
@@ -53,4 +53,6 @@ public class KioskSession {
 
         return session;
     }
+
+
 }

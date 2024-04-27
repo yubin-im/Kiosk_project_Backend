@@ -40,9 +40,44 @@ public class UserService {
         return userRepository.findByUserId(userId);
     }
 
-    public Message setUserLoginMessage(String userId, String userPw){
+    private Message setAdminLoginMessage(User admin, String adminPw){
+
+        //비밀번호 틀림
+        if(!admin.isUserPw(adminPw)){
+            Message message = Message.adminPwInvalid();
+            return message;
+        }
+
+        Message message = Message.adminLoginSuccess();
+        return message;
+    }
+
+    private Message setUserLoginMessage(User user, String userPw){
+
+        //만약 관리자일 경우 에러 발생
+        try{
+            if(user.isAdmin()){
+                throw new RuntimeException("관리자입니다");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //비번 오류
+        if(!user.isUserPw(userPw)){
+            Message message = Message.userPwInvalid();
+            return message;
+        }
+
+        //로그인 성공
+        Message message = Message.userLoginSuccess();
+        return message;
+    }
+
+    public Message setLoginMessage(String userId, String userPw){
 
         Optional<User> optional = findByUserId(userId);
+
 
         //유저  not found
         if(!optional.isPresent()){
@@ -52,17 +87,15 @@ public class UserService {
 
         User user = optional.get();
 
-        //비밀번호 불일치
-        if(!user.isUserPw(user.getUserPw())){
-            //로그인에 실패하였습니다
-            Message message = Message.userPwInvalid();
+        //관리자 로그인
+        if(user.isAdmin()){
+            Message message = setAdminLoginMessage(user, userPw);
             return message;
+
         }
 
-        //로그인 성공
-        KioskSession userSession = KioskSession.setSession(user);
-        Message message = Message.userLoginSuccess();
-
+        //일반 회원 로그인
+        Message message = setUserLoginMessage(user, userPw);
         return message;
     }
 
