@@ -37,7 +37,7 @@ public class User {
 
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate userJoinDate = LocalDate.now();
+    private LocalDate userJoinDate;
 
     @Column
     private Integer userPoint = 0;
@@ -68,6 +68,7 @@ public class User {
                 .userName(userName)
                 .userPw(userPw)
                 .userRole(UserRole.ADMIN)
+                .userJoinDate(LocalDate.now())
                 .build();
 
         return user;
@@ -79,6 +80,8 @@ public class User {
                 .userName(userName)
                 .userPw(userPw)
                 .userRole(UserRole.USER)
+                .userJoinDate(LocalDate.now())
+                .userPoint(0)
                 .build();
 
         return user;
