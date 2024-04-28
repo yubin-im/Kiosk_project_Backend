@@ -2,10 +2,7 @@ package com.study.springboot.domain.product.dto;
 
 
 import com.study.springboot.domain.product.Product;
-import com.study.springboot.enumeration.CategoryProduct;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import com.study.springboot.enumeration.ProductCategory;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -23,7 +20,7 @@ public class RequestProductEditDto {
 
     private String productImgUrl;
 
-    private CategoryProduct category;
+    private ProductCategory category;
 
     public Product toEntity(Long id){
         return Product.builder()

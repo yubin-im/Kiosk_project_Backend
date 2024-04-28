@@ -8,6 +8,9 @@ import com.study.springboot.domain.product.Product;
 import com.study.springboot.domain.product.dto.ProductDto;
 import com.study.springboot.domain.product.dto.RequestProductEditDto;
 import com.study.springboot.domain.product.dto.RequestProductRemoveDto;
+import com.study.springboot.domain.product.dto.RequestSearchDto;
+import com.study.springboot.enumeration.ProductCategory;
+import com.study.springboot.enumeration.SearchCategory;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +39,7 @@ public class AdminController {
             return ResponseEntity.ok(message);
         }
 
-        List<ProductDto> dto = adminService.findAll();
+        List<ProductDto> dto = adminService.findAllProduct();
 
         return ResponseEntity.ok(dto);
     }
@@ -84,6 +87,19 @@ public class AdminController {
         Message message = adminService.editProduct(dto);
 
         return ResponseEntity.ok(message);
+    }
+
+    @PostMapping("/product/list/search")
+    public ResponseEntity productSearch(@RequestBody RequestSearchDto dto, HttpSession session){
+        String searchKeyword = dto.getSearchKeyword();
+        Integer page = dto.getPage();
+        Integer pageSize = dto.getPageSize();
+        ProductCategory category = dto.getSearchProductCategory();
+
+
+        List<Product> result = adminService.findProductsBy(category, searchKeyword, page, pageSize);
+        return ResponseEntity.ok(result);
+
     }
 
 }

@@ -2,7 +2,7 @@ package com.study.springboot.domain.product.dto;
 
 
 import com.study.springboot.domain.product.Product;
-import com.study.springboot.enumeration.CategoryProduct;
+import com.study.springboot.enumeration.ProductCategory;
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -23,11 +23,11 @@ public class ProductDto {
 
     private String productImgUrl;
 
-    private CategoryProduct category;
+    private ProductCategory category;
 
 
     @Builder
-    public ProductDto(String productName, Integer productPrice, String productCode, String productImgUrl, CategoryProduct category) {
+    public ProductDto(String productName, Integer productPrice, String productCode, String productImgUrl, ProductCategory category) {
         this.productName = productName;
         this.productPrice = productPrice;
         this.productCode = productCode;

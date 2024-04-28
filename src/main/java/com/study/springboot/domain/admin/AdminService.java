@@ -1,17 +1,25 @@
 package com.study.springboot.domain.admin;
 
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.springboot.datas.AdminMessage;
 import com.study.springboot.datas.Message;
 import com.study.springboot.domain.product.Product;
+import com.study.springboot.domain.product.QProduct;
 import com.study.springboot.domain.product.dto.ProductDto;
 import com.study.springboot.domain.product.dto.RequestProductEditDto;
 import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.product.service.ProductService;
+import com.study.springboot.enumeration.ProductCategory;
+import com.study.springboot.enumeration.SearchCategory;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -23,9 +31,11 @@ public class AdminService {
     private final ProductRepository productRepository;
     private final ProductService productService;
 
+    private final JPAQueryFactory queryFactory;
+
 
     @Transactional(readOnly = true)
-    public List<ProductDto> findAll(){
+    public List<ProductDto> findAllProduct(){
         return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
     }
 
@@ -63,7 +73,6 @@ public class AdminService {
 
     @Transactional
     Message editProduct(RequestProductEditDto dto){
-        System.out.println("PC: " + dto.getProductCode());
         Optional<Product> optional = productRepository.findProductByProductCode(dto.getProductCode());
 
         if(!optional.isPresent()){
@@ -79,4 +88,32 @@ public class AdminService {
         return AdminMessage.productEditSuccess();
 
     }
+
+    @Transactional(readOnly = true)
+    List<Product> findProductsBy(final ProductCategory category, final String searchKeyword, final int page, final int pageSize){
+//        List<Sort.Order> sorts = new ArrayList<>();
+//        Sort.Order sort = Sort.Order.desc(category.getValue());
+//        sorts.add(sort);
+
+//        System.out.println("category = " + category);
+
+//        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
+
+//        List<ProductDto> list = productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
+
+        QProduct product = QProduct.product;
+        List<Product> list = queryFactory.selectFrom(product)
+                .where(
+                        product.category.eq(category)
+                                .and(
+                                        product.productCode.contains(searchKeyword)
+                                                .or(product.productName.contains(searchKeyword))
+                                )
+                )
+                .fetch();
+
+        return list;
+
+    }
 }
+
