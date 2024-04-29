@@ -37,7 +37,7 @@ public class User {
 
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private LocalDate userJoinDate = LocalDate.now();
+    private LocalDate userJoinDate;
 
     @Column
     private Integer userPoint = 0;
@@ -68,23 +68,26 @@ public class User {
                 .userName(userName)
                 .userPw(userPw)
                 .userRole(UserRole.ADMIN)
+                .userJoinDate(LocalDate.now())
                 .build();
 
         return user;
     }
 
-    public static User makeUser(String userId, String userName, String userPw){
+    public static User makeUser(String userId, String userPw, String userName){
         User user = User.builder()
                 .userId(userId)
                 .userName(userName)
                 .userPw(userPw)
                 .userRole(UserRole.USER)
+                .userJoinDate(LocalDate.now())
+                .userPoint(0)
                 .build();
 
         return user;
     }
 
-    public User updateUserInfo(String userId, String userName, String userPw){
+    public User updateUserInfo(String userId, String userPw, String userName){
         return User.builder()
                 .id(this.id)
                 .userId(userId)
@@ -123,6 +126,14 @@ public class User {
                 .orderList(this.orderList)
                 .userPoint(this.userPoint)
                 .build();
+    }
+
+    public Boolean isAdmin(){
+        return this.userRole.equals(UserRole.ADMIN);
+    }
+
+    public Boolean isUserPw(String userPw){
+        return this.userPw.equals(userPw);
     }
 
 }

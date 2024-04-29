@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class RequestUserDto {
+public class RequestEditUserDto {
 
     private Long id;
 

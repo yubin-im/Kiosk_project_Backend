@@ -1,9 +1,10 @@
 package com.study.springboot.domain.product;
 
 
-import com.study.springboot.enumeration.CategoryProduct;
+import com.study.springboot.enumeration.ProductCategory;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -32,6 +33,16 @@ public class Product {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private CategoryProduct category;
+    private ProductCategory category;
 
+
+    @Builder
+    public Product(Long id, String productName, Integer productPrice, String productCode, String productImgUrl, ProductCategory category) {
+        this.id = id;
+        this.productName = productName;
+        this.productPrice = productPrice;
+        this.productCode = productCode;
+        this.productImgUrl = productImgUrl;
+        this.category = category;
+    }
 }

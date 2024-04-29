@@ -1,17 +1,19 @@
 package com.study.springboot.domain.member;
 
 
+import com.study.springboot.datas.KioskSession;
+import com.study.springboot.datas.Message;
+import com.study.springboot.domain.member.dto.RequestAddUserDto;
 import com.study.springboot.domain.member.dto.RequestLoginDto;
 import com.study.springboot.domain.member.service.UserService;
+import com.study.springboot.enumeration.error.StatusCode;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/member")
@@ -20,22 +22,43 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
-    public HttpStatus userLogin(RequestLoginDto dto){
+    @PostMapping("/login")
+    public ResponseEntity<Message> userLogin(@RequestBody RequestLoginDto dto, HttpSession session){
         String userId = dto.getUserId();
         String userPw = dto.getUserPw();
-        Optional<User> optional = userService.findByUserId(userId);
 
-        if(!optional.isPresent()){
-            return HttpStatus.NOT_FOUND;
+        Message message = userService.setLoginMessage(userId, userPw);
+
+        KioskSession kioskSession = null;
+
+        //세션 setting
+        //응답 결과가 '관리자 로그인 성공'
+        if(message.getStatus().equals(StatusCode.ADMIN_LOGIN)){
+            kioskSession = KioskSession.makeAdminSession(userId);
         }
 
-        User user = optional.get();
-        return (user.getUserPw().equals(userPw)) ? HttpStatus.OK : HttpStatus.NOT_FOUND;
+        //응답 결과가 '유저 로그인 성공'
+        else if(message.getMessage().equals(StatusCode.USER_LOGIN)){
+            kioskSession = KioskSession.makeUserSession(userId);
+        }
+
+        session.setAttribute("sesseion", kioskSession);
+
+        return ResponseEntity.ok(message);
     }
 
 
 
-//    @PostMapping("/register")
-//    public HttpStatus ad
+
+    @PostMapping("/register")
+    public ResponseEntity<Message> addUser(@RequestBody RequestAddUserDto dto){
+
+        String userId = dto.getUserId();
+        String userPw = dto.getUserPw();
+        String userName = dto.getUserName();
+
+        Message message = userService.setUserRegisterMessage(userId, userPw, userName);
+
+        return ResponseEntity.ok(message);
+    }
 }
