@@ -3,6 +3,7 @@ package com.study.springboot.domain.admin;
 import com.study.springboot.domain.member.dto.UserDto;
 import com.study.springboot.domain.member.dto.UserListDto;
 import com.study.springboot.domain.member.service.MemberService;
+import com.study.springboot.domain.member.service.UserService;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
@@ -18,7 +19,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/admin")
 public class AdminController {
-    private final MemberService memberService;
+    private final UserService userService;
     private final OrderListService orderListService;
 
     /*
@@ -29,7 +30,7 @@ public class AdminController {
                                                   @RequestParam(value="text", required = false) @Nullable String text,
                                                   @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
                                                   ){
-        return ResponseEntity.ok().body(memberService.getMemberList(type, text, page));
+        return ResponseEntity.ok().body(userService.getMemberList(type, text, page));
     }
 
     /*
@@ -38,7 +39,7 @@ public class AdminController {
      */
     @GetMapping("/member/{id}")
     public ResponseEntity<UserDto> getMember(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(memberService.getMember(id));
+        return ResponseEntity.ok().body(userService.getMember(id));
     }
 
     /*
@@ -46,7 +47,7 @@ public class AdminController {
      */
     @DeleteMapping("/member/{id}")
     public ResponseEntity deleteMember(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(memberService.deleteMember(id));
+        return ResponseEntity.ok().body(userService.deleteMember(id));
     }
 
     /*
@@ -54,7 +55,7 @@ public class AdminController {
      */
     @PutMapping("/member/{id}")
     public ResponseEntity updateMember(@PathVariable("id") Long id, @RequestBody UserDto dto){
-        return ResponseEntity.ok().body(memberService.updateMember(id, dto));
+        return ResponseEntity.ok().body(userService.updateMember(id, dto));
     }
 
 
