@@ -1,4 +1,4 @@
-package com.study.springboot.domain.member.dto;
+package com.study.springboot.domain.user.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

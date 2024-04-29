@@ -1,7 +1,7 @@
 package com.study.springboot.domain.orderSystem;
 
 
-import com.study.springboot.domain.member.User;
+import com.study.springboot.domain.user.User;
 import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

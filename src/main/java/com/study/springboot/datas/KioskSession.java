@@ -1,6 +1,6 @@
 package com.study.springboot.datas;
 
-import com.study.springboot.domain.member.User;
+import com.study.springboot.domain.user.User;
 import com.study.springboot.enumeration.UserRole;
 import jakarta.servlet.http.HttpSession;
 import lombok.Builder;

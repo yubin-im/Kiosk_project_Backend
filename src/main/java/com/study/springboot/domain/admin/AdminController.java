@@ -1,19 +1,29 @@
 package com.study.springboot.domain.admin;
 
-import com.study.springboot.domain.member.dto.UserDto;
-import com.study.springboot.domain.member.dto.UserListDto;
-import com.study.springboot.domain.member.service.MemberService;
-import com.study.springboot.domain.member.service.UserService;
+import com.study.springboot.datas.KioskSession;
+import com.study.springboot.datas.Message;
+import com.study.springboot.domain.user.dto.UserDto;
+import com.study.springboot.domain.user.dto.UserListDto;
+import com.study.springboot.domain.user.service.UserService;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
+import com.study.springboot.domain.product.Product;
+import com.study.springboot.domain.product.dto.ProductDto;
+import com.study.springboot.domain.product.dto.RequestProductEditDto;
+import com.study.springboot.domain.product.dto.RequestProductRemoveDto;
+import com.study.springboot.domain.product.dto.RequestSearchDto;
+import com.study.springboot.enumeration.ProductCategory;
+import com.study.springboot.enumeration.SearchCategory;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,41 +31,42 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final OrderListService orderListService;
+    private final AdminService adminService;
 
     /*
     회원 목록
      */
-    @GetMapping("/member")
-    public ResponseEntity<UserListDto> memberList(@RequestParam(value="type", required = false) @Nullable String type,
-                                                  @RequestParam(value="text", required = false) @Nullable String text,
-                                                  @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
+    @GetMapping("/user")
+    public ResponseEntity<UserListDto> userList(@RequestParam(value="type", required = false) @Nullable String type,
+                                                @RequestParam(value="text", required = false) @Nullable String text,
+                                                @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
                                                   ){
-        return ResponseEntity.ok().body(userService.getMemberList(type, text, page));
+        return ResponseEntity.ok().body(userService.getUserList(type, text, page));
     }
 
     /*
     회원 상세 조회
     TODO: JPA N+1 문제 해결하기
      */
-    @GetMapping("/member/{id}")
-    public ResponseEntity<UserDto> getMember(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(userService.getMember(id));
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(userService.getUser(id));
     }
 
     /*
     회원 삭제
      */
-    @DeleteMapping("/member/{id}")
-    public ResponseEntity deleteMember(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(userService.deleteMember(id));
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(userService.deleteUser(id));
     }
 
     /*
     회원 수정
      */
-    @PutMapping("/member/{id}")
-    public ResponseEntity updateMember(@PathVariable("id") Long id, @RequestBody UserDto dto){
-        return ResponseEntity.ok().body(userService.updateMember(id, dto));
+    @PutMapping("/user/{id}")
+    public ResponseEntity updateUser(@PathVariable("id") Long id, @RequestBody UserDto dto){
+        return ResponseEntity.ok().body(userService.updateUser(id, dto));
     }
 
 
