@@ -36,6 +36,23 @@ public class OrderList {
     private User user;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
-    private List<OrderItem>  orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
+    public void update(LocalDateTime orderListTime, Integer orderListTotalPrice, OrderListStatus orderListStatus){
+        this.orderListTime=orderListTime;
+        this.orderListTotalPrice=orderListTotalPrice;
+        this.orderListStatus=orderListStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderList{" +
+                "id=" + id +
+                ", orderListTime=" + orderListTime +
+                ", orderListTotalPrice=" + orderListTotalPrice +
+                ", orderListStatus=" + orderListStatus +
+                ", user=" + user +
+                ", orderItems=" + orderItems +
+                '}';
+    }
 }

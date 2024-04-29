@@ -1,62 +1,48 @@
 package com.study.springboot.domain.member.dto;
 
-
 import com.study.springboot.domain.member.User;
-import com.study.springboot.domain.orderSystem.OrderList;
-import com.study.springboot.enumeration.UserRole;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.OneToMany;
-import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserDto {
-
     private Long id;
     private String userId;
-
-    private String userName;
-
     private String userPw;
-
+    private String userName;
     private LocalDate userJoinDate;
-
     private Integer userPoint;
+    private String userRole;
 
-    private UserRole userRole;
+    public UserDto(User entity){
 
-    private List<OrderList> orderList;
-
-    UserDto(User entity){
         this.id = entity.getId();
         this.userId = entity.getUserId();
         this.userPw = entity.getUserPw();
         this.userName = entity.getUserName();
-        this.userRole = entity.getUserRole();
+        this.userJoinDate=entity.getUserJoinDate();
         this.userPoint = entity.getUserPoint();
-        this.userJoinDate = entity.getUserJoinDate();
-        this.orderList = entity.getOrderList();
+        this.userRole=entity.getUserRole().toString();
     }
 
-    public User toEntity(){
-        return User.builder()
-                .id(this.id)
-                .userId(this.userId)
-                .userId(this.userId)
-                .userPw(this.userPw)
-                .userRole(this.userRole)
-                .userName(this.userName)
-                .userJoinDate(this.userJoinDate)
-                .orderList(this.orderList)
-                .build();
-    }
 
+    // public User toEntity(){
+    //     return User.builder()
+    //             .id(this.id)
+    //             .userId(this.userId)
+    //             .userId(this.userId)
+    //             .userPw(this.userPw)
+    //             .userRole(this.userRole)
+    //             .userName(this.userName)
+    //             .userJoinDate(this.userJoinDate)
+    //             .orderList(this.orderList)
+    //             .build();
+    // }
 }
