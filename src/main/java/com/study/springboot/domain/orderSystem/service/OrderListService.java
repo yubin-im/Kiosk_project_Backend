@@ -87,6 +87,7 @@ public class OrderListService {
                 .orderListTime(LocalDateTime.now())
                 .orderListStatus(OrderListStatus.PREPARING)
                 .orderListTotalPrice(0)
+                // 비회원이면 null로 들어가도록
                 .user(userRepository.findById(userId).orElse(null))
                 .build();
 

@@ -1,5 +1,7 @@
 package com.study.springboot.domain.orderSystem.controller;
 
+import com.study.springboot.domain.orderSystem.OrderItem;
+import com.study.springboot.domain.orderSystem.dto.AddProductReqDto;
 import com.study.springboot.domain.orderSystem.dto.AmountControlReqDto;
 import com.study.springboot.domain.orderSystem.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
@@ -34,4 +36,16 @@ public class OrderItemController {
         response.put("orderAmount", orderAmount);
         return response;
     }
+
+    // 장바구니에 상품 추가
+    @PostMapping("/order/addProduct")
+    public OrderItem addProduct(@RequestBody AddProductReqDto addProductReqDto) {
+        Long productId = addProductReqDto.getProductId();
+        Long orderListId = addProductReqDto.getOrderListId();
+
+        OrderItem orderItem = orderItemService.addProduct(productId, orderListId);
+
+        return orderItem;
+    }
+
 }
