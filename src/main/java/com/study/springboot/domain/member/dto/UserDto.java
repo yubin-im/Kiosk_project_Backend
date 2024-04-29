@@ -22,6 +22,7 @@ public class UserDto {
     private String userRole;
 
     public UserDto(User entity){
+
         this.id = entity.getId();
         this.userId = entity.getUserId();
         this.userPw = entity.getUserPw();
@@ -30,4 +31,18 @@ public class UserDto {
         this.userPoint = entity.getUserPoint();
         this.userRole=entity.getUserRole().toString();
     }
+
+
+    // public User toEntity(){
+    //     return User.builder()
+    //             .id(this.id)
+    //             .userId(this.userId)
+    //             .userId(this.userId)
+    //             .userPw(this.userPw)
+    //             .userRole(this.userRole)
+    //             .userName(this.userName)
+    //             .userJoinDate(this.userJoinDate)
+    //             .orderList(this.orderList)
+    //             .build();
+    // }
 }

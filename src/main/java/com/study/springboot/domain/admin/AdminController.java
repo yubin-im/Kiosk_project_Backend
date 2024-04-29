@@ -94,4 +94,80 @@ public class AdminController {
         return ResponseEntity.ok().body(orderListService.updateOrderList(id, dto));
     }
 
+    /*
+    product service
+     */
+    @GetMapping("/product/list")
+    public ResponseEntity productList(HttpSession session){
+
+        //관리자가 아니라면 에러 코드
+        if(!KioskSession.isAdmin(session)){
+            Message message = Message.userNoPermission();
+            return ResponseEntity.ok(message);
+        }
+
+        List<ProductDto> dto = adminService.findAllProduct();
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/product/remove")
+    public ResponseEntity productRemove(@RequestBody RequestProductRemoveDto dto, HttpSession session){
+
+        //관리자가 아니라면 에러 코드
+        if(!KioskSession.isAdmin(session)){
+            Message message = Message.userNoPermission();
+            return ResponseEntity.ok(message);
+        }
+
+        String code = dto.getProductCode();
+        String productName = dto.getProductName();
+
+        Message message = adminService.setRemoveProductMessage(code, productName);
+
+        return ResponseEntity.ok(message);
+
+    }
+
+    @GetMapping("/product/detail")
+    public ResponseEntity productDetail(@RequestParam(name = "code") String code, HttpSession session){
+        //관리자가 아니라면 에러 코드
+        if(!KioskSession.isAdmin(session)){
+            Message message = Message.userNoPermission();
+            return ResponseEntity.ok(message);
+        }
+
+        Optional<Product> optional = adminService.findProductByCode(code);
+        ProductDto dto = new ProductDto(optional.get());
+
+        return ResponseEntity.ok(dto);
+    }
+
+    @PostMapping("/product/detail/edit")
+    public ResponseEntity productEdit(@RequestBody RequestProductEditDto dto, HttpSession session){
+        //관리자가 아니라면 에러 코드
+//        if(!KioskSession.isAdmin(session)){
+//            Message message = Message.userNoPermission();
+//            return ResponseEntity.ok(message);
+//        }
+
+        Message message = adminService.editProduct(dto);
+
+        return ResponseEntity.ok(message);
+    }
+
+    @PostMapping("/product/list/search")
+    public ResponseEntity productSearch(@RequestBody RequestSearchDto dto, HttpSession session){
+        String searchKeyword = dto.getSearchKeyword();
+        Integer page = dto.getPage();
+        Integer pageSize = dto.getPageSize();
+        ProductCategory productCategory = dto.getProductCategory();
+        SearchCategory searchCategory = dto.getSearchCategory();
+
+
+        List<Product> result = adminService.findProductsBy(searchCategory, productCategory, searchKeyword, page, pageSize);
+        return ResponseEntity.ok(result);
+    }
+
+
 }
