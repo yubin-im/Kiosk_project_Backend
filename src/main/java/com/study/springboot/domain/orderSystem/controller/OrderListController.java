@@ -1,6 +1,7 @@
 package com.study.springboot.domain.orderSystem.controller;
 
 import com.study.springboot.domain.orderSystem.OrderList;
+import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,5 +22,14 @@ public class OrderListController {
         OrderList orderList = orderListService.userOrderList(userId);
 
         return orderList;
+    }
+
+    // 결제 화면
+    @PostMapping("/order/payment")
+    public PaymentResDto payment(@RequestBody Map<String, Long> orderListIdMap) {
+        Long orderListId = orderListIdMap.get("orderListId");
+        PaymentResDto paymentResDto = orderListService.payment(orderListId);
+
+        return paymentResDto;
     }
 }

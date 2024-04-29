@@ -1,8 +1,11 @@
 package com.study.springboot.domain.orderSystem.service;
 
+import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
+import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
+import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
@@ -22,6 +25,7 @@ public class OrderListService {
 
     private final OrderListRepository orderListRepository;
     private final UserRepository userRepository;
+    private final OrderItemRepository orderItemRepository;
 
     /*
     주문 목록 조회
@@ -93,6 +97,23 @@ public class OrderListService {
 
         orderListRepository.save(orderList);
         return orderList;
+    }
+
+    // 결제 화면
+    @Transactional
+    public PaymentResDto payment(Long orderListId) {
+        OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
+        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByOrderList(orderList);
+
+        Integer orderItemTotalAmount = orderItemList.size();
+        Integer orderListTotalPrice = orderList.getOrderListTotalPrice();
+
+        PaymentResDto paymentResDto = PaymentResDto.builder()
+                .orderItemTotalAmount(orderItemTotalAmount)
+                .orderListTotalPrice(orderListTotalPrice)
+                .build();
+
+        return paymentResDto;
     }
 
 }
