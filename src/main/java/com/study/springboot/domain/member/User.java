@@ -1,6 +1,7 @@
 package com.study.springboot.domain.member;
 
 
+import com.study.springboot.domain.member.dto.UserDto;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.enumeration.UserRole;
 import jakarta.persistence.*;
@@ -136,4 +137,16 @@ public class User {
         return this.userPw.equals(userPw);
     }
 
+    public void update(UserDto dto){
+        this.userId=dto.getUserId();
+        this.userPw= dto.getUserPw();
+        this.userName=dto.getUserName();
+        this.userJoinDate=dto.getUserJoinDate();
+        this.userPoint=dto.getUserPoint();
+        if(dto.getUserRole().equals("ROLE_USER")){
+            this.userRole=UserRole.USER;
+        } else{
+            this.userRole=UserRole.ADMIN;
+        }
+    }
 }
