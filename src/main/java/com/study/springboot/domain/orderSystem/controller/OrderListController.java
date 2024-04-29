@@ -2,6 +2,8 @@ package com.study.springboot.domain.orderSystem.controller;
 
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
+import com.study.springboot.domain.orderSystem.dto.SuccessOrderReqDto;
+import com.study.springboot.domain.orderSystem.dto.SuccessOrderResDto;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +33,16 @@ public class OrderListController {
         PaymentResDto paymentResDto = orderListService.payment(orderListId);
 
         return paymentResDto;
+    }
+
+    // 주문 완료(주문번호와 고객 적립금 출력) 및 주문 시간과 상태 업데이트
+    @PostMapping("/order/submit")
+    public SuccessOrderResDto successOrder(@RequestBody SuccessOrderReqDto successOrderReqDto) {
+        Long userId = successOrderReqDto.getUserId();
+        Long orderListId = successOrderReqDto.getOrderListId();
+
+        SuccessOrderResDto successOrderResDto = orderListService.successOrder(userId, orderListId);
+
+        return successOrderResDto;
     }
 }

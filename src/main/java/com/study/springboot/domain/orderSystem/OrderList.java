@@ -57,4 +57,10 @@ public class OrderList {
                 ", orderItems=" + orderItems +
                 '}';
     }
+
+    // 주문 완료 시 시간과 상태 업데이트
+    public void updateTimeAndStatus(LocalDateTime orderListTime, OrderListStatus orderListStatus) {
+        this.orderListTime = orderListTime;
+        this.orderListStatus = orderListStatus;
+    }
 }

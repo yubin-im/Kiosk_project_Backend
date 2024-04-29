@@ -5,8 +5,10 @@ import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
 import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
+import com.study.springboot.domain.orderSystem.dto.SuccessOrderResDto;
 import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
+import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.transaction.Transactional;
@@ -114,6 +116,25 @@ public class OrderListService {
                 .build();
 
         return paymentResDto;
+    }
+
+    // 주문 완료(주문번호와 고객 적립금 출력) 및 주문 시간과 상태 업데이트
+    @Transactional
+    public SuccessOrderResDto successOrder(Long userId, Long orderListId) {
+        User user = userRepository.findById(userId).orElse(null);
+        OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
+
+        // 주문 시간과 상태 업데이트
+        orderList.updateTimeAndStatus(LocalDateTime.now(), OrderListStatus.COMPLETED);
+        orderListRepository.save(orderList);
+
+        // 주문번호와 고객 적립금 출력
+        SuccessOrderResDto successOrderResDto = SuccessOrderResDto.builder()
+                .userPoint(user.getUserPoint())
+                .orderListId(orderList.getId())
+                .build();
+
+        return successOrderResDto;
     }
 
 }
