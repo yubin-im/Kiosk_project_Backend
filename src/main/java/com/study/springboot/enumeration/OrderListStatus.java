@@ -1,5 +1,5 @@
 package com.study.springboot.enumeration;
 
-public enum OrderStatus {
+public enum OrderListStatus {
     PREPARING, COMPLETED, READY, RECEIVED
 }
