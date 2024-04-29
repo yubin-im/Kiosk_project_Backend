@@ -1,11 +1,13 @@
 package com.study.springboot.domain.orderSystem;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.springboot.domain.product.Product;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -22,14 +24,19 @@ public class OrderItem {
     @Column
     private Integer orderAmount;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
+    @JsonIgnore
     private Product product;
 
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_list_id")
+    @JsonIgnore
     private OrderList orderList;
 
-
+    // 수량 수정 위한 메소드
+    public void updateOrderAmount(Integer orderAmount) {
+        this.orderAmount = orderAmount;
+    }
 }
