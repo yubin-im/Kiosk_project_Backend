@@ -2,7 +2,7 @@ package com.study.springboot.domain.orderSystem;
 
 
 import com.study.springboot.domain.member.User;
-import com.study.springboot.enumeration.OrderStatus;
+import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,13 +29,30 @@ public class OrderList {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderListStatus orderListStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
-    private List<OrderItem>  orderItems = new ArrayList<>();
+    private List<OrderItem> orderItems = new ArrayList<>();
 
+    public void update(LocalDateTime orderListTime, Integer orderListTotalPrice, OrderListStatus orderListStatus){
+        this.orderListTime=orderListTime;
+        this.orderListTotalPrice=orderListTotalPrice;
+        this.orderListStatus=orderListStatus;
+    }
+
+    @Override
+    public String toString() {
+        return "OrderList{" +
+                "id=" + id +
+                ", orderListTime=" + orderListTime +
+                ", orderListTotalPrice=" + orderListTotalPrice +
+                ", orderListStatus=" + orderListStatus +
+                ", user=" + user +
+                ", orderItems=" + orderItems +
+                '}';
+    }
 }
