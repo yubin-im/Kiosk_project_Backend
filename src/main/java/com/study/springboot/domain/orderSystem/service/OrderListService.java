@@ -1,10 +1,7 @@
 package com.study.springboot.domain.orderSystem.service;
 
-import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
-import com.study.springboot.domain.orderSystem.dto.OrderRevenueResponseDto;
+import com.study.springboot.domain.orderSystem.dto.*;
 import com.study.springboot.domain.orderSystem.OrderList;
-import com.study.springboot.domain.orderSystem.dto.OrderListDto;
-import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.transaction.Transactional;
@@ -106,7 +103,41 @@ public class OrderListService {
 
         return OrderRevenueListDto.builder()
                 .type(type)
+                .year(year)
+                .month(month)
                 .OrderRevenueList(result)
+                .build();
+    }
+
+    /*
+    주문 통계 - 날짜별 주문 수 조회
+     */
+    public OrderCountListDto getOrderCount(String type, int year, int month){
+
+        List<OrderCountResponseDto> result = new ArrayList<>();
+        List<Object[]> summary = null;
+
+        if(type.equals("month")){
+            // 일별 통계
+            summary = orderListRepository.findOrderMonth(year, month);
+        } else if(type.equals("year")){
+            // 월별 통계
+            summary = orderListRepository.findOrderYear(year);
+        }
+
+        for(Object[] dto : summary){
+            OrderCountResponseDto resDto = OrderCountResponseDto.builder()
+                    .orderListDate(dto[0].toString())
+                    .orderListCount(dto[2].toString())
+                    .build();
+            result.add(resDto);
+        }
+
+        return OrderCountListDto.builder()
+                .type(type)
+                .year(year)
+                .month(month)
+                .OrderCountList(result)
                 .build();
     }
 }

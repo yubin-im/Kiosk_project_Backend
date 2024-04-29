@@ -7,9 +7,9 @@ import java.util.List;
 
 @Builder
 @Getter
-public class OrderRevenueListDto {
+public class OrderCountListDto {
     private String type;
     private int year;
     private int month;
-    private List<OrderRevenueResponseDto> OrderRevenueList;
+    private List<OrderCountResponseDto> OrderCountList;
 }
