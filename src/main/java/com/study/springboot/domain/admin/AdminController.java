@@ -2,6 +2,8 @@ package com.study.springboot.domain.admin;
 
 import com.study.springboot.datas.KioskSession;
 import com.study.springboot.datas.Message;
+import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
+import com.study.springboot.domain.orderSystem.dto.OrderRevenueResponseDto;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.domain.user.service.UserService;
@@ -22,6 +24,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -104,6 +107,16 @@ public class AdminController {
     public ResponseEntity updateOrderList(@PathVariable("id") Long id, @RequestBody OrderListUpdateDto dto){
         System.out.println(dto.getOrderListStatus());
         return ResponseEntity.ok().body(orderListService.updateOrderList(id, dto));
+    }
+
+    /*
+    주문 통계 - 날짜별 주문 금액 조회 (일별 통계)
+     */
+    @GetMapping("/order/statistics/revenue")
+    public ResponseEntity<OrderRevenueListDto> getOrderRevenue(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
+                                                               @RequestParam(value="year", required = false, defaultValue = "2024") @Nullable int year,
+                                                               @RequestParam(value="month", required = false, defaultValue = "4") @Nullable int month){
+        return ResponseEntity.ok(orderListService.getOrderRevenue(type, year, month));
     }
 
     /*

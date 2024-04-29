@@ -1,5 +1,7 @@
 package com.study.springboot.domain.orderSystem.service;
 
+import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
+import com.study.springboot.domain.orderSystem.dto.OrderRevenueResponseDto;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
@@ -12,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -77,4 +80,33 @@ public class OrderListService {
         }
     }
 
+    /*
+    주문 수입 통계
+     */
+    public OrderRevenueListDto getOrderRevenue(String type, int year, int month){
+
+        List<OrderRevenueResponseDto> result = new ArrayList<>();
+        List<Object[]> summary = null;
+
+        if(type.equals("month")){
+            // 일별 통계
+            summary = orderListRepository.findOrderMonth(year, month);
+        } else if(type.equals("year")){
+            // 월별 통계
+            summary = orderListRepository.findOrderYear(year);
+        }
+
+        for(Object[] dto : summary){
+            OrderRevenueResponseDto resDto = OrderRevenueResponseDto.builder()
+                    .orderListDate(dto[0].toString())
+                    .orderListTotalPrice(dto[1].toString())
+                    .build();
+            result.add(resDto);
+        }
+
+        return OrderRevenueListDto.builder()
+                .type(type)
+                .OrderRevenueList(result)
+                .build();
+    }
 }
