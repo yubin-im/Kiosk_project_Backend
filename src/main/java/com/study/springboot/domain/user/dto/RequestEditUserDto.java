@@ -1,7 +1,7 @@
-package com.study.springboot.domain.member.dto;
+package com.study.springboot.domain.user.dto;
 
 
-import com.study.springboot.domain.member.User;
+import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.enumeration.UserRole;
 import lombok.AccessLevel;

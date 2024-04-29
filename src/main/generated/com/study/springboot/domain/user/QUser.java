@@ -1,4 +1,4 @@
-package com.study.springboot.domain.member;
+package com.study.springboot.domain.user;
 
 import static com.querydsl.core.types.PathMetadataFactory.*;
 
@@ -16,7 +16,7 @@ import com.querydsl.core.types.dsl.PathInits;
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
 public class QUser extends EntityPathBase<User> {
 
-    private static final long serialVersionUID = -129436398L;
+    private static final long serialVersionUID = 591274817L;
 
     public static final QUser user = new QUser("user");
 
