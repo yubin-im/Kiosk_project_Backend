@@ -94,10 +94,11 @@ public class AdminController {
         String searchKeyword = dto.getSearchKeyword();
         Integer page = dto.getPage();
         Integer pageSize = dto.getPageSize();
-        ProductCategory category = dto.getSearchProductCategory();
+        ProductCategory productCategory = dto.getProductCategory();
+        SearchCategory searchCategory = dto.getSearchCategory();
 
 
-        List<Product> result = adminService.findProductsBy(category, searchKeyword, page, pageSize);
+        List<Product> result = adminService.findProductsBy(searchCategory, productCategory, searchKeyword, page, pageSize);
         return ResponseEntity.ok(result);
 
     }

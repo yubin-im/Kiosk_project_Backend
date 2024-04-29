@@ -13,13 +13,10 @@ import com.study.springboot.domain.product.service.ProductService;
 import com.study.springboot.enumeration.ProductCategory;
 import com.study.springboot.enumeration.SearchCategory;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -90,21 +87,13 @@ public class AdminService {
     }
 
     @Transactional(readOnly = true)
-    List<Product> findProductsBy(final ProductCategory category, final String searchKeyword, final int page, final int pageSize){
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        Sort.Order sort = Sort.Order.desc(category.getValue());
-//        sorts.add(sort);
+    List<Product> findProductsBy(final SearchCategory searchCategory, final ProductCategory productCategory, final String searchKeyword, final int page, final int pageSize){
 
-//        System.out.println("category = " + category);
-
-//        Pageable pageable = PageRequest.of(page, pageSize, Sort.by(sorts));
-
-//        List<ProductDto> list = productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
 
         QProduct product = QProduct.product;
         List<Product> list = queryFactory.selectFrom(product)
                 .where(
-                        product.category.eq(category)
+                        product.category.stringValue().eq(productCategory.getValue())
                                 .and(
                                         product.productCode.contains(searchKeyword)
                                                 .or(product.productName.contains(searchKeyword))
@@ -115,5 +104,7 @@ public class AdminService {
         return list;
 
     }
+
+//    private BooleanExpression eqSearchCategory(SearchCategory)
 }
 

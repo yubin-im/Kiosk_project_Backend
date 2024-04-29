@@ -9,7 +9,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RequestSearchDto {
-    private ProductCategory searchProductCategory;
+    private ProductCategory productCategory;
+    private SearchCategory searchCategory;
     private String searchKeyword;
     private Integer pageSize;
     private Integer page;
