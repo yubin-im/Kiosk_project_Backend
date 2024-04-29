@@ -13,4 +13,6 @@ import java.util.List;
 public interface MemberRepository extends JpaRepository<User, Long> {
     Page<User> findByUserIdContains(String text, Pageable pageable);
     Page<User> findByUserNameContains(String text, Pageable pageable);
+    Optional<User> findByUserId(String userId);
+
 }

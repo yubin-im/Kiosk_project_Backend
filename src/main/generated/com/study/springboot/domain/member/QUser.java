@@ -22,17 +22,17 @@ public class QUser extends EntityPathBase<User> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final StringPath memberId = createString("memberId");
-
-    public final DatePath<java.time.LocalDate> memberJoinDate = createDate("memberJoinDate", java.time.LocalDate.class);
-
-    public final NumberPath<Integer> memberPoint = createNumber("memberPoint", Integer.class);
-
-    public final StringPath memberPw = createString("memberPw");
-
     public final ListPath<com.study.springboot.domain.orderSystem.OrderList, com.study.springboot.domain.orderSystem.QOrderList> orderList = this.<com.study.springboot.domain.orderSystem.OrderList, com.study.springboot.domain.orderSystem.QOrderList>createList("orderList", com.study.springboot.domain.orderSystem.OrderList.class, com.study.springboot.domain.orderSystem.QOrderList.class, PathInits.DIRECT2);
 
+    public final StringPath userId = createString("userId");
+
+    public final DatePath<java.time.LocalDate> userJoinDate = createDate("userJoinDate", java.time.LocalDate.class);
+
     public final StringPath userName = createString("userName");
+
+    public final NumberPath<Integer> userPoint = createNumber("userPoint", Integer.class);
+
+    public final StringPath userPw = createString("userPw");
 
     public final EnumPath<com.study.springboot.enumeration.UserRole> userRole = createEnum("userRole", com.study.springboot.enumeration.UserRole.class);
 

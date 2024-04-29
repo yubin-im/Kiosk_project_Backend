@@ -1,6 +1,7 @@
 package com.study.springboot.enumeration;
 
 public enum OrderListStatus {
+<<<<<<< HEAD
     PREPARING("PREPARING"),
     COMPLETED("COMPLETED"),
     READY("READY"),
