@@ -48,4 +48,15 @@ public class OrderItemController {
         return orderItem;
     }
 
+    // 장바구니에 상품 삭제
+    @PostMapping("/order/removeProduct")
+    public String removeProduct(@RequestBody AmountControlReqDto amountControlReqDto) {
+        Long orderListId = amountControlReqDto.getOrderListId();
+        Long productId = amountControlReqDto.getProductId();
+
+        String message = orderItemService.removeProduct(orderListId, productId);
+
+        return message;
+    }
+
 }

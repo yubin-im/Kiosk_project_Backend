@@ -58,4 +58,13 @@ public class OrderItemService {
         orderItemRepository.save(orderItem);
         return orderItem;
     }
+
+    // 장바구니에 상품 삭제
+    @Transactional
+    public String removeProduct(Long orderListId, Long productId) {
+        OrderItem orderItem = orderItemRepository.findByOrderListIdAndProductId(orderListId, productId).orElse(null);
+        orderItemRepository.delete(orderItem);
+
+        return "상품 삭제가 완료되었습니다!";
+    }
 }
