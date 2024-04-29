@@ -4,6 +4,7 @@ import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
+import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +21,7 @@ import java.util.List;
 public class OrderListService {
 
     private final OrderListRepository orderListRepository;
+    private final UserRepository userRepository;
 
     /*
     주문 목록 조회
@@ -75,6 +78,20 @@ public class OrderListService {
             orderList.update(dto.getOrderListTime(),dto.getOrderListTotalPrice(), OrderListStatus.valueOf(dto.getOrderListStatus()));
             return true;
         }
+    }
+
+    // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
+    @Transactional
+    public OrderList userOrderList(Long userId) {
+        OrderList orderList = OrderList.builder()
+                .orderListTime(LocalDateTime.now())
+                .orderListStatus(OrderListStatus.PREPARING)
+                .orderListTotalPrice(0)
+                .user(userRepository.findById(userId).orElse(null))
+                .build();
+
+        orderListRepository.save(orderList);
+        return orderList;
     }
 
 }
