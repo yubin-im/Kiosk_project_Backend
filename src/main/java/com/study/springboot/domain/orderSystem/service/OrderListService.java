@@ -107,7 +107,13 @@ public class OrderListService {
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
         List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByOrderList(orderList);
 
-        Integer orderItemTotalAmount = orderItemList.size();
+        // 총 수량 계산
+        Integer orderItemTotalAmount = 0;
+        for(int i = 0; i < orderItemList.size(); i++) {
+            orderItemTotalAmount += orderItemList.get(i).getOrderAmount();
+        }
+
+        // 총 금액
         Integer orderListTotalPrice = orderList.getOrderListTotalPrice();
 
         PaymentResDto paymentResDto = PaymentResDto.builder()
