@@ -2,7 +2,7 @@ package com.study.springboot.domain.orderSystem;
 
 
 import com.study.springboot.domain.member.User;
-import com.study.springboot.enumeration.OrderStatus;
+import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,7 +29,7 @@ public class OrderList {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    private OrderListStatus orderListStatus;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
