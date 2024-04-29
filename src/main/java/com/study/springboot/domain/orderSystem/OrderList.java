@@ -1,6 +1,7 @@
 package com.study.springboot.domain.orderSystem;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.persistence.*;
@@ -31,8 +32,9 @@ public class OrderList {
     @Enumerated(EnumType.STRING)
     private OrderListStatus orderListStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
