@@ -38,4 +38,9 @@ public class OrderItem {
     public void updateOrderAmount(Integer orderAmount) {
         this.orderAmount = orderAmount;
     }
+
+    // 금액 수정 위한 메소드
+    public void updateOrderPrice(Integer orderPrice) {
+        this.orderPrice = orderPrice;
+    }
 }
