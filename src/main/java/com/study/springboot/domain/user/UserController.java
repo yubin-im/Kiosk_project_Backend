@@ -42,9 +42,10 @@ public class UserController {
             return ResponseEntity.ok(message);
         }
 
+
         //멤버가 존재한다면
 
-        // 비밀번호가 불일치
+        // 멤버가 존재하지만 비밀번호가 불일치
         UserDto user = isMember.get();
         if(!userService.passwordMatchesUserId(user, dto.getUserPw())){
             message = messageService.userPwInvalid();
@@ -72,7 +73,15 @@ public class UserController {
         String userPw = dto.getUserPw();
         String userName = dto.getUserName();
 
-        Message message = userService.setUserRegisterMessage(userId, userPw, userName);
+        Optional<User> user = userService.createUser(userId, userPw, userName);
+
+        //가입 실패했다면
+        if(!user.isPresent()){
+            Message message = messageService.userRegisterFailed();
+            return ResponseEntity.ok(message);
+        }
+
+        Message message = messageService.userRegisterSuccess();
 
         return ResponseEntity.ok(message);
     }

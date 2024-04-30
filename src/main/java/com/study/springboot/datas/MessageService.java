@@ -29,6 +29,10 @@ public class MessageService {
         return new Message(StatusCode.USER_REG_SUCCESS, StatusCode.USER_REG_SUCCESS.getValue(), "회원가입 성공");
     }
 
+    public Message userRegisterFailed(){
+        return new Message(StatusCode.USER_REG_FAILED, StatusCode.USER_REG_FAILED.getValue(), "회원가입 실패");
+    }
+
     public Message adminPwInvalid(){
         return new Message(StatusCode.ADMIN_PW_INVALID, StatusCode.ADMIN_PW_INVALID.getValue(), "비밀번호가 틀렸습니다");
     }

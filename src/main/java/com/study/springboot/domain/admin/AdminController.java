@@ -17,10 +17,12 @@ import com.study.springboot.domain.product.dto.RequestProductRemoveDto;
 import com.study.springboot.domain.product.dto.RequestSearchDto;
 import com.study.springboot.enumeration.ProductCategory;
 import com.study.springboot.enumeration.SearchCategory;
+import com.study.springboot.enumeration.UserRole;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -30,6 +32,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
+@Secured({"ROLE_ADMIN"})
 public class AdminController {
     private final UserService userService;
     private final OrderListService orderListService;
