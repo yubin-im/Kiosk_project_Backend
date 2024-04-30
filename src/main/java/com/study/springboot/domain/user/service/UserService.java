@@ -1,7 +1,11 @@
 package com.study.springboot.domain.user.service;
 
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.study.springboot.config.JwtUtil;
 import com.study.springboot.datas.Message;
+import com.study.springboot.datas.MessageService;
+import com.study.springboot.domain.user.QUser;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.repository.UserRepository;
@@ -19,15 +23,35 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MessageService messageService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JPAQueryFactory jpaQueryFactory;
 
+
+
+
+
+    /*
+    회원가입
+     */
 
     @Transactional
-    public User createUser(String userId, String userPw, String userName){
-        String pw = bCryptPasswordEncoder.encode(userPw);
-        User user = User.makeUser(userId, pw, userName);
+    public Optional<User> createUser(String userId, String userPw, String userName){
+        QUser user = QUser.user;
 
-        User result = userRepository.save(user);
+        Long count = jpaQueryFactory.selectFrom(user)
+                .where(user.userId.eq(userId))
+                .stream().count();
+
+        if(count > 0){
+            return Optional.ofNullable(null);
+        }
+
+
+        String pw = bCryptPasswordEncoder.encode(userPw);
+        User newUser = User.makeUser(userId, pw, userName);
+
+        User result = userRepository.save(newUser);
 
         try{
             if(result == null) throw new RuntimeException("멤버 추가 오류");
@@ -35,98 +59,49 @@ public class UserService {
             e.printStackTrace();
         }
 
-        return user;
+        return Optional.of(result);
     }
 
+
+    /*
+    userId로 user찾기
+     */
     @Transactional(readOnly = true)
-    public Optional<User> findByUserId(String userId){
-        return userRepository.findByUserId(userId);
+    public Optional<UserDto> findByUserId(String userId){
+        return userRepository.findByUserId(userId).map(UserDto::new);
     }
 
+
+    /*
+    userPw와 inputPw 일치하는지 확인
+     */
+    public Boolean passwordMatchesUserId(UserDto user, String inputPw){
+        if(bCryptPasswordEncoder.matches(inputPw, user.getUserPw())){
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
+    /*
+    userId 와 userPw 로 user 찾기
+     */
     @Transactional(readOnly = true)
-    public UserDto findByUserIdandPw(String userId, String userPw){
+    public Optional<UserDto> findByUserIdAndPw(String userId, String userPw){
         User userEntity = Optional.ofNullable(
                 userRepository.findByUserId(userId)).get().orElseThrow(()-> new BadCredentialsException("유저 없음"));
 
         if(!bCryptPasswordEncoder.matches(userPw, userEntity.getPassword())){
-            throw new BadCredentialsException("비밀번호 틀림");
+
+            //throw new BadCredentialsException("비밀번호 틀림");
+            return Optional.ofNullable(null);
         }
 
         UserDto dto = new UserDto(userEntity);
-        return dto;
+        return Optional.of(dto);
     }
 
-    private Message setAdminLoginMessage(User admin, String adminPw){
-
-        //비밀번호 틀림
-        if(!admin.isUserPw(adminPw)){
-            Message message = Message.adminPwInvalid();
-            return message;
-        }
-
-        Message message = Message.adminLoginSuccess();
-        return message;
-    }
-
-    private Message setUserLoginMessage(User user, String userPw){
-
-        //만약 관리자일 경우 에러 발생
-        try{
-            if(user.isAdmin()){
-                throw new RuntimeException("관리자입니다");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        //비번 오류
-        if(!user.isUserPw(userPw)){
-            Message message = Message.userPwInvalid();
-            return message;
-        }
-
-        //로그인 성공
-        Message message = Message.userLoginSuccess();
-        return message;
-    }
-
-    public Message setLoginMessage(String userId, String userPw){
-
-        Optional<User> optional = userRepository.findByUserId(userId);
-
-        //아이디가 없다면
-        if(!optional.isPresent()){
-            Message message = Message.userNotFound();
-            return message;
-        }
-
-        User user = optional.get();
-
-        //관리자 로그인
-        if(user.isAdmin()){
-            Message message = setAdminLoginMessage(user, userPw);
-            return message;
-
-        }
-
-        //일반 회원 로그인
-        Message message = setUserLoginMessage(user, userPw);
-        return message;
-    }
-
-    public Message setUserRegisterMessage(String userId, String userPw, String userName){
-        Optional<User> optional = findByUserId(userId);
-
-        //이미 있는 회원
-        if(optional.isPresent()){
-            Message message = Message.userRegisterUserIdExists();
-            return message;
-        }
-
-        //회원가입 성공
-        User newUser = createUser(userId, userPw, userName);
-        Message message = Message.userRegisterSuccess();
-
-        return message;
-    }
 }

@@ -18,6 +18,7 @@ public enum StatusCode {
     USER_REG_ID_EXISTS("EUR01"),
     USER_REG_PW_INVALID("EUR02"),
     USER_REG_SUCCESS("UR00"),
+    USER_REG_FAILED("EUR00"),
 
 
 
