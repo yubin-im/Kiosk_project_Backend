@@ -50,13 +50,13 @@ public class User implements UserDetails {
 
     @Getter
     @Column
-    private Integer userPoint = 0;
+    private Integer userPoint;
 
 
     @Getter
     @Enumerated(EnumType.STRING)
-    @Column
-    private UserRole userRole = UserRole.USER;
+    @Column(name = "user_role")
+    private UserRole userRole;
 
 
     @Getter
