@@ -4,7 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="7fdf05d9-d4fc-4652-899a-4c181ffb5ba2" name="Changes" comment="" />
+    <list default="true" id="7fdf05d9-d4fc-4652-899a-4c181ffb5ba2" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/study/springboot/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/com/study/springboot/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/com/study/springboot/domain/member/QMember.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/resources/application.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/product/QProduct.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/generated/com/study/springboot/domain/product/QProduct.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/admin/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/admin/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/User.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/service/UserService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/domain/member/service/UserService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/study/springboot/enumeration/UserRole.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/study/springboot/enumeration/UserRole.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/application.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/application.properties" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -89,7 +103,7 @@
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
-  <component name="RunManager" selected="Gradle.KioskBE [build]">
+  <component name="RunManager" selected="Spring Boot.KioskProjectApplication">
     <configuration name="KioskBE [build]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -178,9 +192,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.KioskBE [build]" />
         <item itemvalue="Gradle.KioskBE [clean]" />
         <item itemvalue="Gradle.KioskBE [compileJava]" />
-        <item itemvalue="Gradle.KioskBE [build]" />
       </list>
     </recent_temporary>
   </component>
@@ -199,6 +213,7 @@
       <workItem from="1713977822449" duration="181000" />
       <workItem from="1713978019602" duration="1020000" />
       <workItem from="1714001634926" duration="11237000" />
+      <workItem from="1714377292835" duration="10784000" />
     </task>
     <servers />
   </component>

@@ -1,19 +1,29 @@
 package com.study.springboot.domain.admin;
 
+import com.study.springboot.datas.KioskSession;
+import com.study.springboot.datas.Message;
 import com.study.springboot.domain.member.dto.UserDto;
 import com.study.springboot.domain.member.dto.UserListDto;
-import com.study.springboot.domain.member.service.MemberService;
 import com.study.springboot.domain.member.service.UserService;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
+import com.study.springboot.domain.product.Product;
+import com.study.springboot.domain.product.dto.ProductDto;
+import com.study.springboot.domain.product.dto.RequestProductEditDto;
+import com.study.springboot.domain.product.dto.RequestProductRemoveDto;
+import com.study.springboot.domain.product.dto.RequestSearchDto;
+import com.study.springboot.enumeration.ProductCategory;
+import com.study.springboot.enumeration.SearchCategory;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,6 +31,7 @@ import java.util.List;
 public class AdminController {
     private final UserService userService;
     private final OrderListService orderListService;
+    private final AdminService adminService;
 
     /*
     회원 목록
