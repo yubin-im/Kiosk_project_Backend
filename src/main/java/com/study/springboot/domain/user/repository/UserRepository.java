@@ -1,12 +1,12 @@
-package com.study.springboot.domain.member.repository;
+package com.study.springboot.domain.user.repository;
 
-import com.study.springboot.domain.member.User;
+import com.study.springboot.domain.user.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import org.springframework.data.domain.Pageable;
-import java.util.List;
+
 import java.util.Optional;
 
 

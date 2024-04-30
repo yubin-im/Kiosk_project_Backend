@@ -19,7 +19,7 @@ public class QProduct extends EntityPathBase<Product> {
 
     public static final QProduct product = new QProduct("product");
 
-    public final EnumPath<com.study.springboot.enumeration.CategoryProduct> category = createEnum("category", com.study.springboot.enumeration.CategoryProduct.class);
+    public final EnumPath<com.study.springboot.enumeration.ProductCategory> category = createEnum("category", com.study.springboot.enumeration.ProductCategory.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 

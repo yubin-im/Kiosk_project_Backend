@@ -1,6 +1,6 @@
-package com.study.springboot.domain.member.dto;
+package com.study.springboot.domain.user.dto;
 
-import com.study.springboot.domain.member.User;
+import com.study.springboot.domain.user.User;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
