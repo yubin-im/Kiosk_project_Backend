@@ -30,7 +30,8 @@ public class UserController {
 
 
     @PostMapping("/login")
-    public ResponseEntity<Message> userLogin(@RequestBody RequestLoginDto dto){
+    public ResponseEntity<Message> userLogin(@ModelAttribute RequestLoginDto dto){
+        System.out.println("dto.getUserId() = " + dto.getUserId());
         Optional<UserDto> isMember = userService.findByUserId(dto.getUserId());
 
 

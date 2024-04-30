@@ -24,6 +24,7 @@ public class AdminMessage extends Message {
         super(status, code, message);
     }
 
+
     public AdminMessage(StatusCode status, String code, String message, Object result) {
         super(status, code, message, result);
     }

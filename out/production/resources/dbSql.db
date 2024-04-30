@@ -1,0 +1,3 @@
+use kioskdb;
+
+select * from user;
