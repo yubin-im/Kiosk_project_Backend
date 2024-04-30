@@ -46,7 +46,6 @@ public class AdminController {
 
     /*
     회원 상세 조회
-    TODO: JPA N+1 문제 해결하기
      */
     @GetMapping("/user/{id}")
     public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id){
@@ -102,8 +101,15 @@ public class AdminController {
      */
     @PutMapping("/order/{id}")
     public ResponseEntity updateOrderList(@PathVariable("id") Long id, @RequestBody OrderListUpdateDto dto){
-        System.out.println(dto.getOrderListStatus());
         return ResponseEntity.ok().body(orderListService.updateOrderList(id, dto));
+    }
+
+    /*
+    주문별 상세 아이템 수정
+     */
+    @PutMapping("/order/{orderListId}/item")
+    public ResponseEntity updateOrderItem(@PathVariable("orderListId") Long orderListId,@RequestBody OrderItemUpdateRequestDto dto){
+        return ResponseEntity.ok().body(adminService.updateOrderItem(orderListId, dto));
     }
 
     /*

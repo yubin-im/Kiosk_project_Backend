@@ -38,4 +38,9 @@ public class OrderItem {
     public void updateOrderAmount(Integer orderAmount) {
         this.orderAmount = orderAmount;
     }
+
+    public void updateAmountAndPrice(Integer orderAmount, Integer orderPrice){
+        this.orderAmount = orderAmount;
+        this.orderPrice = orderPrice;
+    }
 }
