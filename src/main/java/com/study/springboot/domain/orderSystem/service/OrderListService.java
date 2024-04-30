@@ -2,6 +2,8 @@ package com.study.springboot.domain.orderSystem.service;
 
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
+import com.study.springboot.domain.orderSystem.dto.OrderDetailItemDto;
+import com.study.springboot.domain.orderSystem.dto.OrderDetailResDto;
 import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
 import com.study.springboot.domain.orderSystem.dto.SuccessOrderResDto;
 import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -74,6 +77,10 @@ public class OrderListService {
         // 주문 시간과 상태 업데이트
         orderList.updateTimeAndStatus(LocalDateTime.now(), OrderListStatus.COMPLETED);
         orderListRepository.save(orderList);
+
+        // 구매금액의 1% 적립
+        Integer reserves = (int) (orderList.getOrderListTotalPrice() * 0.01);
+        user.updateUserPoint(user.getUserPoint() + reserves);
 
         // 주문번호와 고객 적립금 출력
         SuccessOrderResDto successOrderResDto = SuccessOrderResDto.builder()
