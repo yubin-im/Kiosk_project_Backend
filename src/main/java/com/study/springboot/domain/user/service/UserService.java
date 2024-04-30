@@ -10,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,11 +24,15 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
+
 
 
     @Transactional
-    public User addUser(String userId, String userPw, String userName){
-        User user = User.makeUser(userId, userPw, userName);
+    public User createUser(String userId, String userPw, String userName){
+        String pw = bCryptPasswordEncoder.encode(userPw);
+        User user = User.makeUser(userId, pw, userName);
 
         User result = userRepository.save(user);
 
@@ -40,6 +48,19 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> findByUserId(String userId){
         return userRepository.findByUserId(userId);
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto findByUserIdandPw(String userId, String userPw){
+        User userEntity = Optional.ofNullable(
+                userRepository.findByUserId(userId)).get().orElseThrow(()-> new BadCredentialsException("유저 없음"));
+
+        if(!bCryptPasswordEncoder.matches(userPw, userEntity.getPassword())){
+            throw new BadCredentialsException("비밀번호 틀림");
+        }
+
+        UserDto dto = new UserDto(userEntity);
+        return dto;
     }
 
     private Message setAdminLoginMessage(User admin, String adminPw){
@@ -110,7 +131,7 @@ public class UserService {
         }
 
         //회원가입 성공
-        User newUser = addUser(userId, userPw, userName);
+        User newUser = createUser(userId, userPw, userName);
         Message message = Message.userRegisterSuccess();
 
         return message;
