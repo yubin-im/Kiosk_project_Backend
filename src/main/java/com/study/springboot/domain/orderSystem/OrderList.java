@@ -1,12 +1,11 @@
 package com.study.springboot.domain.orderSystem;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.enumeration.OrderListStatus;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,6 +15,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "order_list")
+@Builder
+@AllArgsConstructor
 public class OrderList {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +32,9 @@ public class OrderList {
     @Enumerated(EnumType.STRING)
     private OrderListStatus orderListStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnore
     private User user;
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
@@ -54,5 +56,11 @@ public class OrderList {
                 ", user=" + user +
                 ", orderItems=" + orderItems +
                 '}';
+    }
+
+    // 주문 완료 시 시간과 상태 업데이트
+    public void updateTimeAndStatus(LocalDateTime orderListTime, OrderListStatus orderListStatus) {
+        this.orderListTime = orderListTime;
+        this.orderListStatus = orderListStatus;
     }
 }
