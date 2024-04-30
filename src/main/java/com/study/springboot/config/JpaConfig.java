@@ -2,7 +2,7 @@ package com.study.springboot.config;
 
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.study.springboot.domain.member.User;
+import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.product.Product;
 import jakarta.persistence.EntityManager;

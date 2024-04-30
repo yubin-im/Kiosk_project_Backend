@@ -1,13 +1,11 @@
-package com.study.springboot.domain.member.service;
+package com.study.springboot.domain.user.service;
 
 
-import com.study.springboot.datas.KioskSession;
 import com.study.springboot.datas.Message;
-import com.study.springboot.domain.member.User;
-import com.study.springboot.domain.member.dto.RequestAddUserDto;
-import com.study.springboot.domain.member.dto.UserDto;
-import com.study.springboot.domain.member.dto.UserListDto;
-import com.study.springboot.domain.member.repository.UserRepository;
+import com.study.springboot.domain.user.User;
+import com.study.springboot.domain.user.dto.UserDto;
+import com.study.springboot.domain.user.dto.UserListDto;
+import com.study.springboot.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -142,7 +141,7 @@ public class UserService {
     회원 목록 조회
      */
     @Transactional
-    public UserListDto getMemberList(String type, String text, int page){
+    public UserListDto getUserList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("userJoinDate").descending());
 
         Page<UserDto> userDtoPage=null;
@@ -161,7 +160,7 @@ public class UserService {
     /*
     회원 상세 조회
      */
-    public UserDto getMember(Long id){
+    public UserDto getUser(Long id){
         User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("멤버가 존재하지 않습니다."));
         return new UserDto(user);
     }
@@ -170,7 +169,7 @@ public class UserService {
     회원 삭제
      */
     @Transactional
-    public boolean deleteMember(Long id){
+    public boolean deleteUser(Long id){
         User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("멤버가 존재하지 않습니다."));
         if(user==null){
             return false;
@@ -184,7 +183,7 @@ public class UserService {
     회원 수정
      */
     @Transactional
-    public boolean updateMember(Long id, UserDto dto){
+    public boolean updateUser(Long id, UserDto dto){
         User user = userRepository.findById(id).get();
         if(user==null || id!=user.getId()){
             return false;
@@ -192,8 +191,6 @@ public class UserService {
             user.update(dto);
             return true;
         }
-
     }
-
 
 }

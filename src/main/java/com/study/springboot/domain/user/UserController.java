@@ -1,4 +1,4 @@
-package com.study.springboot.domain.member;
+package com.study.springboot.domain.user;
 
 
 import com.study.springboot.datas.KioskSession;
@@ -7,13 +7,12 @@ import com.study.springboot.domain.member.dto.RequestAddUserDto;
 import com.study.springboot.domain.member.dto.RequestLoginDto;
 import com.study.springboot.domain.member.dto.UserDto;
 import com.study.springboot.domain.member.service.UserService;
+
 import com.study.springboot.enumeration.error.StatusCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Optional;
 
 
 @RestController

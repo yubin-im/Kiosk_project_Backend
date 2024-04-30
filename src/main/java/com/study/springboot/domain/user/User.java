@@ -1,7 +1,7 @@
-package com.study.springboot.domain.member;
+package com.study.springboot.domain.user;
 
 
-import com.study.springboot.domain.member.dto.UserDto;
+import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.enumeration.UserRole;
 import jakarta.persistence.*;

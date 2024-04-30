@@ -2,12 +2,12 @@ package com.study.springboot.domain.admin;
 
 import com.study.springboot.datas.KioskSession;
 import com.study.springboot.datas.Message;
-import com.study.springboot.domain.member.dto.UserDto;
-import com.study.springboot.domain.member.dto.UserListDto;
-import com.study.springboot.domain.member.service.UserService;
+
+import com.study.springboot.domain.orderSystem.dto.*;
+import com.study.springboot.domain.user.dto.UserDto;
+import com.study.springboot.domain.user.dto.UserListDto;
+import com.study.springboot.domain.user.service.UserService;
 import com.study.springboot.domain.orderSystem.OrderList;
-import com.study.springboot.domain.orderSystem.dto.OrderListDto;
-import com.study.springboot.domain.orderSystem.dto.OrderListUpdateDto;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
 import com.study.springboot.domain.product.Product;
 import com.study.springboot.domain.product.dto.ProductDto;
@@ -22,6 +22,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,37 +37,37 @@ public class AdminController {
     /*
     회원 목록
      */
-    @GetMapping("/member")
-    public ResponseEntity<UserListDto> memberList(@RequestParam(value="type", required = false) @Nullable String type,
-                                                  @RequestParam(value="text", required = false) @Nullable String text,
-                                                  @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
+    @GetMapping("/user")
+    public ResponseEntity<UserListDto> userList(@RequestParam(value="type", required = false) @Nullable String type,
+                                                @RequestParam(value="text", required = false) @Nullable String text,
+                                                @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
                                                   ){
-        return ResponseEntity.ok().body(userService.getMemberList(type, text, page));
+        return ResponseEntity.ok().body(userService.getUserList(type, text, page));
     }
 
     /*
     회원 상세 조회
     TODO: JPA N+1 문제 해결하기
      */
-    @GetMapping("/member/{id}")
-    public ResponseEntity<UserDto> getMember(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(userService.getMember(id));
+    @GetMapping("/user/{id}")
+    public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(userService.getUser(id));
     }
 
     /*
     회원 삭제
      */
-    @DeleteMapping("/member/{id}")
-    public ResponseEntity deleteMember(@PathVariable("id") Long id){
-        return ResponseEntity.ok().body(userService.deleteMember(id));
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity deleteUser(@PathVariable("id") Long id){
+        return ResponseEntity.ok().body(userService.deleteUser(id));
     }
 
     /*
     회원 수정
      */
-    @PutMapping("/member/{id}")
-    public ResponseEntity updateMember(@PathVariable("id") Long id, @RequestBody UserDto dto){
-        return ResponseEntity.ok().body(userService.updateMember(id, dto));
+    @PutMapping("/user/{id}")
+    public ResponseEntity updateUser(@PathVariable("id") Long id, @RequestBody UserDto dto){
+        return ResponseEntity.ok().body(userService.updateUser(id, dto));
     }
 
 
@@ -104,6 +105,26 @@ public class AdminController {
     public ResponseEntity updateOrderList(@PathVariable("id") Long id, @RequestBody OrderListUpdateDto dto){
         System.out.println(dto.getOrderListStatus());
         return ResponseEntity.ok().body(orderListService.updateOrderList(id, dto));
+    }
+
+    /*
+    주문 통계 - 날짜별 주문 금액 조회
+     */
+    @GetMapping("/order/statistics/revenue")
+    public ResponseEntity<OrderRevenueListDto> getOrderRevenue(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
+                                                               @RequestParam(value="year", required = false, defaultValue = "2024") @Nullable int year,
+                                                               @RequestParam(value="month", required = false, defaultValue = "4") @Nullable int month){
+        return ResponseEntity.ok(orderListService.getOrderRevenue(type, year, month));
+    }
+
+    /*
+    주문 통계 - 날짜별 주문 수 조회
+     */
+    @GetMapping("/order/statistics/orders")
+    public ResponseEntity<OrderCountListDto> getOrderCount(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
+                                                           @RequestParam(value="year", required = false, defaultValue = "2024") @Nullable int year,
+                                                           @RequestParam(value="month", required = false, defaultValue = "4") @Nullable int month){
+        return ResponseEntity.ok(orderListService.getOrderCount(type, year, month));
     }
 
     /*
