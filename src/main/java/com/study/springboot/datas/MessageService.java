@@ -17,8 +17,8 @@ public class MessageService {
         return new Message(StatusCode.USER_LOGIN_PW_INVALID, StatusCode.USER_LOGIN_PW_INVALID.getValue(), "비밀번호가 틀렸습니다");
     }
 
-    public Message userLoginSuccess(){
-        return new Message(StatusCode.USER_LOGIN, StatusCode.USER_LOGIN.getValue(), "로그인 성공");
+    public Message userLoginSuccess(UserToken userToken){
+        return new Message(StatusCode.USER_LOGIN, StatusCode.USER_LOGIN.getValue(), "로그인 성공", userToken);
     }
 
     public Message userRegisterUserIdExists(){

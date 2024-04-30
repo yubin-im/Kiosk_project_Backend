@@ -1,6 +1,7 @@
 package com.study.springboot.domain.user.service;
 
 
+import com.study.springboot.config.JwtUtil;
 import com.study.springboot.datas.Message;
 import com.study.springboot.datas.MessageService;
 import com.study.springboot.domain.user.User;
@@ -27,6 +28,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final MessageService messageService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtUtil jwtUtil;
 
 
 
@@ -48,21 +50,31 @@ public class UserService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<User> findByUserId(String userId){
-        return userRepository.findByUserId(userId);
+    public Optional<UserDto> findByUserId(String userId){
+        return userRepository.findByUserId(userId).map(UserDto::new);
+    }
+
+    public Boolean passwordMatchesUserId(UserDto user, String userPw){
+        if(bCryptPasswordEncoder.matches(userPw, user.getUserPw())){
+            return true;
+        }
+
+        return false;
     }
 
     @Transactional(readOnly = true)
-    public UserDto findByUserIdandPw(String userId, String userPw){
+    public Optional<UserDto> findByUserIdAndPw(String userId, String userPw){
         User userEntity = Optional.ofNullable(
                 userRepository.findByUserId(userId)).get().orElseThrow(()-> new BadCredentialsException("유저 없음"));
 
         if(!bCryptPasswordEncoder.matches(userPw, userEntity.getPassword())){
-            throw new BadCredentialsException("비밀번호 틀림");
+
+            //throw new BadCredentialsException("비밀번호 틀림");
+            return null;
         }
 
         UserDto dto = new UserDto(userEntity);
-        return dto;
+        return Optional.of(dto);
     }
 
     private Message setAdminLoginMessage(User admin, String adminPw){
@@ -77,54 +89,10 @@ public class UserService {
         return message;
     }
 
-    private Message setUserLoginMessage(User user, String userPw){
 
-        //만약 관리자일 경우 에러 발생
-        try{
-            if(user.isAdmin()){
-                throw new RuntimeException("관리자입니다");
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
-        //비번 오류
-        if(!user.isUserPw(userPw)){
-            Message message = messageService.userPwInvalid();
-            return message;
-        }
-
-        //로그인 성공
-        Message message = messageService.userLoginSuccess();
-        return message;
-    }
-
-    public Message setLoginMessage(String userId, String userPw){
-
-        Optional<User> optional = userRepository.findByUserId(userId);
-
-        //아이디가 없다면
-        if(!optional.isPresent()){
-            Message message = messageService.userNotFound();
-            return message;
-        }
-
-        User user = optional.get();
-
-        //관리자 로그인
-        if(user.isAdmin()){
-            Message message = setAdminLoginMessage(user, userPw);
-            return message;
-
-        }
-
-        //일반 회원 로그인
-        Message message = setUserLoginMessage(user, userPw);
-        return message;
-    }
 
     public Message setUserRegisterMessage(String userId, String userPw, String userName){
-        Optional<User> optional = findByUserId(userId);
+        Optional<UserDto> optional = findByUserId(userId);
 
         //이미 있는 회원
         if(optional.isPresent()){
@@ -133,7 +101,7 @@ public class UserService {
         }
 
         //회원가입 성공
-        User newUser = addUser(userId, userPw, userName);
+        User newUser = createUser(userId, userPw, userName);
         Message message = messageService.userRegisterSuccess();
 
 
