@@ -9,6 +9,8 @@ import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
 import com.study.springboot.domain.orderSystem.dto.SuccessOrderResDto;
 import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
+import com.study.springboot.domain.product.Product;
+import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
@@ -209,5 +211,46 @@ public class OrderListService {
 
         return successOrderResDto;
     }
+
+    // 주문 확인 상세 페이지 (주문 상품의 이름, 가격, 개수 및 총 수량, 총 가격 출력)
+    @Transactional
+    public OrderDetailResDto orderDetail(Long orderListId) {
+        OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
+        List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByOrderList(orderList);
+
+        // 주문 상품 이름, 가격, 개수를 리스트에 담기
+        List<OrderDetailItemDto> orderDetailItemDtoList = new ArrayList<>();
+
+        for(int i = 0; i < orderItemList.size(); i++) {
+            OrderItem orderItem = orderItemList.get(i);
+            Product product = orderItem.getProduct();
+
+            OrderDetailItemDto orderDetailItemDto = OrderDetailItemDto.builder()
+                    .productName(product.getProductName())
+                    .orderPrice(orderItem.getOrderPrice())
+                    .orderAmount(orderItem.getOrderAmount())
+                    .build();
+
+            orderDetailItemDtoList.add(orderDetailItemDto);
+        }
+
+        // 총 수량 계산
+        Integer orderListTotalAmount = 0;
+        for(int i = 0; i < orderItemList.size(); i++) {
+            orderListTotalAmount += orderItemList.get(i).getOrderAmount();
+        }
+
+        // 총 금액
+        Integer orderListTotalPrice = orderList.getOrderListTotalPrice();
+
+        OrderDetailResDto orderDetailResDto = OrderDetailResDto.builder()
+                .orderDetailItemDtoList(orderDetailItemDtoList)
+                .orderListTotalAmount(orderListTotalAmount)
+                .orderListTotalPrice(orderListTotalPrice)
+                .build();
+
+        return orderDetailResDto;
+    }
+
 
 }
