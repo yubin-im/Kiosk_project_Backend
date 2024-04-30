@@ -5,7 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ProductCategory {
     BURGER_SET("BURGER_SET"),
-    BURGER_SINGLE("BUGER_SIGNLE"),
+    BURGER_SINGLE("BURGER_SINGLE"),
     HAPPY_MEAL("HAPPY_MEAL"),
     DRINK("DRINK"),
     DESSERT("DESSERT");
