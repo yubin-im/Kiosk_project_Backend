@@ -32,7 +32,7 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public final NumberPath<Integer> orderListTotalPrice = createNumber("orderListTotalPrice", Integer.class);
 
-    public final com.study.springboot.domain.member.QUser user;
+    public final com.study.springboot.domain.user.QUser user;
 
     public QOrderList(String variable) {
         this(OrderList.class, forVariable(variable), INITS);
@@ -52,7 +52,7 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public QOrderList(Class<? extends OrderList> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.user = inits.isInitialized("user") ? new com.study.springboot.domain.member.QUser(forProperty("user")) : null;
+        this.user = inits.isInitialized("user") ? new com.study.springboot.domain.user.QUser(forProperty("user")) : null;
     }
 
 }
