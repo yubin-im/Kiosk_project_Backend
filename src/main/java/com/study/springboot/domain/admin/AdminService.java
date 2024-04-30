@@ -4,6 +4,9 @@ package com.study.springboot.domain.admin;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.springboot.datas.AdminMessage;
 import com.study.springboot.datas.Message;
+import com.study.springboot.domain.orderSystem.OrderItem;
+import com.study.springboot.domain.orderSystem.dto.OrderItemUpdateRequestDto;
+import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
 import com.study.springboot.domain.product.Product;
 import com.study.springboot.domain.product.QProduct;
 import com.study.springboot.domain.product.dto.ProductDto;
@@ -27,6 +30,7 @@ public class AdminService {
 
     private final ProductRepository productRepository;
     private final ProductService productService;
+    private final OrderItemRepository orderItemRepository;
 
     private final JPAQueryFactory queryFactory;
 
@@ -106,5 +110,27 @@ public class AdminService {
     }
 
 //    private BooleanExpression eqSearchCategory(SearchCategory)
+
+    /*
+    주문 상세 수정
+     */
+    @Transactional
+    public Message updateOrderItem(Long orderListId,OrderItemUpdateRequestDto dto){
+        Optional<OrderItem> optional = orderItemRepository.findById(dto.getId());
+
+        if(!optional.isPresent()){
+            return AdminMessage.orderItemNotFoundMessage();
+        }
+
+        OrderItem orderItem = optional.get();
+
+        if(orderItem.getOrderList().getId()!=orderListId){
+            return AdminMessage.orderItemOrderListMisMatchMessage();
+        }
+
+        orderItem.updateAmountAndPrice(dto.getOrderItemAmount(), dto.getOrderItemPrice());
+
+        return AdminMessage.productEditSuccess();
+    }
 }
 
