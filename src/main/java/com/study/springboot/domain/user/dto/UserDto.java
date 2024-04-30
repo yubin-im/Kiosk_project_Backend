@@ -1,6 +1,7 @@
 package com.study.springboot.domain.user.dto;
 
 import com.study.springboot.domain.user.User;
+import com.study.springboot.enumeration.UserRole;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,7 +20,7 @@ public class UserDto {
     private String userName;
     private LocalDate userJoinDate;
     private Integer userPoint;
-    private String userRole;
+    private UserRole userRole;
 
     public UserDto(User entity){
 
@@ -29,7 +30,7 @@ public class UserDto {
         this.userName = entity.getUserName();
         this.userJoinDate=entity.getUserJoinDate();
         this.userPoint = entity.getUserPoint();
-        this.userRole=entity.getUserRole().toString();
+        this.userRole=entity.getUserRole();
     }
 
 

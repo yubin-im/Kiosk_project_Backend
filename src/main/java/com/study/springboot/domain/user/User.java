@@ -10,43 +10,56 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Getter
-@Table(uniqueConstraints = {
+@Table(name="user", uniqueConstraints = {
         @UniqueConstraint(name="ID_USER_ID_PW_CONSTRAINT", columnNames = {"id", "user_id", "user_pw"})
 })
-public class User {
+public class User implements UserDetails {
 
+    @Getter
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Getter
     @Column(nullable = false)
     private String userId;
+
 
     @Column
     private String userName;
 
 
+    @Getter
     @Column(nullable = false)
     private String userPw;
 
+
+    @Getter
     @Column
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate userJoinDate;
 
+
+    @Getter
     @Column
     private Integer userPoint = 0;
 
+
+    @Getter
     @Enumerated(EnumType.STRING)
     @Column
     private UserRole userRole = UserRole.USER;
 
+
+    @Getter
     @OneToMany(mappedBy = "user")
     private List<OrderList> orderList = new ArrayList<>();
 
@@ -61,6 +74,10 @@ public class User {
         this.userPoint = userPoint;
         this.userRole = userRole;
         this.orderList = orderList;
+    }
+
+    public String getUserName() {
+        return userName;
     }
 
     public static User makeAdminUser(String userId, String userName, String userPw){
@@ -148,5 +165,43 @@ public class User {
         } else{
             this.userRole=UserRole.ADMIN;
         }
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        Set<GrantedAuthority> roles = new HashSet<>();
+        roles.add(new SimpleGrantedAuthority(userRole.getValue()));
+
+        return roles;
+    }
+
+    @Override
+    public String getPassword() {
+        return this.userPw;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.userName;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
     }
 }

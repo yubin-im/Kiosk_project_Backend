@@ -39,6 +39,11 @@ public class OrderItem {
         this.orderAmount = orderAmount;
     }
 
+    public void updateAmountAndPrice(Integer orderAmount, Integer orderPrice){
+        this.orderAmount = orderAmount;
+        this.orderPrice = orderPrice;
+    }
+  
     // 금액 수정 위한 메소드
     public void updateOrderPrice(Integer orderPrice) {
         this.orderPrice = orderPrice;
