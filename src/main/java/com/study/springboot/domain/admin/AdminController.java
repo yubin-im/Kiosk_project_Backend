@@ -2,6 +2,7 @@ package com.study.springboot.domain.admin;
 
 import com.study.springboot.datas.KioskSession;
 import com.study.springboot.datas.Message;
+import com.study.springboot.datas.MessageService;
 import com.study.springboot.domain.orderSystem.dto.*;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.dto.UserListDto;
@@ -32,6 +33,7 @@ public class AdminController {
     private final UserService userService;
     private final OrderListService orderListService;
     private final AdminService adminService;
+    private final MessageService messageService;
 
     /*
     회원 목록
@@ -134,7 +136,7 @@ public class AdminController {
 
         //관리자가 아니라면 에러 코드
         if(!KioskSession.isAdmin(session)){
-            Message message = Message.userNoPermission();
+            Message message = messageService.userNoPermission();
             return ResponseEntity.ok(message);
         }
 
@@ -148,7 +150,7 @@ public class AdminController {
 
         //관리자가 아니라면 에러 코드
         if(!KioskSession.isAdmin(session)){
-            Message message = Message.userNoPermission();
+            Message message = messageService.userNoPermission();
             return ResponseEntity.ok(message);
         }
 
@@ -165,7 +167,7 @@ public class AdminController {
     public ResponseEntity productDetail(@RequestParam(name = "code") String code, HttpSession session){
         //관리자가 아니라면 에러 코드
         if(!KioskSession.isAdmin(session)){
-            Message message = Message.userNoPermission();
+            Message message = messageService.userNoPermission();
             return ResponseEntity.ok(message);
         }
 

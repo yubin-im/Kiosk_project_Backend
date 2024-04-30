@@ -2,6 +2,7 @@ package com.study.springboot.domain.user.service;
 
 
 import com.study.springboot.datas.Message;
+import com.study.springboot.datas.MessageService;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.dto.UserListDto;
@@ -20,6 +21,7 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final MessageService messageService;
 
 
     @Transactional
@@ -46,11 +48,11 @@ public class UserService {
 
         //비밀번호 틀림
         if(!admin.isUserPw(adminPw)){
-            Message message = Message.adminPwInvalid();
+            Message message = messageService.adminPwInvalid();
             return message;
         }
 
-        Message message = Message.adminLoginSuccess();
+        Message message = messageService.adminLoginSuccess();
         return message;
     }
 
@@ -67,12 +69,12 @@ public class UserService {
 
         //비번 오류
         if(!user.isUserPw(userPw)){
-            Message message = Message.userPwInvalid();
+            Message message = messageService.userPwInvalid();
             return message;
         }
 
         //로그인 성공
-        Message message = Message.userLoginSuccess();
+        Message message = messageService.userLoginSuccess();
         return message;
     }
 
@@ -82,7 +84,7 @@ public class UserService {
 
         //아이디가 없다면
         if(!optional.isPresent()){
-            Message message = Message.userNotFound();
+            Message message = messageService.userNotFound();
             return message;
         }
 
@@ -105,13 +107,13 @@ public class UserService {
 
         //이미 있는 회원
         if(optional.isPresent()){
-            Message message = Message.userRegisterUserIdExists();
+            Message message = messageService.userRegisterUserIdExists();
             return message;
         }
 
         //회원가입 성공
         User newUser = addUser(userId, userPw, userName);
-        Message message = Message.userRegisterSuccess();
+        Message message = messageService.userRegisterSuccess();
 
         return message;
     }
