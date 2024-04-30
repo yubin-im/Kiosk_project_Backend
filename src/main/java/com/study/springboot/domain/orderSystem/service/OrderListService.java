@@ -1,5 +1,6 @@
 package com.study.springboot.domain.orderSystem.service;
 
+import com.study.springboot.datas.Message;
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderDetailItemDto;
@@ -13,6 +14,7 @@ import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
+import com.study.springboot.enumeration.error.StatusCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,7 +34,7 @@ public class OrderListService {
 
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
     @Transactional
-    public OrderList userOrderList(Long userId) {
+    public Message userOrderList(Long userId) {
         OrderList orderList = OrderList.builder()
                 .orderListTime(LocalDateTime.now())
                 .orderListStatus(OrderListStatus.PREPARING)
@@ -42,12 +44,21 @@ public class OrderListService {
                 .build();
 
         orderListRepository.save(orderList);
-        return orderList;
+
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.ORDER_LIST_CREATE_SUCCESS)
+                .code(StatusCode.ORDER_LIST_CREATE_SUCCESS.getValue())
+                .message("장바구니가 생성되었습니다!")
+                .result(orderList)
+                .build();
+
+        return message;
     }
 
     // 결제 화면
     @Transactional
-    public PaymentResDto payment(Long orderListId) {
+    public Message payment(Long orderListId) {
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
         List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByOrderList(orderList);
 
@@ -65,12 +76,20 @@ public class OrderListService {
                 .orderListTotalPrice(orderListTotalPrice)
                 .build();
 
-        return paymentResDto;
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.ORDER_LIST_PAYMENT_SUCCESS)
+                .code(StatusCode.ORDER_LIST_PAYMENT_SUCCESS.getValue())
+                .message("결제가 정상적으로 진행되었습니다!")
+                .result(paymentResDto)
+                .build();
+
+        return message;
     }
 
     // 주문 완료(주문번호와 고객 적립금 출력) 및 주문 시간과 상태 업데이트
     @Transactional
-    public SuccessOrderResDto successOrder(Long userId, Long orderListId) {
+    public Message successOrder(Long userId, Long orderListId) {
         User user = userRepository.findById(userId).orElse(null);
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
 
@@ -89,12 +108,20 @@ public class OrderListService {
                 .orderListId(orderList.getId())
                 .build();
 
-        return successOrderResDto;
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.ORDER_LIST_SUCCESS)
+                .code(StatusCode.ORDER_LIST_SUCCESS.getValue())
+                .message("주문이 정상적으로 완료되었습니다!")
+                .result(successOrderResDto)
+                .build();
+
+        return message;
     }
 
     // 주문 확인 상세 페이지 (주문 상품의 이름, 가격, 개수 및 총 수량, 총 가격 출력)
     @Transactional
-    public OrderDetailResDto orderDetail(Long orderListId) {
+    public Message orderDetail(Long orderListId) {
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
         List<OrderItem> orderItemList = orderItemRepository.findOrderItemsByOrderList(orderList);
 
@@ -129,7 +156,15 @@ public class OrderListService {
                 .orderListTotalPrice(orderListTotalPrice)
                 .build();
 
-        return orderDetailResDto;
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.ORDER_LIST_CHECK_SUCCESS)
+                .code(StatusCode.ORDER_LIST_CHECK_SUCCESS.getValue())
+                .message("주문 상세 조회를 성공했습니다!")
+                .result(orderDetailResDto)
+                .build();
+
+        return message;
     }
 
 

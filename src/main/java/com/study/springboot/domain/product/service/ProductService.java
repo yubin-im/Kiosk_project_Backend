@@ -1,6 +1,7 @@
 package com.study.springboot.domain.product.service;
 
 
+import com.study.springboot.datas.Message;
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
@@ -8,6 +9,7 @@ import com.study.springboot.domain.product.Product;
 import com.study.springboot.domain.product.dto.*;
 import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.enumeration.ProductCategory;
+import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -42,7 +44,7 @@ public class ProductService {
 
     // 제품 9개 랜덤 추천 기능 (함께 즐기면 더욱 좋습니다!)
     @Transactional
-    public List<RecommendProductDto> recommendProduct() {
+    public Message recommendProduct() {
         List<Product> productList = productRepository.findAll();
         List<RecommendProductDto> randomProducts = new ArrayList<>();
         Random random = new Random();
@@ -61,12 +63,20 @@ public class ProductService {
             randomProducts.add(recommendProductDto);
         }
 
-        return randomProducts;
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("추천 상품 조회 성공!")
+                .result(randomProducts)
+                .build();
+
+        return message;
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 사용자 이름 출력, 총가격 및 총수량 출력
     @Transactional
-    public ProductsResDto getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
+    public Message getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
         Page<Product> products = productRepository.findByCategory(category, pageable);
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
         List<OrderItem> orderItemList = orderList.getOrderItems();
@@ -100,12 +110,20 @@ public class ProductService {
                 .orderListTotalPrice(orderListTotalPrice)
                 .build();
 
-        return productsResDto;
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("상품 조회가 완료되었습니다!")
+                .result(productsResDto)
+                .build();
+
+        return message;
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
     @Transactional
-    public List<ProductsByCategoryDto> onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
+    public Message onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
         Page<Product> products = productRepository.findByCategory(category, pageable);
 
         // 카테고리별 9개씩 제품 출력
@@ -117,7 +135,15 @@ public class ProductService {
                         product.getProductImgUrl()))
                 .collect(Collectors.toList());
 
-        return productDtos;
+        // Message에 추가
+        Message message = Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("상품 조회가 완료되었습니다!")
+                .result(productDtos)
+                .build();
+
+        return message;
     }
 
 
