@@ -54,7 +54,7 @@ public class AdminService {
 
     //회원 목록 조회
     @Transactional
-    public UserListDto getUserList(String type, String text, int page){
+    public Message getUserList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("userJoinDate").descending());
 
         Page<UserDto> userDtoPage=null;
@@ -65,39 +65,62 @@ public class AdminService {
         } else if(type.equals("name")){
             userDtoPage = userRepository.findByUserNameContains(text, pageRequest).map(UserDto::new);
         }
-        return UserListDto.builder()
+
+       if(userDtoPage==null){
+           Message message = AdminMessage.userListNotFoundMessage();
+           return message;
+       }
+
+        Message message = AdminMessage.userListFoundSuccessMessage(
+                UserListDto.builder()
                 .userDtoList(userDtoPage)
-                .build();
+                .build());
+        return message;
     }
 
     //회원 상세 조회
-    public UserDto getUser(Long id){
-        User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("멤버가 존재하지 않습니다."));
-        return new UserDto(user);
+    public Message getUser(Long id){
+        Optional<User> optional = userRepository.findById(id);
+        if(optional.isEmpty()){
+            Message message = AdminMessage.userNotFoundMessage();
+            return message;
+        }
+        User user = optional.get();
+        Message message = AdminMessage.userFoundSuccessMessage(new UserDto(user));
+        return message;
     }
 
     //회원 삭제
     @Transactional
-    public boolean deleteUser(Long id){
-        User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("멤버가 존재하지 않습니다."));
-        if(user==null){
-            return false;
-        } else{
-            userRepository.delete(user);
-            return true;
+    public Message deleteUser(Long id){
+        Optional<User> optional = userRepository.findById(id);
+
+        if(optional.isEmpty()){
+            Message message = AdminMessage.userNotFoundMessage();
+            return message;
         }
+
+        User user = optional.get();
+        userRepository.delete(user);
+        Message message = AdminMessage.userDeleteSuccessMessage();
+        return message;
+
     }
 
     //회원 수정
     @Transactional
-    public boolean updateUser(Long id, UserDto dto){
-        User user = userRepository.findById(id).get();
-        if(user==null || id!=user.getId()){
-            return false;
-        } else{
-            user.update(dto);
-            return true;
+    public Message updateUser(Long id, UserDto dto){
+        Optional<User> optional = userRepository.findById(id);
+
+        if(optional.isEmpty() || id!=optional.get().getId()){
+            Message message = AdminMessage.userNotFoundMessage();
+            return message;
         }
+        User user = optional.get();
+        user.update(dto);
+
+        Message message = AdminMessage.userUpdateSuccessMessage();
+        return message;
     }
 
 
@@ -252,7 +275,7 @@ public class AdminService {
 
         orderItem.updateAmountAndPrice(dto.getOrderItemAmount(), dto.getOrderItemPrice());
 
-        return AdminMessage.productEditSuccess();
+        return AdminMessage.orderItemUpdateSuccessMessage();
     }
 
     //주문 통계 - 날짜별 주문 수입 조회

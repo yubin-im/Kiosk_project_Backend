@@ -32,7 +32,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-@Secured({"ROLE_ADMIN"})
+//@Secured({"ROLE_ADMIN"})
 public class AdminController {
     private final UserService userService;
     private final OrderListService orderListService;
@@ -46,7 +46,7 @@ public class AdminController {
 
     //회원 목록
     @GetMapping("/user")
-    public ResponseEntity<UserListDto> userList(@RequestParam(value="type", required = false) @Nullable String type,
+    public ResponseEntity<Message> userList(@RequestParam(value="type", required = false) @Nullable String type,
                                                 @RequestParam(value="text", required = false) @Nullable String text,
                                                 @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
                                                   ){
@@ -55,7 +55,7 @@ public class AdminController {
 
     //회원 상세 조회
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id){
+    public ResponseEntity<Message> getUser(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(adminService.getUser(id));
     }
 

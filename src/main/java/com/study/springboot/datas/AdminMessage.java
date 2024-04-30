@@ -1,5 +1,7 @@
 package com.study.springboot.datas;
 
+import com.study.springboot.domain.user.dto.UserDto;
+import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.enumeration.error.StatusCode;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -14,6 +16,54 @@ public class AdminMessage extends Message {
 
     public AdminMessage(StatusCode status, String code, String message) {
         super(status, code, message);
+    }
+
+    public AdminMessage(StatusCode status, String code, String message, Object result) {
+        super(status, code, message, result);
+    }
+
+    //회원 존재하지 않음
+    public static Message userNotFoundMessage(){
+        return new AdminMessage(StatusCode.USER_NOT_FOUND,
+                StatusCode.USER_NOT_FOUND.getValue(),
+                "회원을 찾을 수 없습니다.");
+    }
+
+    //회원 목록 없음
+    public static Message userListNotFoundMessage(){
+        return new AdminMessage(StatusCode.USER_LIST_NOT_FOUND,
+                StatusCode.USER_LIST_NOT_FOUND.getValue(),
+                "회원 목록 없음");
+    }
+
+    //회원 목록 조회 성공
+    public static Message userListFoundSuccessMessage(UserListDto dto){
+        return new AdminMessage(StatusCode.USER_LIST_FOUND_SUCCESS,
+                StatusCode.USER_LIST_FOUND_SUCCESS.getValue(),
+                "회원 목록 조회 성공",
+                dto);
+    }
+
+    //회원 상세 조회 성공
+    public static Message userFoundSuccessMessage(UserDto dto){
+        return new AdminMessage(StatusCode.USER_FOUND_SUCCESS,
+                StatusCode.USER_FOUND_SUCCESS.getValue(),
+                "회원 조회 성공",
+                dto);
+    }
+
+    //회원 삭제 성공
+    public static Message userDeleteSuccessMessage(){
+        return new AdminMessage(StatusCode.USER_DELETE_SUCCESS,
+                StatusCode.USER_DELETE_SUCCESS.getValue(),
+                "회원 삭제 성공");
+    }
+
+    //회원 수정 성공
+    public static Message userUpdateSuccessMessage(){
+        return new AdminMessage(StatusCode.USER_UPDATE_SUCCESS,
+                StatusCode.USER_UPDATE_SUCCESS.getValue(),
+                "회원 수정 성공");
     }
 
     //상품 삭제 실패
@@ -56,7 +106,7 @@ public class AdminMessage extends Message {
         return new AdminMessage(
                 StatusCode.ORDER_ITEM_UPDATE_SUCCESS,
                 StatusCode.ORDER_ITEM_UPDATE_SUCCESS.getValue(),
-                "주문 아이템을 수정 성공");
+                "주문 아이템 수정 성공");
     }
 
     //주문 아이템, 주문 리스트 불일치
