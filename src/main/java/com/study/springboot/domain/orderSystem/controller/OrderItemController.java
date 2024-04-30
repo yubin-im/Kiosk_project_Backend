@@ -1,8 +1,10 @@
 package com.study.springboot.domain.orderSystem.controller;
 
+import com.study.springboot.datas.Message;
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.dto.AddProductReqDto;
 import com.study.springboot.domain.orderSystem.dto.AmountControlReqDto;
+import com.study.springboot.domain.orderSystem.dto.AmountControlResDto;
 import com.study.springboot.domain.orderSystem.service.OrderItemService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,44 +19,44 @@ import java.util.Map;
 public class OrderItemController {
     final private OrderItemService orderItemService;
 
-    // 상품 개수 1개 추가
+    // 상품 개수 1개 추가 및 총 상품 가격 변경
     @PostMapping("/order/addAmount")
-    public Map<String, Integer> addAmount(@RequestBody AmountControlReqDto amountControlReqDto) {
-        Integer orderAmount = orderItemService.addAmount(amountControlReqDto.getOrderListId(), amountControlReqDto.getProductId());
+    public Message addAmount(@RequestBody AmountControlReqDto amountControlReqDto) {
+        Long orderListId = amountControlReqDto.getOrderListId();
+        Long productId = amountControlReqDto.getProductId();
 
-        Map<String, Integer> response = new HashMap<>();
-        response.put("orderAmount", orderAmount);
-        return response;
+        Message message = orderItemService.addAmount(orderListId, productId);
+        return message;
     }
 
-    // 상품 개수 1개 삭제
+    // 상품 개수 1개 삭제 및 총 상품 가격 변경
     @PostMapping("/order/removeAmount")
-    public Map<String, Integer> removeAmount(@RequestBody AmountControlReqDto amountControlReqDto) {
-        Integer orderAmount = orderItemService.removeAmount(amountControlReqDto.getOrderListId(), amountControlReqDto.getProductId());
+    public Message removeAmount(@RequestBody AmountControlReqDto amountControlReqDto) {
+        Long orderListId = amountControlReqDto.getOrderListId();
+        Long productId = amountControlReqDto.getProductId();
 
-        Map<String, Integer> response = new HashMap<>();
-        response.put("orderAmount", orderAmount);
-        return response;
+        Message message = orderItemService.removeAmount(orderListId, productId);
+        return message;
     }
 
     // 장바구니에 상품 추가
     @PostMapping("/order/addProduct")
-    public OrderItem addProduct(@RequestBody AddProductReqDto addProductReqDto) {
+    public Message addProduct(@RequestBody AddProductReqDto addProductReqDto) {
         Long productId = addProductReqDto.getProductId();
         Long orderListId = addProductReqDto.getOrderListId();
 
-        OrderItem orderItem = orderItemService.addProduct(productId, orderListId);
+        Message message = orderItemService.addProduct(productId, orderListId);
 
-        return orderItem;
+        return message;
     }
 
     // 장바구니에 상품 삭제
     @PostMapping("/order/removeProduct")
-    public String removeProduct(@RequestBody AmountControlReqDto amountControlReqDto) {
+    public Message removeProduct(@RequestBody AmountControlReqDto amountControlReqDto) {
         Long orderListId = amountControlReqDto.getOrderListId();
         Long productId = amountControlReqDto.getProductId();
 
-        String message = orderItemService.removeProduct(orderListId, productId);
+        Message message = orderItemService.removeProduct(orderListId, productId);
 
         return message;
     }
