@@ -3,6 +3,7 @@ package com.study.springboot.domain.orderSystem.service;
 
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
+import com.study.springboot.domain.orderSystem.dto.AmountControlResDto;
 import com.study.springboot.domain.orderSystem.repository.OrderItemRepository;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
 import com.study.springboot.domain.product.Product;
@@ -18,28 +19,50 @@ public class OrderItemService {
     private final ProductRepository productRepository;
     private final OrderListRepository orderListRepository;
 
-    // 상품 개수 1개 추가
+    // 상품 개수 1개 추가 및 총 상품 가격 변경
     @Transactional
-    public Integer addAmount(Long orderListId, Long productId) {
+    public AmountControlResDto addAmount(Long orderListId, Long productId) {
         OrderItem orderItem = orderItemRepository.findByOrderListIdAndProductId(orderListId, productId).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
 
+        // 상품 개수 1개 추가
         Integer newOrderAmount = orderItem.getOrderAmount() + 1;
         orderItem.updateOrderAmount(newOrderAmount);
+
+        // 상품 총 가격 변경
+        Integer newOrderPrice = product.getProductPrice() * newOrderAmount;
+        orderItem.updateOrderPrice(newOrderPrice);
         orderItemRepository.save(orderItem);
 
-        return newOrderAmount;
+        AmountControlResDto amountControlResDto = AmountControlResDto.builder()
+                .orderAmount(newOrderAmount)
+                .orderPrice(newOrderPrice)
+                .build();
+
+        return amountControlResDto;
     }
 
-    // 상품 개수 1개 삭제
+    // 상품 개수 1개 삭제 및 총 상품 가격 변경
     @Transactional
-    public Integer removeAmount(Long orderListId, Long productId) {
+    public AmountControlResDto removeAmount(Long orderListId, Long productId) {
         OrderItem orderItem = orderItemRepository.findByOrderListIdAndProductId(orderListId, productId).orElse(null);
+        Product product = productRepository.findById(productId).orElse(null);
 
+        // 상품 개수 1개 삭제
         Integer newOrderAmount = orderItem.getOrderAmount() - 1;
         orderItem.updateOrderAmount(newOrderAmount);
+
+        // 상품 총 가격 변경
+        Integer newOrderPrice = product.getProductPrice() * newOrderAmount;
+        orderItem.updateOrderPrice(newOrderPrice);
         orderItemRepository.save(orderItem);
 
-        return newOrderAmount;
+        AmountControlResDto amountControlResDto = AmountControlResDto.builder()
+                .orderAmount(newOrderAmount)
+                .orderPrice(newOrderPrice)
+                .build();
+
+        return amountControlResDto;
     }
 
     // 장바구니에 상품 추가

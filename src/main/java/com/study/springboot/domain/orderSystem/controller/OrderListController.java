@@ -1,6 +1,7 @@
 package com.study.springboot.domain.orderSystem.controller;
 
 import com.study.springboot.domain.orderSystem.OrderList;
+import com.study.springboot.domain.orderSystem.dto.OrderDetailResDto;
 import com.study.springboot.domain.orderSystem.dto.PaymentResDto;
 import com.study.springboot.domain.orderSystem.dto.SuccessOrderReqDto;
 import com.study.springboot.domain.orderSystem.dto.SuccessOrderResDto;
@@ -44,5 +45,14 @@ public class OrderListController {
         SuccessOrderResDto successOrderResDto = orderListService.successOrder(userId, orderListId);
 
         return successOrderResDto;
+    }
+
+    // 주문 확인 상세 페이지 (주문 상품의 이름, 가격, 개수 및 총 수량, 총 가격 출력)
+    @PostMapping("/order/detail")
+    public OrderDetailResDto orderDetail(@RequestBody Map<String, Long> orderListIdMap) {
+        Long orderListId = orderListIdMap.get("orderListId");
+        OrderDetailResDto orderDetailResDto = orderListService.orderDetail(orderListId);
+
+        return orderDetailResDto;
     }
 }

@@ -204,4 +204,8 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public void updateUserPoint(Integer userPoint) {
+        this.userPoint = userPoint;
+    }
 }
