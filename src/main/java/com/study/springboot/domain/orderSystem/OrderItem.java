@@ -4,14 +4,14 @@ package com.study.springboot.domain.orderSystem;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.study.springboot.domain.product.Product;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Table
+@Builder
+@AllArgsConstructor
 public class OrderItem {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,5 +34,8 @@ public class OrderItem {
     @JsonIgnore
     private OrderList orderList;
 
-
+    // 수량 수정 위한 메소드
+    public void updateOrderAmount(Integer orderAmount) {
+        this.orderAmount = orderAmount;
+    }
 }
