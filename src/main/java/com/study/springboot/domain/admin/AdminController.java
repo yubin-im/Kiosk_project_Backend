@@ -32,7 +32,7 @@ import java.util.Optional;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/admin")
-@Secured({"ROLE_ADMIN"})
+//@Secured({"ROLE_ADMIN"})
 public class AdminController {
     private final UserService userService;
     private final OrderListService orderListService;
@@ -46,7 +46,7 @@ public class AdminController {
 
     //회원 목록
     @GetMapping("/user")
-    public ResponseEntity<UserListDto> userList(@RequestParam(value="type", required = false) @Nullable String type,
+    public ResponseEntity userList(@RequestParam(value="type", required = false) @Nullable String type,
                                                 @RequestParam(value="text", required = false) @Nullable String text,
                                                 @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
                                                   ){
@@ -55,7 +55,7 @@ public class AdminController {
 
     //회원 상세 조회
     @GetMapping("/user/{id}")
-    public ResponseEntity<UserDto> getUser(@PathVariable("id") Long id){
+    public ResponseEntity getUser(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(adminService.getUser(id));
     }
 
@@ -79,7 +79,7 @@ public class AdminController {
 
     //주문 목록 조회
     @GetMapping("/order")
-    public ResponseEntity<List<OrderListDto>> orderList(@RequestParam(value="type", required = false) @Nullable String type,
+    public ResponseEntity orderList(@RequestParam(value="type", required = false) @Nullable String type,
                                                         @RequestParam(value="text", required = false) @Nullable String text,
                                                         @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
     ){
@@ -88,7 +88,7 @@ public class AdminController {
 
     //주문 상세 조회
     @GetMapping("/order/{id}")
-    public ResponseEntity<OrderList> getOrderList(@PathVariable("id") Long id){
+    public ResponseEntity getOrderList(@PathVariable("id") Long id){
         return ResponseEntity.ok().body(adminService.getOrder(id));
     }
 
@@ -112,7 +112,7 @@ public class AdminController {
 
     //주문 통계 - 날짜별 주문 금액 조회
     @GetMapping("/order/statistics/revenue")
-    public ResponseEntity<OrderRevenueListDto> getOrderRevenue(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
+    public ResponseEntity getOrderRevenue(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
                                                                @RequestParam(value="year", required = false, defaultValue = "2024") @Nullable int year,
                                                                @RequestParam(value="month", required = false, defaultValue = "4") @Nullable int month){
         return ResponseEntity.ok(adminService.getOrderRevenue(type, year, month));
@@ -120,7 +120,7 @@ public class AdminController {
 
     //주문 통계 - 날짜별 주문 수 조회
     @GetMapping("/order/statistics/orders")
-    public ResponseEntity<OrderCountListDto> getOrderCount(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
+    public ResponseEntity getOrderCount(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
                                                            @RequestParam(value="year", required = false, defaultValue = "2024") @Nullable int year,
                                                            @RequestParam(value="month", required = false, defaultValue = "4") @Nullable int month){
         return ResponseEntity.ok(adminService.getOrderCount(type, year, month));
