@@ -4,6 +4,7 @@ package com.study.springboot.domain.admin;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.springboot.datas.AdminMessage;
 import com.study.springboot.datas.Message;
+import com.study.springboot.datas.MessageService;
 import com.study.springboot.domain.product.Product;
 import com.study.springboot.domain.product.QProduct;
 import com.study.springboot.domain.product.dto.ProductDto;
@@ -27,6 +28,7 @@ public class AdminService {
 
     private final ProductRepository productRepository;
     private final ProductService productService;
+    private final MessageService messageService;
 
     private final JPAQueryFactory queryFactory;
 
@@ -43,7 +45,7 @@ public class AdminService {
 
         //존재하지 않는 코드
         if(!optional.isPresent()){
-            Message message = AdminMessage.productNotFoundMessage();
+            Message message = messageService.productNotFoundMessage();
             return message;
         }
 
@@ -52,13 +54,13 @@ public class AdminService {
 
         //코드명과 코드번호 불일치
         if(!product.getProductName().equals(productName)){
-            Message message = AdminMessage.productCodeMisMatchMessage();
+            Message message = messageService.productCodeMisMatchMessage();
             return message;
         }
 
         //삭제 성공
         productRepository.delete(product);
-        Message message = AdminMessage.productRemoveSuccessMessage();
+        Message message = messageService.productRemoveSuccessMessage();
         return message;
     }
 
@@ -73,7 +75,7 @@ public class AdminService {
         Optional<Product> optional = productRepository.findProductByProductCode(dto.getProductCode());
 
         if(!optional.isPresent()){
-            return AdminMessage.productNotFoundMessage();
+            return messageService.productNotFoundMessage();
         }
 
         Product product = optional.get();
@@ -82,7 +84,7 @@ public class AdminService {
         product = dto.toEntity(id);
         productRepository.save(product);
 
-        return AdminMessage.productEditSuccess();
+        return messageService.productEditSuccess();
 
     }
 
