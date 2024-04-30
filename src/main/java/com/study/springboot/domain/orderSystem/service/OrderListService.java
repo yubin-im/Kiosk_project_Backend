@@ -81,6 +81,7 @@ public class OrderListService {
         // 구매금액의 1% 적립
         Integer reserves = (int) (orderList.getOrderListTotalPrice() * 0.01);
         user.updateUserPoint(user.getUserPoint() + reserves);
+        userRepository.save(user);
 
         // 주문번호와 고객 적립금 출력
         SuccessOrderResDto successOrderResDto = SuccessOrderResDto.builder()
