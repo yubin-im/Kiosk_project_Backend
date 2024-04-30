@@ -54,7 +54,7 @@ public class AdminService {
 
     //회원 목록 조회
     @Transactional
-    public UserListDto getUserList(String type, String text, int page){
+    public Message getUserList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("userJoinDate").descending());
 
         Page<UserDto> userDtoPage=null;
@@ -65,39 +65,62 @@ public class AdminService {
         } else if(type.equals("name")){
             userDtoPage = userRepository.findByUserNameContains(text, pageRequest).map(UserDto::new);
         }
-        return UserListDto.builder()
+
+       if(userDtoPage==null){
+           Message message = AdminMessage.userListNotFoundMessage();
+           return message;
+       }
+
+        Message message = AdminMessage.userListFoundSuccessMessage(
+                UserListDto.builder()
                 .userDtoList(userDtoPage)
-                .build();
+                .build());
+        return message;
     }
 
     //회원 상세 조회
-    public UserDto getUser(Long id){
-        User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("멤버가 존재하지 않습니다."));
-        return new UserDto(user);
+    public Message getUser(Long id){
+        Optional<User> optional = userRepository.findById(id);
+        if(optional.isEmpty()){
+            Message message = AdminMessage.userNotFoundMessage();
+            return message;
+        }
+        User user = optional.get();
+        Message message = AdminMessage.userFoundSuccessMessage(new UserDto(user));
+        return message;
     }
 
     //회원 삭제
     @Transactional
-    public boolean deleteUser(Long id){
-        User user = userRepository.findById(id).orElseThrow(()->new IllegalArgumentException("멤버가 존재하지 않습니다."));
-        if(user==null){
-            return false;
-        } else{
-            userRepository.delete(user);
-            return true;
+    public Message deleteUser(Long id){
+        Optional<User> optional = userRepository.findById(id);
+
+        if(optional.isEmpty()){
+            Message message = AdminMessage.userNotFoundMessage();
+            return message;
         }
+
+        User user = optional.get();
+        userRepository.delete(user);
+        Message message = AdminMessage.userDeleteSuccessMessage();
+        return message;
+
     }
 
     //회원 수정
     @Transactional
-    public boolean updateUser(Long id, UserDto dto){
-        User user = userRepository.findById(id).get();
-        if(user==null || id!=user.getId()){
-            return false;
-        } else{
-            user.update(dto);
-            return true;
+    public Message updateUser(Long id, UserDto dto){
+        Optional<User> optional = userRepository.findById(id);
+
+        if(optional.isEmpty() || id!=optional.get().getId()){
+            Message message = AdminMessage.userNotFoundMessage();
+            return message;
         }
+        User user = optional.get();
+        user.update(dto);
+
+        Message message = AdminMessage.userUpdateSuccessMessage();
+        return message;
     }
 
 
@@ -188,7 +211,7 @@ public class AdminService {
 
     //주문 목록 조회
     @Transactional
-    public List<OrderListDto> getOrderList(String type, String text, int page){
+    public Message getOrderList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("orderListTime").descending());
 
         Page<OrderListDto> orderListDtoPage=null;
@@ -199,40 +222,61 @@ public class AdminService {
             orderListDtoPage = orderListRepository.findByOrderListStatus(status, pageRequest).map(OrderListDto::new);
         }
 
-        return orderListDtoPage.getContent();
+        if(orderListDtoPage==null){
+            Message message = AdminMessage.orderListNotFoundMessage();
+            return message;
+        }
+
+        Message message = AdminMessage.orderListFoundSuccessMessage(orderListDtoPage.getContent());
+        return message;
     }
 
     //주문 상세 조회
-    public OrderList getOrder(Long id){
-        OrderList orderList = orderListRepository.findById(id).orElseThrow(()->new IllegalArgumentException("주문이 존재하지 않습니다."));
-        System.out.println(orderList.toString());
-        return orderList;
+    public Message getOrder(Long id){
+        Optional<OrderList> optional = orderListRepository.findById(id);
+        if(optional.isEmpty()){
+            Message message = AdminMessage.orderListNotFoundMessage();
+            return message;
+        }
+
+        OrderList orderList = optional.get();
+        Message message = AdminMessage.orderFoundSuccessMessage(orderList);
+        return message;
     }
 
     //주문 삭제
-    @jakarta.transaction.Transactional
-    public boolean deleteOrderList(Long id){
-        OrderList orderList = orderListRepository.findById(id).orElseThrow(()->new IllegalArgumentException("주문이 존재하지 않습니다."));
+    @Transactional
+    public Message deleteOrderList(Long id){
+        Optional<OrderList> optional =orderListRepository.findById(id);
 
-        if(orderList==null){
-            return false;
-        } else{
-            orderListRepository.delete(orderList);
-            return true;
+        if(optional.isEmpty()){
+            Message message = AdminMessage.orderListNotFoundMessage();
+            return message;
         }
+
+        OrderList orderList = optional.get();
+        orderListRepository.delete(orderList);
+
+        Message message = AdminMessage.orderListDeleteSuccessMessage();
+        return message;
+
     }
 
     //주문 수정
     @Transactional
-    public boolean updateOrderList(Long id, OrderListUpdateDto dto){
-        OrderList orderList = orderListRepository.findById(id).get();
-        System.out.println(dto.getOrderListStatus());
-        if(orderList==null || id!=dto.getId()){
-            return false;
-        } else {
-            orderList.update(dto.getOrderListTime(),dto.getOrderListTotalPrice(), OrderListStatus.valueOf(dto.getOrderListStatus()));
-            return true;
+    public Message updateOrderList(Long id, OrderListUpdateDto dto){
+        Optional<OrderList> optional = orderListRepository.findById(id);
+
+        if(optional.isEmpty()||id!=dto.getId()){
+            Message message = AdminMessage.orderListNotFoundMessage();
+            return message;
         }
+
+        OrderList orderList = optional.get();
+        orderList.update(dto.getOrderListTime(),dto.getOrderListTotalPrice(), OrderListStatus.valueOf(dto.getOrderListStatus()));
+        Message message = AdminMessage.orderListUpdateSuccessMessage();
+
+        return message;
     }
 
     //주문 상세 수정
@@ -252,21 +296,25 @@ public class AdminService {
 
         orderItem.updateAmountAndPrice(dto.getOrderItemAmount(), dto.getOrderItemPrice());
 
-        return AdminMessage.productEditSuccess();
+        return AdminMessage.orderItemUpdateSuccessMessage();
     }
 
     //주문 통계 - 날짜별 주문 수입 조회
-    public OrderRevenueListDto getOrderRevenue(String type, int year, int month){
+    public Message getOrderRevenue(String type, int year, int month){
 
         List<OrderRevenueResponseDto> result = new ArrayList<>();
         List<Object[]> summary = null;
 
+        // month: 월별 통계 , year: 년도별 통계
         if(type.equals("month")){
-            // 일별 통계
             summary = orderListRepository.findOrderMonth(year, month);
         } else if(type.equals("year")){
-            // 월별 통계
             summary = orderListRepository.findOrderYear(year);
+        }
+
+        if(summary==null){
+            Message message = AdminMessage.orderStatisticsListNotFoundMessage();
+            return message;
         }
 
         for(Object[] dto : summary){
@@ -277,16 +325,19 @@ public class AdminService {
             result.add(resDto);
         }
 
-        return OrderRevenueListDto.builder()
-                .type(type)
-                .year(year)
-                .month(month)
-                .OrderRevenueList(result)
-                .build();
+        Message message = AdminMessage.orderRevenueListFoundSuccessMessage(
+                OrderRevenueListDto.builder()
+                        .type(type)
+                        .year(year)
+                        .month(month)
+                        .OrderRevenueList(result)
+                        .build()
+        );
+        return message;
     }
 
-    //주문 통계 - 날짜별 주문 수 조회
-    public OrderCountListDto getOrderCount(String type, int year, int month){
+    //주문 통계 - 날짜별 주문 횟수 조회
+    public Message getOrderCount(String type, int year, int month){
 
         List<OrderCountResponseDto> result = new ArrayList<>();
         List<Object[]> summary = null;
@@ -299,6 +350,11 @@ public class AdminService {
             summary = orderListRepository.findOrderYear(year);
         }
 
+        if(summary==null){
+            Message message = AdminMessage.orderStatisticsListNotFoundMessage();
+            return message;
+        }
+
         for(Object[] dto : summary){
             OrderCountResponseDto resDto = OrderCountResponseDto.builder()
                     .orderListDate(dto[0].toString())
@@ -307,12 +363,16 @@ public class AdminService {
             result.add(resDto);
         }
 
-        return OrderCountListDto.builder()
-                .type(type)
-                .year(year)
-                .month(month)
-                .OrderCountList(result)
-                .build();
+        Message message = AdminMessage.orderCountListFoundSuccessMessage(
+                OrderCountListDto.builder()
+                        .type(type)
+                        .year(year)
+                        .month(month)
+                        .OrderCountList(result)
+                        .build()
+        );
+
+        return message;
     }
 }
 
