@@ -1,5 +1,9 @@
 package com.study.springboot.datas;
 
+import com.study.springboot.domain.orderSystem.OrderList;
+import com.study.springboot.domain.orderSystem.dto.OrderCountListDto;
+import com.study.springboot.domain.orderSystem.dto.OrderListDto;
+import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.enumeration.error.StatusCode;
@@ -7,6 +11,8 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 
 @Getter
@@ -21,6 +27,10 @@ public class AdminMessage extends Message {
     public AdminMessage(StatusCode status, String code, String message, Object result) {
         super(status, code, message, result);
     }
+
+    /*
+    User
+     */
 
     //회원 존재하지 않음
     public static Message userNotFoundMessage(){
@@ -66,6 +76,11 @@ public class AdminMessage extends Message {
                 "회원 수정 성공");
     }
 
+
+    /*
+    Product
+     */
+
     //상품 삭제 실패
     public static Message productRemoveSuccessMessage(){
         return new AdminMessage(StatusCode.PRODUCT_REMOVE_SUCCESS,
@@ -93,6 +108,48 @@ public class AdminMessage extends Message {
         return new AdminMessage(StatusCode.PRODUCT_EDIT_SUCCESS, StatusCode.PRODUCT_EDIT_SUCCESS.getValue(), "상품 수정 성공");
     }
 
+
+    /*
+    OrderList
+     */
+
+    //주문 목록 없음
+    public static Message orderListNotFoundMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_NOT_FOUND,
+                StatusCode.ORDER_LIST_NOT_FOUND.getValue(),
+                "주문 목록 없음");
+    }
+
+    //주문 목록 조회 성공
+    public static Message orderListFoundSuccessMessage(List<OrderListDto> dto){
+        return new AdminMessage(StatusCode.ORDER_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_LIST_FOUND_SUCCESS.getValue(),
+                "주문 목록 조회 성공",
+                dto);
+    }
+
+    //주문 상세 조회 성공
+    public static Message orderFoundSuccessMessage(OrderList dto){
+        return new AdminMessage(StatusCode.ORDER_FOUND_SUCCESS,
+                StatusCode.ORDER_FOUND_SUCCESS.getValue(),
+                "주문 상세 조회 성공",
+                dto);
+    }
+
+    //주문 삭제 성공
+    public static Message orderListDeleteSuccessMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_DELETE_SUCCESS,
+                StatusCode.ORDER_LIST_DELETE_SUCCESS.getValue(),
+                "주문 삭제 성공");
+    }
+
+    //주문 수정 성공
+    public static Message orderListUpdateSuccessMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_UPDATE_SUCCESS,
+                StatusCode.ORDER_LIST_UPDATE_SUCCESS.getValue(),
+                "주문 수정 성공");
+    }
+
     //주문 상세 아이템 존재하지 않음
     public static Message orderItemNotFoundMessage(){
         return new AdminMessage(
@@ -117,4 +174,26 @@ public class AdminMessage extends Message {
                 "주문 아이템과 주문 리스트가 일치하지 않습니다.");
     }
 
+    //주문 통계 조회 실패
+    public static Message orderStatisticsListNotFoundMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_NOT_FOUND,
+                StatusCode.ORDER_LIST_NOT_FOUND.getValue(),
+                "주문 통계 목록 없음");
+    }
+
+    //주문 수입 통계 조회 성공
+    public static Message orderRevenueListFoundSuccessMessage(OrderRevenueListDto dto){
+        return new AdminMessage(StatusCode.ORDER_REVENUE_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_REVENUE_LIST_FOUND_SUCCESS.getValue(),
+                "주문 수입 목록 조회 성공",
+                dto);
+    }
+
+    //주문 횟수 통계 조회 성공
+    public static Message orderCountListFoundSuccessMessage(OrderCountListDto dto){
+        return new AdminMessage(StatusCode.ORDER_COUNT_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_COUNT_LIST_FOUND_SUCCESS.getValue(),
+                "주문 횟수 목록 조회 성공",
+                dto);
+    }
 }
