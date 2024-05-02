@@ -131,7 +131,7 @@ public class AdminController {
     product service
      */
     @GetMapping("/product/list")
-    public ResponseEntity productList(HttpSession session){
+    public ResponseEntity<Message> productList(HttpSession session){
 
         //관리자가 아니라면 에러 코드
         if(!KioskSession.isAdmin(session)){
@@ -140,8 +140,9 @@ public class AdminController {
         }
 
         List<ProductDto> dto = adminService.findAllProduct();
+        Message<List<ProductDto>> message = messageService.productFetchSuccess();
 
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(message);
     }
 
     @PostMapping("/product/remove")

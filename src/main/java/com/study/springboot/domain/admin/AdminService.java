@@ -73,10 +73,7 @@ public class AdminService {
            return message;
        }
 
-        Message message = AdminMessage.userListFoundSuccessMessage(
-                UserListDto.builder()
-                .userDtoList(userDtoPage)
-                .build());
+        Message message = AdminMessage.userListFoundSuccessMessage(userDtoPage);
         return message;
     }
 

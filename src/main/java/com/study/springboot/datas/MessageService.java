@@ -34,6 +34,10 @@ public class MessageService {
         return new AdminMessage(StatusCode.PRODUCT_EDIT_SUCCESS, StatusCode.PRODUCT_EDIT_SUCCESS.getValue(), "상품 수정 성공");
     }
 
+    public static Message productFetchSuccess(){
+        return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "성공");
+    }
+
     public Message userNotFound(){
         return new Message(StatusCode.USER_NOT_FOUND,
                 StatusCode.USER_NOT_FOUND.getValue(),
