@@ -5,6 +5,7 @@ import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.OrderCountListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderListDto;
 import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
+import com.study.springboot.domain.product.dto.ProductDto;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.dto.UserListDto;
@@ -214,6 +215,10 @@ public class MessageService {
 
     public Message productFoundSuccessMessage(){
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공");
+    }
+
+    public Message productListFoundSuccessMessage (List<ProductDto> dtoList){
+        return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dtoList);
     }
 
 

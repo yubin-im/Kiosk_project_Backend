@@ -238,7 +238,7 @@ public class AdminController {
 
         List<ProductDto> dto = adminService.findAllProduct();
         if(!dto.isEmpty()){
-            Message message = messageService.productFoundSuccessMessage();
+            Message message = messageService.productListFoundSuccessMessage(dto);
             return ResponseEntity.ok(message);
         }
 
