@@ -75,6 +75,9 @@ public class ProductService {
     public Optional<ProductsResDto> getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
         Page<Product> products = productRepository.findByCategory(category, pageable);
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
+        if(orderList == null){
+            return Optional.empty();
+        }
         List<OrderItem> orderItemList = orderList.getOrderItems();
 
         // 카테고리별 9개씩 제품 출력
