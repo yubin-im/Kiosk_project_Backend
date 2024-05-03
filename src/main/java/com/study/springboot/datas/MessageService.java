@@ -2,10 +2,10 @@ package com.study.springboot.datas;
 
 
 import com.study.springboot.domain.orderSystem.OrderList;
-import com.study.springboot.domain.orderSystem.dto.OrderCountListDto;
-import com.study.springboot.domain.orderSystem.dto.OrderListDto;
-import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
+import com.study.springboot.domain.orderSystem.dto.*;
 import com.study.springboot.domain.product.dto.ProductDto;
+import com.study.springboot.domain.product.dto.ProductsResDto;
+import com.study.springboot.domain.product.dto.RecommendProductDto;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.dto.UserListDto;
@@ -31,6 +31,14 @@ public class MessageService {
         return new AdminMessage(
                 StatusCode.PRODUCT_NOT_FOUND,
                 StatusCode.PRODUCT_NOT_FOUND.getValue(),
+                "상품을 찾을 수 없습니다");
+    }
+
+    //상품코드 존재하지 않음
+    public Message productListNotFoundMessage(){
+        return new AdminMessage(
+                StatusCode.PRODUCT_LIST_NOT_FOUND,
+                StatusCode.PRODUCT_LIST_NOT_FOUND.getValue(),
                 "상품을 찾을 수 없습니다");
     }
 
@@ -220,6 +228,114 @@ public class MessageService {
     public Message productListFoundSuccessMessage (List<ProductDto> dtoList){
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dtoList);
     }
+
+
+    public Message recommendationNotFound(){
+        return Message.builder()
+                .status(StatusCode.PRODUCT_NOT_FOUND)
+                .code(StatusCode.PRODUCT_NOT_FOUND.getValue())
+                .message("추천 상품 조회 실패")
+                .build();
+    }
+
+    public Message recommendationSuccessMessage(List<RecommendProductDto> dto){
+        return Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("추천 상품 조회 성공!")
+                .result(dto)
+                .build();
+    }
+
+    public Message productsByCategoryFoundSuccessMessage(ProductsResDto dto){
+        return Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("상품 조회가 완료되었습니다!")
+                .result(dto)
+                .build();
+    }
+
+    public Message addOrderListSuccessMessage(OrderListDto orderList){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_CREATE_SUCCESS)
+                .code(StatusCode.ORDER_LIST_CREATE_SUCCESS.getValue())
+                .message("장바구니가 생성되었습니다!")
+                .result(orderList)
+                .build();
+    }
+
+    public Message addOrderListFailedMessage(){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_CREATE_FAILED)
+                .code(StatusCode.ORDER_LIST_CREATE_FAILED.getValue())
+                .message("상품 추가 실패")
+                .build();
+    }
+
+    public Message paymentSuccessMessage(PaymentResDto paymentResDto){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_PAYMENT_SUCCESS)
+                .code(StatusCode.ORDER_LIST_PAYMENT_SUCCESS.getValue())
+                .message("결제가 정상적으로 진행되었습니다!")
+                .result(paymentResDto)
+                .build();
+    }
+
+    public Message paymentFailedMessage(){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_PAYMENT_FAILED)
+                .code(StatusCode.ORDER_LIST_PAYMENT_FAILED.getValue())
+                .message("결제 실패")
+                .build();
+    }
+
+    public Message orderSuccessMessage(SuccessOrderResDto dto){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_SUCCESS)
+                .code(StatusCode.ORDER_LIST_SUCCESS.getValue())
+                .message("주문이 정상적으로 완료되었습니다!")
+                .result(dto)
+                .build();
+    }
+
+    public Message orderFailedMessage(){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_CREATE_FAILED)
+                .code(StatusCode.ORDER_LIST_CREATE_FAILED.getValue())
+                .message("주문 실패")
+                .build();
+    }
+
+    public Message orderDetailSuccessMessage(OrderDetailResDto dto){
+        return Message.builder()
+                .status(StatusCode.ORDER_FOUND_SUCCESS)
+                .code(StatusCode.ORDER_FOUND_SUCCESS.getValue())
+                .message("상품 상세 조회 성공")
+                .result(dto)
+                .build();
+
+    }
+
+    public Message updateOrderAmountSuccessMessage(AmountControlResDto dto){
+        return Message.builder()
+                .status(StatusCode.PRODUCT_EDIT_SUCCESS)
+                .code(StatusCode.PRODUCT_EDIT_SUCCESS.getValue())
+                .message("상품 수량이 변경되었습니다!")
+                .result(dto)
+                .build();
+
+    }
+
+    public Message updateOrderAmountFailedMessage(){
+        return Message.builder()
+                .status(StatusCode.PRODUCT_EDIT_FAILED)
+                .code(StatusCode.PRODUCT_EDIT_FAILED.getValue())
+                .message("상품 수량 변경 실패")
+                .build();
+
+    }
+
 
 
 
