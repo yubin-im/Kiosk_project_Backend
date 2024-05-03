@@ -30,7 +30,7 @@ public class ProductController {
 
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 사용자 이름 출력, 총가격 및 총수량 출력
-    @PostMapping("/order")
+//    @PostMapping("/order")
     @ResponseBody
     public Message getProductsByCategory(@RequestBody ProductsReqDto productsReqDto) {
         ProductCategory category = ProductCategory.valueOf(productsReqDto.getCategory());
@@ -43,7 +43,7 @@ public class ProductController {
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
-//    @PostMapping("/order")
+    @PostMapping("/order")
     @ResponseBody
     public Message onlyGetProductsByCategory(@RequestBody OnlyGetProductsReq onlyGetProductsReq) {
         ProductCategory productCategory = ProductCategory.valueOf(onlyGetProductsReq.getCategory());
