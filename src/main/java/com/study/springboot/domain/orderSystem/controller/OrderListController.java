@@ -40,7 +40,7 @@ public class OrderListController {
     // 주문 완료(주문번호와 고객 적립금 출력) 및 주문 시간과 상태 업데이트
     @PostMapping("/order/submit")
     public Message successOrder(@RequestBody SuccessOrderReqDto successOrderReqDto) {
-        Long userId = successOrderReqDto.getUserId();
+        String userId = successOrderReqDto.getUserId();
         Long orderListId = successOrderReqDto.getOrderListId();
 
         Message message = orderListService.successOrder(userId, orderListId);
