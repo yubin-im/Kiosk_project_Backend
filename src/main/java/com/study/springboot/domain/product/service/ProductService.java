@@ -13,6 +13,7 @@ import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,7 +45,7 @@ public class ProductService {
 
     // 제품 9개 랜덤 추천 기능 (함께 즐기면 더욱 좋습니다!)
     @Transactional
-    public Message recommendProduct() {
+    public List<RecommendProductDto> recommendProduct() {
         List<Product> productList = productRepository.findAll();
         List<RecommendProductDto> randomProducts = new ArrayList<>();
         Random random = new Random();
@@ -64,21 +65,19 @@ public class ProductService {
         }
 
         // Message에 추가
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("추천 상품 조회 성공!")
-                .result(randomProducts)
-                .build();
 
-        return message;
+
+        return randomProducts;
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 사용자 이름 출력, 총가격 및 총수량 출력
     @Transactional
-    public Message getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
+    public Optional<ProductsResDto> getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
         Page<Product> products = productRepository.findByCategory(category, pageable);
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
+        if(orderList == null){
+            return Optional.empty();
+        }
         List<OrderItem> orderItemList = orderList.getOrderItems();
 
         // 카테고리별 9개씩 제품 출력
@@ -110,15 +109,7 @@ public class ProductService {
                 .orderListTotalPrice(orderListTotalPrice)
                 .build();
 
-        // Message에 추가
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("상품 조회가 완료되었습니다!")
-                .result(productsResDto)
-                .build();
-
-        return message;
+        return Optional.ofNullable(productsResDto);
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
