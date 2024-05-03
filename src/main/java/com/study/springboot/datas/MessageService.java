@@ -1,8 +1,18 @@
 package com.study.springboot.datas;
 
 
+import com.study.springboot.domain.orderSystem.OrderList;
+import com.study.springboot.domain.orderSystem.dto.OrderCountListDto;
+import com.study.springboot.domain.orderSystem.dto.OrderListDto;
+import com.study.springboot.domain.orderSystem.dto.OrderRevenueListDto;
+import com.study.springboot.domain.user.User;
+import com.study.springboot.domain.user.dto.UserDto;
+import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.enumeration.error.StatusCode;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class MessageService {
@@ -16,7 +26,7 @@ public class MessageService {
 
 
     //상품코드 존재하지 않음
-    public static Message productNotFoundMessage(){
+    public Message productNotFoundMessage(){
         return new AdminMessage(
                 StatusCode.PRODUCT_NOT_FOUND,
                 StatusCode.PRODUCT_NOT_FOUND.getValue(),
@@ -74,6 +84,136 @@ public class MessageService {
 
     public Message userNoPermission(){
         return new Message(StatusCode.USER_NO_PERMISSION, StatusCode.USER_NO_PERMISSION.getValue(), "권한이 없습니다");
+    }
+
+
+    public Message userListNotFoundMessage(){
+        return new AdminMessage(StatusCode.USER_LIST_NOT_FOUND,
+                StatusCode.USER_LIST_NOT_FOUND.getValue(),
+                "회원 목록 없음");
+    }
+
+    public static Message userListFoundSuccessMessage(Page<UserDto> dto){
+        return new AdminMessage(StatusCode.USER_LIST_FOUND_SUCCESS,
+                StatusCode.USER_LIST_FOUND_SUCCESS.getValue(),
+                "회원 목록 조회 성공",
+                dto);
+    }
+
+
+    public Message userFoundSuccessMessage(UserDto dto){
+        return new AdminMessage(StatusCode.USER_FOUND_SUCCESS,
+                StatusCode.USER_FOUND_SUCCESS.getValue(),
+                "회원 조회 성공",
+                dto);
+    }
+
+    //회원 삭제 성공
+    public Message userDeleteSuccessMessage(){
+        return new AdminMessage(StatusCode.USER_DELETE_SUCCESS,
+                StatusCode.USER_DELETE_SUCCESS.getValue(),
+                "회원 삭제 성공");
+    }
+
+    //회원 존재하지 않음
+    public Message userNotFoundMessage(){
+        return new AdminMessage(StatusCode.USER_NOT_FOUND,
+                StatusCode.USER_NOT_FOUND.getValue(),
+                "회원을 찾을 수 없습니다.");
+    }
+
+    //회원 수정 성공
+    public Message userUpdateSuccessMessage(){
+        return new AdminMessage(StatusCode.USER_UPDATE_SUCCESS,
+                StatusCode.USER_UPDATE_SUCCESS.getValue(),
+                "회원 수정 성공");
+    }
+
+    /*
+    OrderList
+     */
+
+    //주문 목록 없음
+    public Message orderListNotFoundMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_NOT_FOUND,
+                StatusCode.ORDER_LIST_NOT_FOUND.getValue(),
+                "주문 목록 없음");
+    }
+
+    //주문 상세 조회 성공
+    public  Message orderFoundSuccessMessage(OrderList dto){
+        return new AdminMessage(StatusCode.ORDER_FOUND_SUCCESS,
+                StatusCode.ORDER_FOUND_SUCCESS.getValue(),
+                "주문 상세 조회 성공",
+                dto);
+    }
+
+    //주문 목록 조회 성공
+    public  Message orderListFoundSuccessMessage(List<OrderListDto> dto){
+        return new AdminMessage(StatusCode.ORDER_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_LIST_FOUND_SUCCESS.getValue(),
+                "주문 목록 조회 성공",
+                dto);
+    }
+
+    //주문 삭제 성공
+    public Message orderListDeleteSuccessMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_DELETE_SUCCESS,
+                StatusCode.ORDER_LIST_DELETE_SUCCESS.getValue(),
+                "주문 삭제 성공");
+    }
+
+    //주문 수정 성공
+    public Message orderListUpdateSuccessMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_UPDATE_SUCCESS,
+                StatusCode.ORDER_LIST_UPDATE_SUCCESS.getValue(),
+                "주문 수정 성공");
+    }
+
+
+    //주문 아이템 수정 완료
+    public Message orderItemUpdateSuccessMessage(){
+        return new AdminMessage(
+                StatusCode.ORDER_ITEM_UPDATE_SUCCESS,
+                StatusCode.ORDER_ITEM_UPDATE_SUCCESS.getValue(),
+                "주문 아이템 수정 성공");
+    }
+
+
+    //주문 상세 아이템 존재하지 않음
+    public Message orderItemNotFoundMessage(){
+        return new AdminMessage(
+                StatusCode.ORDER_ITEM_NOT_FOUND,
+                StatusCode.ORDER_ITEM_NOT_FOUND.getValue(),
+                "주문 아이템을 찾을 수 없습니다");
+    }
+
+
+    //주문 수입 통계 조회 성공
+    public Message orderRevenueListFoundSuccessMessage(OrderRevenueListDto dto){
+        return new AdminMessage(StatusCode.ORDER_REVENUE_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_REVENUE_LIST_FOUND_SUCCESS.getValue(),
+                "주문 수입 목록 조회 성공",
+                dto);
+    }
+
+    //주문 통계 조회 실패
+    public Message orderStatisticsListNotFoundMessage(){
+        return new AdminMessage(StatusCode.ORDER_LIST_NOT_FOUND,
+                StatusCode.ORDER_LIST_NOT_FOUND.getValue(),
+                "주문 통계 목록 없음");
+    }
+
+    //주문 횟수 통계 조회 성공
+    public Message orderCountListFoundSuccessMessage(OrderCountListDto dto){
+        return new AdminMessage(StatusCode.ORDER_COUNT_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_COUNT_LIST_FOUND_SUCCESS.getValue(),
+                "주문 횟수 목록 조회 성공",
+                dto);
+    }
+
+    public Message productFoundSuccessMessage(){
+        return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공");
     }
 
 
