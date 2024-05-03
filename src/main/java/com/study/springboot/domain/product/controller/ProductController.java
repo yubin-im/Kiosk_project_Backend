@@ -41,34 +41,49 @@ public class ProductController {
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 사용자 이름 출력, 총가격 및 총수량 출력
 //    @PostMapping("/order")
-    @ResponseBody
-    public ResponseEntity getProductsByCategory(@RequestBody ProductsReqDto productsReqDto) {
-        ProductCategory category = ProductCategory.valueOf(productsReqDto.getCategory());
-        Pageable pageable = PageRequest.of(productsReqDto.getPage(), 9);
-
-        Long orderListId = productsReqDto.getOrderListId();
-        Optional<ProductsResDto> optional = productService.getProductsByCategory(category, pageable, orderListId);
-
-        Message message;
-        if(optional.isPresent()){
-            message = messageService.productsByCategoryFoundSuccessMessage(optional.get());
-            return ResponseEntity.ok(message);
-        }
-
-        message = messageService.productListNotFoundMessage();
-        return ResponseEntity.ok(message);
-    }
+//    @ResponseBody
+//    public ResponseEntity getProductsByCategory(@RequestBody ProductsReqDto productsReqDto) {
+//        ProductCategory category = ProductCategory.valueOf(productsReqDto.getCategory());
+//        Pageable pageable = PageRequest.of(productsReqDto.getPage(), 9);
+//
+//        Long orderListId = productsReqDto.getOrderListId();
+//        Optional<ProductsResDto> optional = productService.getProductsByCategory(category, pageable, orderListId);
+//
+//        Message message;
+//        if(optional.isPresent()){
+//            message = messageService.productsByCategoryFoundSuccessMessage(optional.get());
+//            return ResponseEntity.ok(message);
+//        }
+//
+//        message = messageService.productListNotFoundMessage();
+//        return ResponseEntity.ok(message);
+//    }
 
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
     @PostMapping("/order")
     @ResponseBody
-    public Message onlyGetProductsByCategory(@RequestBody OnlyGetProductsReq onlyGetProductsReq) {
+    public ResponseEntity onlyGetProductsByCategory(@RequestBody OnlyGetProductsReq onlyGetProductsReq) {
         ProductCategory productCategory = ProductCategory.valueOf(onlyGetProductsReq.getCategory());
         Pageable pageable = PageRequest.of(onlyGetProductsReq.getPage(), 9);
 
-        Message message = productService.onlyGetProductsByCategory(productCategory, pageable);
-        return message;
+        System.out.println("onlyGetProductsReqCa = " + onlyGetProductsReq.getCategory());
+        System.out.println("onlyGetProductsReq.getPage() = " + onlyGetProductsReq.getPage());
+        List<ProductsByCategoryDto> list = productService.onlyGetProductsByCategory(productCategory, pageable);
+
+        if(list.isEmpty()){
+            Message message = messageService.productNotFoundMessage();
+            return ResponseEntity.ok(message);
+        }
+
+        Message message = Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("상품 조회가 완료되었습니다!")
+                .result(list)
+                .build();
+
+        return ResponseEntity.ok(message);
     }
 
 }

@@ -22,20 +22,20 @@ public class OrderListController {
     final private MessageService messageService;
 
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
-    @PostMapping("/order/place")
-
-    public ResponseEntity userOrderList(@RequestBody Map<String, Long> userIdMap) {
-        Long userId = userIdMap.get("userId");
-
-        Optional<OrderList> optional = orderListService.userOrderList(userId);
-        if(optional.isPresent()){
-            Message message = messageService.addOrderListSuccessMessage(new OrderListDto(optional.get()));
-            return ResponseEntity.ok(message);
-        }
-
-        Message message = messageService.addOrderListFailedMessage();
-        return ResponseEntity.ok(message);
-    }
+//    @PostMapping("/order/place")
+//
+//    public ResponseEntity userOrderList(@RequestBody Map<String, Long> userIdMap) {
+//        Long userId = userIdMap.get("userId");
+//
+//        Optional<OrderList> optional = orderListService.userOrderList(userId);
+//        if(optional.isPresent()){
+//            Message message = messageService.addOrderListSuccessMessage(new OrderListDto(optional.get()));
+//            return ResponseEntity.ok(message);
+//        }
+//
+//        Message message = messageService.addOrderListFailedMessage();
+//        return ResponseEntity.ok(message);
+//    }
 
     // 결제 화면
     @PostMapping("/order/payment")

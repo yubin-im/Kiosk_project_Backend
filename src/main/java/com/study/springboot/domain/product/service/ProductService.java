@@ -56,7 +56,7 @@ public class ProductService {
             Product product = productList.get(randomIndex);
 
             RecommendProductDto recommendProductDto = RecommendProductDto.builder()
-                    .id(product.getId())
+                    .productCode(product.getProductCode())
                     .productName(product.getProductName())
                     .productPrice(product.getProductPrice())
                     .productImgUrl(product.getProductImgUrl())
@@ -83,7 +83,7 @@ public class ProductService {
         // 카테고리별 9개씩 제품 출력
         List<ProductsByCategoryDto> productDtos = products.getContent().stream()
                 .map(product -> new ProductsByCategoryDto(
-                        product.getId(),
+                        product.getProductCode(),
                         product.getProductName(),
                         product.getProductPrice(),
                         product.getProductImgUrl()))
@@ -114,27 +114,25 @@ public class ProductService {
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
     @Transactional
-    public Message onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
+    public List<ProductsByCategoryDto> onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
+        System.out.println("cat : " + category);
         Page<Product> products = productRepository.findByCategory(category, pageable);
 
         // 카테고리별 9개씩 제품 출력
         List<ProductsByCategoryDto> productDtos = products.getContent().stream()
                 .map(product -> new ProductsByCategoryDto(
-                        product.getId(),
+                        product.getProductCode(),
                         product.getProductName(),
                         product.getProductPrice(),
                         product.getProductImgUrl()))
                 .collect(Collectors.toList());
 
-        // Message에 추가
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("상품 조회가 완료되었습니다!")
-                .result(productDtos)
-                .build();
 
-        return message;
+        productDtos.stream().forEach(o->{
+            System.out.println(o.getProductName() );
+        });
+        return productDtos;
+
     }
 
 

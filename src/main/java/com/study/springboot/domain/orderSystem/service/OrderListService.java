@@ -32,21 +32,21 @@ public class OrderListService {
 
 
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
-    @Transactional
-    public Optional<OrderList> userOrderList(Long userId) {
-        OrderList orderList = OrderList.builder()
-                .orderListTime(LocalDateTime.now())
-                .orderListStatus(OrderListStatus.PREPARING)
-                .orderListTotalPrice(0)
-                // 비회원이면 null로 들어가도록
-                .user(userRepository.findByUserId(userId).orElse(null))
-                .build();
-
-        OrderList result = orderListRepository.save(orderList);
-
-        return Optional.ofNullable(result);
-
-    }
+//    @Transactional
+//    public Optional<OrderList> userOrderList(Long userId) {
+//        OrderList orderList = OrderList.builder()
+//                .orderListTime(LocalDateTime.now())
+//                .orderListStatus(OrderListStatus.PREPARING)
+//                .orderListTotalPrice(0)
+//                // 비회원이면 null로 들어가도록
+//                .user(userRepository.findByUserId(userId).orElse(null))
+//                .build();
+//
+//        OrderList result = orderListRepository.save(orderList);
+//
+//        return Optional.ofNullable(result);
+//
+//    }
 
     // 결제 화면
     @Transactional
