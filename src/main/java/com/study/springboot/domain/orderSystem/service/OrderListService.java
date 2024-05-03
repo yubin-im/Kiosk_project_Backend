@@ -34,13 +34,13 @@ public class OrderListService {
 
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
     @Transactional
-    public Message userOrderList(Long userId) {
+    public Message userOrderList(String userId) {
         OrderList orderList = OrderList.builder()
                 .orderListTime(LocalDateTime.now())
                 .orderListStatus(OrderListStatus.PREPARING)
                 .orderListTotalPrice(0)
                 // 비회원이면 null로 들어가도록
-                .user(userRepository.findById(userId).orElse(null))
+                .user(userRepository.findByUserId(userId).orElse(null))
                 .build();
 
         orderListRepository.save(orderList);
