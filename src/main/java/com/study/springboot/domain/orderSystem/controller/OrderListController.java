@@ -21,8 +21,8 @@ public class OrderListController {
 
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
     @PostMapping("/order/place")
-    public Message userOrderList(@RequestBody Map<String, Long> userIdMap) {
-        Long userId = userIdMap.get("userId");
+    public Message userOrderList(@RequestBody Map<String, String> userIdMap) {
+        String userId = userIdMap.get("userId");
         Message message = orderListService.userOrderList(userId);
 
         return message;
