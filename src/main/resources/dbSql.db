@@ -2,5 +2,5 @@ drop database kioskdb;
 create database kioskdb;
 use kioskdb;
 
-select * from product order by category;
+select * from product order by category  ;
 select * from user;
