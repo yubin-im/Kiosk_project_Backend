@@ -82,8 +82,8 @@ public class AdminService {
 
     //회원 삭제
     @Transactional
-    public Optional<User> deleteUser(Long id){
-        Optional<User> optional = userRepository.findById(id);
+    public Optional<User> deleteUser(String userId){
+        Optional<User> optional = userRepository.findByUserId(userId);
         if(optional.isPresent())
         {
             User user = optional.get();
@@ -206,10 +206,16 @@ public class AdminService {
     }
 
     //주문 상세 조회
-    public Optional<OrderList> getOrder(Long id){
+    public Optional<OrderListDetailDto> getOrder(Long id){
         Optional<OrderList> optional = orderListRepository.findById(id);
-        return optional;
+        if(optional.isEmpty()) return Optional.empty();
 
+        OrderListDetailDto orderListDetailDto = OrderListDetailDto.builder()
+                .orderList(optional.get())
+                .items(optional.get().getOrderItems())
+                .build();
+
+        return Optional.ofNullable(orderListDetailDto);
     }
 
     //주문 삭제

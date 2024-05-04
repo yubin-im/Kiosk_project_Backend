@@ -84,8 +84,8 @@ public class AdminController {
 
     //회원 삭제
     @DeleteMapping("/user/{id}")
-    public ResponseEntity deleteUser(@PathVariable("id") Long id){
-        Optional<User> deleted = adminService.deleteUser(id);
+    public ResponseEntity deleteUser(@PathVariable("id") String userId){
+        Optional<User> deleted = adminService.deleteUser(userId);
 
         if(deleted.isPresent()){
             Message message = messageService.userDeleteSuccessMessage();
@@ -122,12 +122,16 @@ public class AdminController {
                                                         @RequestParam(value="text", required = false) @Nullable String text,
                                                         @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
     ){
+
+        System.out.println("응답하");
         Page<OrderListDto> dto = adminService.getOrderList(type, text, page);
         if(dto == null){
             Message message = messageService.orderListNotFoundMessage();
+            System.out.println("널");
             return ResponseEntity.ok(message);
         }
 
+        dto.getContent().stream().forEach(o-> System.out.println(o.getUserId()));
         Message message = messageService.orderListFoundSuccessMessage(dto.getContent());
         return ResponseEntity.ok().body(message);
     }
@@ -135,10 +139,9 @@ public class AdminController {
     //주문 상세 조회
     @GetMapping("/order/{id}")
     public ResponseEntity getOrderList(@PathVariable("id") Long id){
-        Optional<OrderList> optional = adminService.getOrder(id);
+        Optional<OrderListDetailDto> optional = adminService.getOrder(id);
         if(optional.isPresent()){
-            OrderList orderList = optional.get();
-            Message message = messageService.orderFoundSuccessMessage(orderList);
+            Message message = messageService.orderFoundSuccessMessage(optional.get());
             return ResponseEntity.ok(message);
         }
 
@@ -236,6 +239,7 @@ public class AdminController {
     @GetMapping("/product/list")
     public ResponseEntity productList(){
 
+        System.out.println("신호가 들어오긴 함");
         List<ProductDto> dto = adminService.findAllProduct();
         if(!dto.isEmpty()){
             Message message = messageService.productListFoundSuccessMessage(dto);

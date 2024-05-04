@@ -154,7 +154,7 @@ public class MessageService {
     }
 
     //주문 상세 조회 성공
-    public  Message orderFoundSuccessMessage(OrderList dto){
+    public  Message orderFoundSuccessMessage(OrderListDetailDto dto){
         return new AdminMessage(StatusCode.ORDER_FOUND_SUCCESS,
                 StatusCode.ORDER_FOUND_SUCCESS.getValue(),
                 "주문 상세 조회 성공",
