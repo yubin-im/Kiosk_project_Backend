@@ -48,4 +48,13 @@ public class OrderItem {
     public void updateOrderPrice(Integer orderPrice) {
         this.orderPrice = orderPrice;
     }
+
+
+    @Builder
+    public OrderItem(Integer orderPrice, Integer orderAmount, Product product, OrderList orderList) {
+        this.orderPrice = orderPrice;
+        this.orderAmount = orderAmount;
+        this.product = product;
+        this.orderList = orderList;
+    }
 }

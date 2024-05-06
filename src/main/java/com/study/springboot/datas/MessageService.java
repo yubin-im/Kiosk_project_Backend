@@ -285,6 +285,13 @@ public class MessageService {
                 .result(paymentResDto)
                 .build();
     }
+    public Message paymentSuccessMessage2(){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_PAYMENT_SUCCESS)
+                .code(StatusCode.ORDER_LIST_PAYMENT_SUCCESS.getValue())
+                .message("결제가 정상적으로 진행되었습니다!")
+                .build();
+    }
 
     public Message paymentFailedMessage(){
         return Message.builder()

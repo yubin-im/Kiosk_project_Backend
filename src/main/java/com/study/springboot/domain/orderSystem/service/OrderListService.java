@@ -9,11 +9,14 @@ import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
 import com.study.springboot.domain.product.Product;
 import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.user.User;
+import com.study.springboot.domain.user.dto.OrderDto;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import com.study.springboot.enumeration.error.StatusCode;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.query.Order;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -30,6 +33,49 @@ public class OrderListService {
     private final OrderItemRepository orderItemRepository;
     private final ProductRepository productRepository;
 
+
+    @Transactional
+    public Optional<OrderList> makeOrderList(List<OrderDto> orders, String userId){
+        Optional<User> user = userRepository.findByUserId(userId);
+        List<OrderItem> orderItemList = new ArrayList<>();
+        Integer totalPrice = 0;
+        for(OrderDto order : orders){
+            Product product = productRepository.findProductByProductCode(order.getProduct().getProductCode()).get();
+            OrderItem orderItem = OrderItem.builder()
+                    .product(product)
+                    .orderAmount(order.getProductAmount())
+                    .orderPrice(order.getTotalPrice())
+                    .build();
+
+            totalPrice +=  order.getTotalPrice();
+            orderItemList.add(orderItem);
+        }
+
+        OrderList newOrder ;
+        if(user.isEmpty()){
+            newOrder = OrderList.builder()
+                    .orderItems(orderItemList)
+                    .orderListStatus(OrderListStatus.READY)
+                    .orderListTime(LocalDateTime.now())
+                    .orderListTotalPrice(totalPrice)
+                    .build();
+
+
+        }
+        else {
+            newOrder = OrderList.builder()
+                .orderItems(orderItemList)
+                .orderListStatus(OrderListStatus.READY)
+                .orderListTime(LocalDateTime.now())
+                .orderListTotalPrice(totalPrice)
+                .user(user.get())
+                .build();
+        }
+
+        OrderList result = orderListRepository.save(newOrder);
+
+        return Optional.ofNullable(result);
+    }
 
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
 //    @Transactional
