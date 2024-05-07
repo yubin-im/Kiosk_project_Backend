@@ -228,6 +228,9 @@ public class MessageService {
     public Message productFoundSuccessMessage(){
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공");
     }
+    public Message productFoundSuccessMessage(ProductDto dto){
+        return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dto);
+    }
 
     public Message productListFoundSuccessMessage (List<ProductDto> dtoList){
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dtoList);

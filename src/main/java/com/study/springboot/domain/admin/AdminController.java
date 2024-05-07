@@ -236,10 +236,9 @@ public class AdminController {
     /*
     product service
      */
-    @GetMapping("/product/list")
+    @GetMapping("/product")
     public ResponseEntity productList(){
 
-        System.out.println("신호가 들어오긴 함");
         List<ProductDto> dto = adminService.findAllProduct();
         if(!dto.isEmpty()){
             Message message = messageService.productListFoundSuccessMessage(dto);
@@ -268,15 +267,13 @@ public class AdminController {
 
     }
 
-    @GetMapping("/product/detail")
-    public ResponseEntity productDetail(@RequestParam(name = "code") String code, HttpSession session){
-        //관리자가 아니라면 에러 코드
-        if(!KioskSession.isAdmin(session)){
-            Message message = messageService.userNoPermission();
-            return ResponseEntity.ok(message);
-        }
+    @GetMapping("/product/detail/{code}")
+    public ResponseEntity productDetail(@RequestParam(value = "code") String code){
 
         Optional<Product> optional = adminService.findProductByCode(code);
+        if(optional.isPresent()){
+            Message message = messageService.productFoundSuccessMessage(new ProductDto(optional.get()));
+        }
         ProductDto dto = new ProductDto(optional.get());
 
         return ResponseEntity.ok(dto);
