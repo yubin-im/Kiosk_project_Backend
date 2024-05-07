@@ -8,5 +8,5 @@ import org.springframework.data.domain.Page;
 @Builder
 public class OrderListResponseDto {
     private int totalCount;
-    private Page<OrderListDto> orderListDtoPage;
+    private Page<OrderListDto> orderList;
 }

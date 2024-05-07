@@ -18,7 +18,6 @@ import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.product.service.ProductService;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
-import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import com.study.springboot.enumeration.ProductCategory;
@@ -207,7 +206,7 @@ public class AdminService {
 
         OrderListResponseDto orderListResponseDto = OrderListResponseDto.builder()
                 .totalCount(total)
-                .orderListDtoPage(orderListDtoPage)
+                .orderList(orderListDtoPage)
                 .build();
 
         return orderListResponseDto;
