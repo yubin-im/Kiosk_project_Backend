@@ -74,6 +74,12 @@ public class OrderListService {
 
         OrderList result = orderListRepository.save(newOrder);
 
+        // orderListId 부여
+        List<OrderItem> orderItems = result.getOrderItems();
+        for(OrderItem orderItem: orderItems) {
+            orderItem.updateOrderList(result);
+        }
+
         return Optional.ofNullable(result);
     }
 

@@ -57,4 +57,9 @@ public class OrderItem {
         this.product = product;
         this.orderList = orderList;
     }
+
+    // orderListId 부여를 위한 메소드
+    public void updateOrderList(OrderList orderList) {
+        this.orderList = orderList;
+    }
 }
