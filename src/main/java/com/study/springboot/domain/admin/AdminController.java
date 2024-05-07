@@ -28,8 +28,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
+import java.rmi.StubNotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -250,34 +252,39 @@ public class AdminController {
     }
 
     @PostMapping("/product/remove")
-    public ResponseEntity productRemove(@RequestBody RequestProductRemoveDto dto, HttpSession session){
+    public ResponseEntity productRemove(@RequestBody RequestProductRemoveDto dto){
 
-        //관리자가 아니라면 에러 코드
-        if(!KioskSession.isAdmin(session)){
-            Message message = messageService.userNoPermission();
-            return ResponseEntity.ok(message);
+
+        String productCode = dto.getProductCode();
+
+        Optional<ProductDto> optional = adminService.removeProduct(productCode);
+
+        if(optional.isPresent()){
+            return ResponseEntity.ok(Message.builder()
+                            .status(StatusCode.PRODUCT_REMOVE_SUCCESS)
+                            .code(StatusCode.PRODUCT_REMOVE_SUCCESS.getValue())
+                            .message("상품 삭제 성공")
+                    .build());
         }
 
-        String code = dto.getProductCode();
-        String productName = dto.getProductName();
-
-        Message message = adminService.setRemoveProductMessage(code, productName);
-
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(Message.builder()
+                        .code(StatusCode.PRODUCT_REMOVE_FAIL.getValue())
+                        .status(StatusCode.PRODUCT_REMOVE_FAIL)
+                        .message("상품 삭제 실패")
+                .build());
 
     }
 
     @GetMapping("/product/detail/{code}")
-    public ResponseEntity productDetail(@PathVariable(value = "code") String code){
+    public ResponseEntity productDetail(@PathVariable(value = "code") Long id){
 
-        Optional<Product> optional = adminService.findProductByCode(code);
+        System.out.println("상품디테일 " + id);
+        Optional<Product> optional = adminService.findById(id);
         if(optional.isPresent()){
             Message message = messageService.productFoundSuccessMessage(new ProductDto(optional.get()));
             return ResponseEntity.ok(message);
         }
-//        ProductDto dto = new ProductDto(optional.get());
-//
-//        return ResponseEntity.ok(dto);
+
         return ResponseEntity.ok(messageService.productNotFoundMessage());
     }
 

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProductDto {
-
+    private Long id;
     private String productName;
 
     private Integer productPrice;
@@ -36,6 +36,7 @@ public class ProductDto {
     }
 
     public ProductDto(Product entity){
+        this.id = entity.getId();
         this.productName = entity.getProductName();
         this.productPrice = entity.getProductPrice();
         this.productCode = entity.getProductCode();
