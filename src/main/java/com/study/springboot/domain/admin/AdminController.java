@@ -100,6 +100,7 @@ public class AdminController {
     //회원 수정
     @PutMapping("/user/{id}")
     public ResponseEntity updateUser(@PathVariable("id") Long id, @RequestBody UserDto dto){
+        System.out.println("dtoname" + dto.getUserName());
         Optional<User> optional = adminService.updateUser(id, dto);
         if(optional.isPresent()){
             User user = optional.get();

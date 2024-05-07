@@ -16,6 +16,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     // 카테고리 별로 상품 출력
     Page<Product> findByCategory(ProductCategory category, Pageable pageable);
+
     Page<Product> findAll(Pageable pageable);
 
 }

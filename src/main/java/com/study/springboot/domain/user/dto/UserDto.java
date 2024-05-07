@@ -34,16 +34,16 @@ public class UserDto {
     }
 
 
-    // public User toEntity(){
-    //     return User.builder()
-    //             .id(this.id)
-    //             .userId(this.userId)
-    //             .userId(this.userId)
-    //             .userPw(this.userPw)
-    //             .userRole(this.userRole)
-    //             .userName(this.userName)
-    //             .userJoinDate(this.userJoinDate)
-    //             .orderList(this.orderList)
-    //             .build();
-    // }
+//     public User toEntity(){
+//         return User.builder()
+//                 .id(this.id)
+//                 .userId(this.userId)
+//                 .userId(this.userId)
+//                 .userPw(this.userPw)
+//                 .userRole(this.userRole)
+//                 .userName(this.userName)
+//                 .userJoinDate(this.userJoinDate)
+//                 .orderList(this.orderList)
+//                 .build();
+//     }
 }

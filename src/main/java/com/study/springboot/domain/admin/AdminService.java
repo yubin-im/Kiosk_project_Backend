@@ -99,6 +99,11 @@ public class AdminService {
     public Optional<User> updateUser(Long id, UserDto dto){
         Optional<User> optional = userRepository.findById(id);
 
+        if(optional.isEmpty()){
+            return Optional.empty();
+        }
+
+        optional.get().update(dto);
         return optional;
 
     }
@@ -115,7 +120,8 @@ public class AdminService {
     }
     @Transactional(readOnly = true)
     public Page<ProductDto> findAllProduct(int page, String orderBy){
-        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(orderBy).descending());
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(orderBy).ascending());
+        System.out.println("orderBy" + orderBy);
 
         Page<ProductDto> productDtoPage =  productRepository.findAll(pageRequest).map(ProductDto::new);
         return productDtoPage;
