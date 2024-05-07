@@ -120,8 +120,8 @@ public class OrderListService {
 
     // 주문 완료(주문번호와 고객 적립금 출력) 및 주문 시간과 상태 업데이트
     @Transactional
-    public Optional<SuccessOrderResDto> orderSuccess(Long userId, Long orderListId) {
-        User user = userRepository.findById(userId).orElse(null);
+    public Optional<SuccessOrderResDto> orderSuccess(String userId, Long orderListId) {
+        User user = userRepository.findByUserId(userId).orElse(null);
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
 
         // 주문 시간과 상태 업데이트

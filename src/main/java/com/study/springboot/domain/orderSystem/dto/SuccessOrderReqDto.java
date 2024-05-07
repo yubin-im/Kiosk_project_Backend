@@ -4,6 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class SuccessOrderReqDto {
-    private Long userId;
+    private String userId;
     private Long orderListId;
 }
