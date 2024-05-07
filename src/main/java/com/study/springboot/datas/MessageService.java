@@ -19,7 +19,7 @@ import java.util.List;
 public class MessageService {
 
     //상품 삭제 실패
-    public static Message productRemoveSuccessMessage(){
+    public Message productRemoveSuccessMessage(){
         return new AdminMessage(StatusCode.PRODUCT_REMOVE_SUCCESS,
                 StatusCode.PRODUCT_REMOVE_SUCCESS.getValue(),
                 "상품 삭제 성공");
@@ -43,13 +43,13 @@ public class MessageService {
     }
 
     //상품명과 상품코드 불일치
-    public static Message productCodeMisMatchMessage(){
+    public  Message productCodeMisMatchMessage(){
         return new AdminMessage(StatusCode.PRODUCT_CODE_MISMATCH,
                 StatusCode.PRODUCT_CODE_MISMATCH.getValue(),
                 "상품명과 상품코드가 불일치합니다");
     }
 
-    public static Message productEditSuccess(){
+    public Message productEditSuccess(){
         return new AdminMessage(StatusCode.PRODUCT_EDIT_SUCCESS, StatusCode.PRODUCT_EDIT_SUCCESS.getValue(), "상품 수정 성공");
     }
 

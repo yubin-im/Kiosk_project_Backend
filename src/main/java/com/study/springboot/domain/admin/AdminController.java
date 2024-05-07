@@ -268,15 +268,17 @@ public class AdminController {
     }
 
     @GetMapping("/product/detail/{code}")
-    public ResponseEntity productDetail(@RequestParam(value = "code") String code){
+    public ResponseEntity productDetail(@PathVariable(value = "code") String code){
 
         Optional<Product> optional = adminService.findProductByCode(code);
         if(optional.isPresent()){
             Message message = messageService.productFoundSuccessMessage(new ProductDto(optional.get()));
+            return ResponseEntity.ok(message);
         }
-        ProductDto dto = new ProductDto(optional.get());
-
-        return ResponseEntity.ok(dto);
+//        ProductDto dto = new ProductDto(optional.get());
+//
+//        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(messageService.productNotFoundMessage());
     }
 
     @PostMapping("/product/detail/edit")
@@ -287,9 +289,20 @@ public class AdminController {
 //            return ResponseEntity.ok(message);
 //        }
 
-        Message message = adminService.editProduct(dto);
+        Optional<ProductDto> optional = adminService.editProduct(dto);
+        if(optional.isPresent()){
+            return ResponseEntity.ok(Message.builder()
+                            .status(StatusCode.PRODUCT_EDIT_SUCCESS)
+                            .code(StatusCode.PRODUCT_EDIT_SUCCESS.getValue())
+                            .message("수정 성공")
+                    .build());
+        }
 
-        return ResponseEntity.ok(message);
+        return ResponseEntity.ok(Message.builder()
+                .status(StatusCode.PRODUCT_EDIT_FAILED)
+                .code(StatusCode.PRODUCT_EDIT_FAILED.getValue())
+                .message("수정 실패")
+                .build());
     }
 
     @PostMapping("/product/list/search")

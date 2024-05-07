@@ -146,20 +146,29 @@ public class AdminService {
 
 
     @Transactional
-    Message editProduct(RequestProductEditDto dto){
+    Optional<ProductDto> editProduct(RequestProductEditDto dto){
         Optional<Product> optional = productRepository.findProductByProductCode(dto.getProductCode());
 
-        if(!optional.isPresent()){
-            return messageService.productNotFoundMessage();
+        if(optional.isEmpty()){
+            return Optional.empty();
         }
 
         Product product = optional.get();
         Long id = product.getId();
 
-        product = dto.toEntity(id);
-        productRepository.save(product);
+        ProductCategory newCategory= null;
+        for(ProductCategory p : ProductCategory.values()){
+            if(p.getValue().equals(dto.getCategory())){
+                newCategory = p;
+                break;
+            }
+        }
 
-        return messageService.productEditSuccess();
+        product = dto.toEntity(id);
+
+        Product result = productRepository.save(product);
+
+        return Optional.ofNullable(new ProductDto(result));
 
     }
 

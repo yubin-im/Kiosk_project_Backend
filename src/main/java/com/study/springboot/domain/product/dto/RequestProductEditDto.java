@@ -23,6 +23,7 @@ public class RequestProductEditDto {
     private ProductCategory category;
 
     public Product toEntity(Long id){
+
         return Product.builder()
                 .id(id)
                 .productName(this.productName)
