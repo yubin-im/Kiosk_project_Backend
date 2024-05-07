@@ -232,7 +232,7 @@ public class MessageService {
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dto);
     }
 
-    public Message productListFoundSuccessMessage (List<ProductDto> dtoList){
+    public Message productListFoundSuccessMessage (Page<ProductDto> dtoList){
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dtoList);
     }
 

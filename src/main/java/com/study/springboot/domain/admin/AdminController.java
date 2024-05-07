@@ -239,9 +239,10 @@ public class AdminController {
     product service
      */
     @GetMapping("/product")
-    public ResponseEntity productList(){
+    public ResponseEntity productList(@RequestParam(value = "page", defaultValue = "0") int page,
+                                      @RequestParam(value = "sort", defaultValue = "product_name") String sortBy){
 
-        List<ProductDto> dto = adminService.findAllProduct();
+        Page<ProductDto> dto = adminService.findAllProduct(page, sortBy);
         if(!dto.isEmpty()){
             Message message = messageService.productListFoundSuccessMessage(dto);
             return ResponseEntity.ok(message);

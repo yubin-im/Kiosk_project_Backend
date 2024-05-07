@@ -114,8 +114,11 @@ public class AdminService {
         return productRepository.findById(id);
     }
     @Transactional(readOnly = true)
-    public List<ProductDto> findAllProduct(){
-        return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
+    public Page<ProductDto> findAllProduct(int page, String orderBy){
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(orderBy).descending());
+
+        Page<ProductDto> productDtoPage =  productRepository.findAll(pageRequest).map(ProductDto::new);
+        return productDtoPage;
     }
 
 
