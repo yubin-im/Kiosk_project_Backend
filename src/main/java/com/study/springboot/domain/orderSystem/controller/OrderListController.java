@@ -66,7 +66,7 @@ public class OrderListController {
         Optional<OrderList> optional = orderListService.makeOrderList(orderDto, userId);
 
         if(optional.isPresent()){
-            Message message = messageService.paymentSuccessMessage2();
+            Message message = messageService.paymentSuccessMessage2(optional.get().getId());
             return ResponseEntity.ok(message);
         }
 

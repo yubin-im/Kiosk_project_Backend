@@ -285,11 +285,12 @@ public class MessageService {
                 .result(paymentResDto)
                 .build();
     }
-    public Message paymentSuccessMessage2(){
+    public Message paymentSuccessMessage2(Long id){
         return Message.builder()
                 .status(StatusCode.ORDER_LIST_PAYMENT_SUCCESS)
                 .code(StatusCode.ORDER_LIST_PAYMENT_SUCCESS.getValue())
                 .message("결제가 정상적으로 진행되었습니다!")
+                .result(id)
                 .build();
     }
 
