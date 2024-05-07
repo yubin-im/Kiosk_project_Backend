@@ -11,5 +11,4 @@ import lombok.Setter;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RequestProductRemoveDto {
     private String productCode;
-    private String productName;
 }

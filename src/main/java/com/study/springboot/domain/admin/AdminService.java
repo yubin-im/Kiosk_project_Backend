@@ -115,28 +115,20 @@ public class AdminService {
 
 
     @Transactional
-    public Message setRemoveProductMessage(String productCode, String productName){
+    public Optional<ProductDto> removeProduct(String productCode){
         Optional<Product> optional = productService.findByCode(productCode);
 
         //존재하지 않는 코드
-        if(!optional.isPresent()){
-            Message message = messageService.productNotFoundMessage();
-            return message;
+        if(optional.isEmpty()){
+            return Optional.empty();
         }
-
 
         Product product = optional.get();
 
-        //코드명과 코드번호 불일치
-        if(!product.getProductName().equals(productName)){
-            Message message = messageService.productCodeMisMatchMessage();
-            return message;
-        }
-
         //삭제 성공
         productRepository.delete(product);
-        Message message = messageService.productRemoveSuccessMessage();
-        return message;
+
+        return Optional.ofNullable(new ProductDto(product));
     }
 
     @Transactional(readOnly = true)
