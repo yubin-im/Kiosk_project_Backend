@@ -4,3 +4,4 @@ use kioskdb;
 
 select * from product order by category  ;
 select * from user;
+select * from order_list;
