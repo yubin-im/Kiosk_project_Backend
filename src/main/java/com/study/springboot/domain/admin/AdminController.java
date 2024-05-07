@@ -122,17 +122,13 @@ public class AdminController {
                                                         @RequestParam(value="text", required = false) @Nullable String text,
                                                         @RequestParam(value="page", required = false, defaultValue = "0") @Nullable int page
     ){
-
-        System.out.println("응답하");
-        Page<OrderListDto> dto = adminService.getOrderList(type, text, page);
+        OrderListResponseDto dto = adminService.getOrderList(type, text, page);
         if(dto == null){
             Message message = messageService.orderListNotFoundMessage();
-            System.out.println("널");
             return ResponseEntity.ok(message);
         }
 
-        dto.getContent().stream().forEach(o-> System.out.println(o.getUserId()));
-        Message message = messageService.orderListFoundSuccessMessage(dto.getContent());
+        Message message = messageService.orderListFoundSuccessMessage(dto);
         return ResponseEntity.ok().body(message);
     }
 

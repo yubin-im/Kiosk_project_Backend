@@ -15,6 +15,7 @@ import java.util.List;
 @Repository
 public interface OrderListRepository extends JpaRepository<OrderList, Long> {
     Page<OrderList> findByOrderListStatus(OrderListStatus status, Pageable pageable);
+    List<OrderList> findByOrderListStatus(OrderListStatus status);
 
     // 주문 금액 통계 - 해당 월
     @Query(value = "SELECT date(OL.ORDER_LIST_TIME) as orderListDate, SUM(OL.ORDER_LIST_TOTAL_PRICE) as totalPrice, COUNT(OL.id) as OrderListCount " +
