@@ -44,10 +44,10 @@ public class OrderListService {
             OrderItem orderItem = OrderItem.builder()
                     .product(product)
                     .orderAmount(order.getProductAmount())
-                    .orderPrice(order.getTotalPrice())
+                    .orderPrice(order.getTotalPrice()*order.getProductAmount())
                     .build();
 
-            totalPrice +=  order.getTotalPrice();
+            totalPrice +=  order.getTotalPrice() * order.getProductAmount();
             orderItemList.add(orderItem);
         }
 
