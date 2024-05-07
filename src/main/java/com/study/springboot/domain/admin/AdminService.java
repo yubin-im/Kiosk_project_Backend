@@ -108,6 +108,11 @@ public class AdminService {
     Product
      */
 
+
+    @Transactional(readOnly = true)
+    public Optional<Product> findById(Long id){
+        return productRepository.findById(id);
+    }
     @Transactional(readOnly = true)
     public List<ProductDto> findAllProduct(){
         return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());

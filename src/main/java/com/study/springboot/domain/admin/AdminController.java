@@ -255,9 +255,9 @@ public class AdminController {
     public ResponseEntity productRemove(@RequestBody RequestProductRemoveDto dto){
 
 
-        String code = dto.getProductCode();
+        String productCode = dto.getProductCode();
 
-        Optional<ProductDto> optional = adminService.removeProduct(code);
+        Optional<ProductDto> optional = adminService.removeProduct(productCode);
 
         if(optional.isPresent()){
             return ResponseEntity.ok(Message.builder()
@@ -272,19 +272,19 @@ public class AdminController {
                         .status(StatusCode.PRODUCT_REMOVE_FAIL)
                         .message("상품 삭제 실패")
                 .build());
+
     }
 
     @GetMapping("/product/detail/{code}")
-    public ResponseEntity productDetail(@PathVariable(value = "code") String code){
+    public ResponseEntity productDetail(@PathVariable(value = "code") Long id){
 
-        Optional<Product> optional = adminService.findProductByCode(code);
+        System.out.println("상품디테일 " + id);
+        Optional<Product> optional = adminService.findById(id);
         if(optional.isPresent()){
             Message message = messageService.productFoundSuccessMessage(new ProductDto(optional.get()));
             return ResponseEntity.ok(message);
         }
-//        ProductDto dto = new ProductDto(optional.get());
-//
-//        return ResponseEntity.ok(dto);
+
         return ResponseEntity.ok(messageService.productNotFoundMessage());
     }
 

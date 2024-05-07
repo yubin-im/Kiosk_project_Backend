@@ -44,6 +44,11 @@ public class ProductService {
 
 
     @Transactional(readOnly = true)
+    public Optional<Product> findById(Long id){
+        return productRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Product> findByCode(String code){
         return productRepository.findProductByProductCode(code);
     }
