@@ -11,6 +11,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -39,6 +40,12 @@ public class AdminMessage extends Message {
 
 
     //회원 목록 조회 성공
+    public static Message userListFoundSuccessMessage(Page<UserDto> dto){
+        return new AdminMessage(StatusCode.USER_LIST_FOUND_SUCCESS,
+                StatusCode.USER_LIST_FOUND_SUCCESS.getValue(),
+                "회원 목록 조회 성공",
+                dto);
+    }
 
 
     //회원 상세 조회 성공

@@ -10,20 +10,18 @@ import java.util.List;
 
 @Getter
 public class OrderListDto {
-    private Long id;
+    private Long orderId;
     private LocalDateTime orderListTime;
-    private Integer orderListTotatlPrice;
+    private Integer orderListTotalPrice;
     private String orderListStatus;
-    private Long userId;
-    private List<OrderItem> orderItems;
+    private String userId;
 
     @Builder
     public OrderListDto(OrderList entity) {
-        this.id = entity.getId();
+        this.orderId = entity.getId();
         this.orderListTime = entity.getOrderListTime();
-        this.orderListTotatlPrice = entity.getOrderListTotalPrice();
+        this.orderListTotalPrice = entity.getOrderListTotalPrice();
         this.orderListStatus = entity.getOrderListStatus().toString();
-        this.userId = entity.getUser().getId();
-        this.orderItems=entity.getOrderItems();
+        this.userId = entity.getUser().getUserId();
     }
 }

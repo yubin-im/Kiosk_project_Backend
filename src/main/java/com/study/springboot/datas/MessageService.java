@@ -53,6 +53,10 @@ public class MessageService {
         return new AdminMessage(StatusCode.PRODUCT_EDIT_SUCCESS, StatusCode.PRODUCT_EDIT_SUCCESS.getValue(), "상품 수정 성공");
     }
 
+    public static Message productFetchSuccess(){
+        return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "성공");
+    }
+
     public Message userNotFound(){
         return new Message(StatusCode.USER_NOT_FOUND,
                 StatusCode.USER_NOT_FOUND.getValue(),
@@ -150,7 +154,7 @@ public class MessageService {
     }
 
     //주문 상세 조회 성공
-    public  Message orderFoundSuccessMessage(OrderList dto){
+    public  Message orderFoundSuccessMessage(OrderListDetailDto dto){
         return new AdminMessage(StatusCode.ORDER_FOUND_SUCCESS,
                 StatusCode.ORDER_FOUND_SUCCESS.getValue(),
                 "주문 상세 조회 성공",
@@ -279,6 +283,13 @@ public class MessageService {
                 .code(StatusCode.ORDER_LIST_PAYMENT_SUCCESS.getValue())
                 .message("결제가 정상적으로 진행되었습니다!")
                 .result(paymentResDto)
+                .build();
+    }
+    public Message paymentSuccessMessage2(){
+        return Message.builder()
+                .status(StatusCode.ORDER_LIST_PAYMENT_SUCCESS)
+                .code(StatusCode.ORDER_LIST_PAYMENT_SUCCESS.getValue())
+                .message("결제가 정상적으로 진행되었습니다!")
                 .build();
     }
 

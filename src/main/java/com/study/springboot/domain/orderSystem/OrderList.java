@@ -16,8 +16,6 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "order_list")
-@Builder
-@AllArgsConstructor
 public class OrderList {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +38,18 @@ public class OrderList {
 
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+
+
+    @Builder
+    public OrderList(Long id, LocalDateTime orderListTime, Integer orderListTotalPrice, OrderListStatus orderListStatus, User user, List<OrderItem> orderItems) {
+        this.id = id;
+        this.orderListTime = orderListTime;
+        this.orderListTotalPrice = orderListTotalPrice;
+        this.orderListStatus = orderListStatus;
+        this.user = user;
+        this.orderItems = orderItems;
+    }
 
     public void update(LocalDateTime orderListTime, Integer orderListTotalPrice, OrderListStatus orderListStatus){
         this.orderListTime=orderListTime;

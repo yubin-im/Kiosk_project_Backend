@@ -2,9 +2,13 @@ package com.study.springboot.domain.orderSystem.controller;
 
 import com.study.springboot.datas.Message;
 import com.study.springboot.datas.MessageService;
+import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.dto.*;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
+import com.study.springboot.domain.user.dto.OrderDto;
+import com.study.springboot.domain.user.dto.UserOrderReqDto;
+import com.study.springboot.enumeration.OrderListStatus;
 import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -21,29 +27,46 @@ public class OrderListController {
     final private OrderListService orderListService;
     final private MessageService messageService;
 
+
     // 식사 장소 선택 후 해당 회원의 order_list(장바구니) 생성
-    @PostMapping("/order/place")
-
-    public ResponseEntity userOrderList(@RequestBody Map<String, Long> userIdMap) {
-        Long userId = userIdMap.get("userId");
-
-        Optional<OrderList> optional = orderListService.userOrderList(userId);
-        if(optional.isPresent()){
-            Message message = messageService.addOrderListSuccessMessage(new OrderListDto(optional.get()));
-            return ResponseEntity.ok(message);
-        }
-
-        Message message = messageService.addOrderListFailedMessage();
-        return ResponseEntity.ok(message);
-    }
+//    @PostMapping("/order/place")
+//
+//    public ResponseEntity userOrderList(@RequestBody Map<String, Long> userIdMap) {
+//        Long userId = userIdMap.get("userId");
+//
+//        Optional<OrderList> optional = orderListService.userOrderList(userId);
+//        if(optional.isPresent()){
+//            Message message = messageService.addOrderListSuccessMessage(new OrderListDto(optional.get()));
+//            return ResponseEntity.ok(message);
+//        }
+//
+//        Message message = messageService.addOrderListFailedMessage();
+//        return ResponseEntity.ok(message);
+//    }
 
     // 결제 화면
-    @PostMapping("/order/payment")
-    public ResponseEntity payment(@RequestBody Map<String, Long> orderListIdMap) {
-        Long orderListId = orderListIdMap.get("orderListId");
-        Optional<PaymentResDto> optional = orderListService.payment(orderListId);
+//    @PostMapping("/order/payment")
+//    public ResponseEntity payment(@RequestBody ) {
+//        Long orderListId = orderListIdMap.get("orderListId");
+//        Optional<PaymentResDto> optional = orderListService.payment(orderListId);
+//        if(optional.isPresent()){
+//            Message message = messageService.paymentSuccessMessage(optional.get());
+//            return ResponseEntity.ok(message);
+//        }
+//
+//        Message message = messageService.paymentFailedMessage();
+//        return ResponseEntity.ok(message);
+//    }
+
+    @PostMapping("/order/payment2")
+    public ResponseEntity payment(@RequestBody UserOrderReqDto dto) {
+        String userId = dto.getUserId();
+        List<OrderDto> orderDto = dto.getOrderList();
+
+        Optional<OrderList> optional = orderListService.makeOrderList(orderDto, userId);
+
         if(optional.isPresent()){
-            Message message = messageService.paymentSuccessMessage(optional.get());
+            Message message = messageService.paymentSuccessMessage2();
             return ResponseEntity.ok(message);
         }
 
