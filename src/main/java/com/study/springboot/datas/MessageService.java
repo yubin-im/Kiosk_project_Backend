@@ -162,7 +162,7 @@ public class MessageService {
     }
 
     //주문 목록 조회 성공
-    public  Message orderListFoundSuccessMessage(List<OrderListDto> dto){
+    public  Message orderListFoundSuccessMessage(OrderListResponseDto dto){
         return new AdminMessage(StatusCode.ORDER_LIST_FOUND_SUCCESS,
                 StatusCode.ORDER_LIST_FOUND_SUCCESS.getValue(),
                 "주문 목록 조회 성공",

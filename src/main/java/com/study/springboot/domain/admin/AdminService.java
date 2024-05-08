@@ -18,7 +18,6 @@ import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.product.service.ProductService;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
-import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import com.study.springboot.enumeration.ProductCategory;
@@ -206,18 +205,27 @@ public class AdminService {
 
     //주문 목록 조회
     @Transactional
-    public Page<OrderListDto> getOrderList(String type, String text, int page){
+    public OrderListResponseDto getOrderList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("orderListTime").descending());
+        int total = 0;
 
         Page<OrderListDto> orderListDtoPage=null;
         if(type==null){
             orderListDtoPage = orderListRepository.findAll(pageRequest).map(OrderListDto::new);
+            total = orderListRepository.findAll().size();
         } else if(type.equals("status")){
             OrderListStatus status = OrderListStatus.valueOf(text.toUpperCase());
             orderListDtoPage = orderListRepository.findByOrderListStatus(status, pageRequest).map(OrderListDto::new);
+            total = orderListRepository.findByOrderListStatus(status).size();
         }
 
-        return orderListDtoPage;
+        OrderListResponseDto orderListResponseDto = OrderListResponseDto.builder()
+                .totalCount(total)
+                .orderList(orderListDtoPage)
+                .build();
+
+        return orderListResponseDto;
+//        return orderListDtoPage;
     }
 
     //주문 상세 조회
