@@ -140,7 +140,8 @@ public class AdminService {
         Product product = optional.get();
 
         //삭제 성공
-        productRepository.delete(product);
+//        productRepository.delete(product);
+        product.delete();
 
         return Optional.ofNullable(new ProductDto(product));
     }
@@ -248,7 +249,8 @@ public class AdminService {
         Optional<OrderList> optional =orderListRepository.findById(id);
         if(optional.isPresent()){
             OrderList list = optional.get();
-            orderListRepository.delete(list);
+//            orderListRepository.delete(list);
+            list.delete();
             return optional;
         }
         return Optional.ofNullable(null);

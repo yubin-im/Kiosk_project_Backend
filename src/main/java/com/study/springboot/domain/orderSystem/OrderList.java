@@ -39,7 +39,8 @@ public class OrderList {
     @OneToMany(mappedBy = "orderList", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-
+    @Column
+    private boolean orderListDelYn = false;
 
     @Builder
     public OrderList(Long id, LocalDateTime orderListTime, Integer orderListTotalPrice, OrderListStatus orderListStatus, User user, List<OrderItem> orderItems) {
@@ -57,16 +58,8 @@ public class OrderList {
         this.orderListStatus=orderListStatus;
     }
 
-    @Override
-    public String toString() {
-        return "OrderList{" +
-                "id=" + id +
-                ", orderListTime=" + orderListTime +
-                ", orderListTotalPrice=" + orderListTotalPrice +
-                ", orderListStatus=" + orderListStatus +
-                ", user=" + user +
-                ", orderItems=" + orderItems +
-                '}';
+    public void delete(){
+        this.orderListDelYn=true;
     }
 
     // 주문 완료 시 시간과 상태 업데이트
