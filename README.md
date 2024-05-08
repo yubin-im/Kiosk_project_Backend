@@ -65,3 +65,12 @@
 
 </div>
 </details>
+
+<details>
+<summary><strong>UseCase Diagram</strong></summary>
+<div markdown="1">
+
+![KioskUseCase](https://github.com/Kiosk-Project/KioskBE/assets/140530127/d84dc675-4044-4d16-af83-ea560848afc7)
+
+</div>
+</details>
