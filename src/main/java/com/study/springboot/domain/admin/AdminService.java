@@ -353,6 +353,40 @@ public class AdminService {
                 .build());
     }
 
+    //주문 통계 - 날짜별 주문 횟수 조회
+    public Optional<OrderProductCountListDto> getOrderProductCount(String type, int year, int month){
+
+        List<OrderProductCountResponseDto> result = new ArrayList<>();
+        List<Object[]> summary = null;
+
+        if(type.equals("month")){
+            // 일별 통계
+            summary = orderListRepository.findOrderMonthProduct(year, month);
+        } else if(type.equals("year")){
+            // 월별 통계
+            summary = orderListRepository.findOrderYear(year);
+        }
+
+        if(summary==null){
+            return Optional.ofNullable(null);
+        }
+
+        for(Object[] dto : summary){
+            OrderProductCountResponseDto resDto = OrderProductCountResponseDto.builder()
+                    .orderProductName(dto[0].toString())
+                    .orderProductCount(dto[1].toString())
+                    .build();
+            result.add(resDto);
+        }
+
+        return Optional.ofNullable(OrderProductCountListDto.builder()
+                .type(type)
+                .year(year)
+                .month(month)
+                .OrderProductCountList(result)
+                .build());
+    }
+
     //주문 아이템 수정 완료
     public Message orderItemUpdateSuccessMessage(){
         return new AdminMessage(

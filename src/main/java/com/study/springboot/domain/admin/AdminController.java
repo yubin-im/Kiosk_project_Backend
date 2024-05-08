@@ -222,6 +222,24 @@ public class AdminController {
         return ResponseEntity.ok(message);
     }
 
+    //주문 통계 - 날짜별 상품 조회
+    @GetMapping("/order/statistics/product")
+    public ResponseEntity getOrderProductCount(@RequestParam(value="type", required = false, defaultValue = "month") @Nullable String type,
+                                        @RequestParam(value="year", required = false, defaultValue = "2024") @Nullable int year,
+                                        @RequestParam(value="month", required = false, defaultValue = "4") @Nullable int month){
+
+
+        Optional<OrderProductCountListDto> optional = adminService.getOrderProductCount(type, year, month);
+
+        Message message;
+        if(optional.isPresent()){
+            message = messageService.orderProductCountListFoundSuccessMessage(optional.get());
+            return ResponseEntity.ok(message);
+        }
+
+        message = messageService.orderStatisticsListNotFoundMessage();
+        return ResponseEntity.ok(message);
+    }
 
     /*
     product service
