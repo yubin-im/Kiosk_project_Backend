@@ -1,7 +1,5 @@
 package com.study.springboot.domain.admin;
 
-import com.study.springboot.datas.AdminMessage;
-import com.study.springboot.datas.KioskSession;
 import com.study.springboot.datas.Message;
 import com.study.springboot.datas.MessageService;
 
@@ -9,7 +7,6 @@ import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.dto.*;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
-import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.domain.user.service.UserService;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.service.OrderListService;
@@ -20,19 +17,14 @@ import com.study.springboot.domain.product.dto.RequestProductRemoveDto;
 import com.study.springboot.domain.product.dto.RequestSearchDto;
 import com.study.springboot.enumeration.ProductCategory;
 import com.study.springboot.enumeration.SearchCategory;
-import com.study.springboot.enumeration.UserRole;
 import com.study.springboot.enumeration.error.StatusCode;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
-import org.springframework.security.access.annotation.Secured;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
-import java.rmi.StubNotFoundException;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -41,8 +33,7 @@ import java.util.Optional;
 @RequestMapping("/admin")
 //@Secured({"ROLE_ADMIN"})
 public class AdminController {
-    private final UserService userService;
-    private final OrderListService orderListService;
+
     private final AdminService adminService;
     private final MessageService messageService;
 
@@ -258,18 +249,12 @@ public class AdminController {
         Optional<ProductDto> optional = adminService.removeProduct(productCode);
 
         if(optional.isPresent()){
-            return ResponseEntity.ok(Message.builder()
-                            .status(StatusCode.PRODUCT_REMOVE_SUCCESS)
-                            .code(StatusCode.PRODUCT_REMOVE_SUCCESS.getValue())
-                            .message("상품 삭제 성공")
-                    .build());
+            Message message = messageService.productRemoveSuccessMessage();
+            return ResponseEntity.ok(message);
         }
 
-        return ResponseEntity.ok(Message.builder()
-                        .code(StatusCode.PRODUCT_REMOVE_FAIL.getValue())
-                        .status(StatusCode.PRODUCT_REMOVE_FAIL)
-                        .message("상품 삭제 실패")
-                .build());
+        Message message = messageService.productRemoveFailedMessage();
+        return ResponseEntity.ok(message);
 
     }
 
@@ -296,18 +281,12 @@ public class AdminController {
 
         Optional<ProductDto> optional = adminService.editProduct(dto);
         if(optional.isPresent()){
-            return ResponseEntity.ok(Message.builder()
-                            .status(StatusCode.PRODUCT_EDIT_SUCCESS)
-                            .code(StatusCode.PRODUCT_EDIT_SUCCESS.getValue())
-                            .message("수정 성공")
-                    .build());
+            Message message = messageService.productEditSuccess();
+            return ResponseEntity.ok(message);
         }
 
-        return ResponseEntity.ok(Message.builder()
-                .status(StatusCode.PRODUCT_EDIT_FAILED)
-                .code(StatusCode.PRODUCT_EDIT_FAILED.getValue())
-                .message("수정 실패")
-                .build());
+        Message message = messageService.productEditFailed();
+        return ResponseEntity.ok(message);
     }
 
     @PostMapping("/product/list/search")

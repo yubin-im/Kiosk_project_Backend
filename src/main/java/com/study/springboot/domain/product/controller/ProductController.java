@@ -16,7 +16,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -69,19 +68,14 @@ public class ProductController {
 
         System.out.println("onlyGetProductsReqCa = " + onlyGetProductsReq.getCategory());
         System.out.println("onlyGetProductsReq.getPage() = " + onlyGetProductsReq.getPage());
-        List<ProductsByCategoryDto> list = productService.onlyGetProductsByCategory(productCategory, pageable);
+        Page<ProductsByCategoryDto> list = productService.onlyGetProductsByCategory(productCategory, pageable);
 
         if(list.isEmpty()){
             Message message = messageService.productNotFoundMessage();
             return ResponseEntity.ok(message);
         }
 
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("상품 조회가 완료되었습니다!")
-                .result(list)
-                .build();
+        Message message = MessageService.productFetchSuccess(list);
 
         return ResponseEntity.ok(message);
     }

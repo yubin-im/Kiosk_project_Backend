@@ -31,7 +31,11 @@ public class OrderListDetailDto {
         this.orderListTime = orderList.getOrderListTime();
         this.orderListTotalPrice = orderList.getOrderListTotalPrice();
         this.orderListStatus = orderList.getOrderListStatus();
-        this.userId = orderList.getUser().getUserId();
+        if(orderList.getUser()==null){
+            this.userId="";
+        } else {
+            this.userId = orderList.getUser().getUserId();
+        }
         this.orderItemList = items;
     }
 }

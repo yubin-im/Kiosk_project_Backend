@@ -30,11 +30,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +44,6 @@ public class AdminService {
     private final OrderListRepository orderListRepository;
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
-
     private final JPAQueryFactory queryFactory;
 
 
@@ -113,11 +110,13 @@ public class AdminService {
     Product
      */
 
-
+    //상품 상세 조회
     @Transactional(readOnly = true)
     public Optional<Product> findById(Long id){
         return productRepository.findById(id);
     }
+
+    //상품 목록 조회
     @Transactional(readOnly = true)
     public Page<ProductDto> findAllProduct(int page, String orderBy){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(orderBy).ascending());
@@ -127,31 +126,28 @@ public class AdminService {
         return productDtoPage;
     }
 
-
+    //상품 삭제
     @Transactional
     public Optional<ProductDto> removeProduct(String productCode){
         Optional<Product> optional = productService.findByCode(productCode);
 
-        //존재하지 않는 코드
         if(optional.isEmpty()){
             return Optional.empty();
         }
 
         Product product = optional.get();
-
-        //삭제 성공
-//        productRepository.delete(product);
         product.delete();
 
         return Optional.ofNullable(new ProductDto(product));
     }
 
+    //상품코드로 상품 조회
     @Transactional(readOnly = true)
     Optional<Product> findProductByCode(String code){
         return productRepository.findProductByProductCode(code);
     }
 
-
+    //상품 수정
     @Transactional
     Optional<ProductDto> editProduct(RequestProductEditDto dto){
         Optional<Product> optional = productRepository.findProductByProductCode(dto.getProductCode());
@@ -172,13 +168,13 @@ public class AdminService {
         }
 
         product = dto.toEntity(id);
-
         Product result = productRepository.save(product);
 
         return Optional.ofNullable(new ProductDto(result));
 
     }
 
+    //상품 검색
     @Transactional(readOnly = true)
     List<Product> findProductsBy(final SearchCategory searchCategory, final ProductCategory productCategory, final String searchKeyword, final int page, final int pageSize){
 
@@ -227,7 +223,6 @@ public class AdminService {
                 .build();
 
         return orderListResponseDto;
-//        return orderListDtoPage;
     }
 
     //주문 상세 조회
@@ -249,7 +244,6 @@ public class AdminService {
         Optional<OrderList> optional =orderListRepository.findById(id);
         if(optional.isPresent()){
             OrderList list = optional.get();
-//            orderListRepository.delete(list);
             list.delete();
             return optional;
         }
@@ -317,7 +311,6 @@ public class AdminService {
             result.add(resDto);
         }
 
-
         return Optional.of(OrderRevenueListDto.builder()
                 .type(type)
                 .year(year)
@@ -351,7 +344,6 @@ public class AdminService {
                     .build();
             result.add(resDto);
         }
-
 
         return Optional.ofNullable(OrderCountListDto.builder()
                 .type(type)
