@@ -26,6 +26,8 @@ public class QOrderList extends EntityPathBase<OrderList> {
 
     public final ListPath<OrderItem, QOrderItem> orderItems = this.<OrderItem, QOrderItem>createList("orderItems", OrderItem.class, QOrderItem.class, PathInits.DIRECT2);
 
+    public final BooleanPath orderListDelYn = createBoolean("orderListDelYn");
+
     public final EnumPath<com.study.springboot.enumeration.OrderListStatus> orderListStatus = createEnum("orderListStatus", com.study.springboot.enumeration.OrderListStatus.class);
 
     public final DateTimePath<java.time.LocalDateTime> orderListTime = createDateTime("orderListTime", java.time.LocalDateTime.class);
