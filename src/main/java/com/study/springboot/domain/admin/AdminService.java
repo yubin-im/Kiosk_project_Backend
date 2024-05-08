@@ -1,7 +1,6 @@
 package com.study.springboot.domain.admin;
 
 
-import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.springboot.datas.AdminMessage;
 import com.study.springboot.datas.Message;
@@ -17,7 +16,6 @@ import com.study.springboot.domain.product.dto.ProductDto;
 import com.study.springboot.domain.product.dto.RequestProductEditDto;
 import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.product.service.ProductService;
-import com.study.springboot.domain.user.QUser;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
 import com.study.springboot.domain.user.repository.UserRepository;
@@ -27,17 +25,14 @@ import com.study.springboot.enumeration.SearchCategory;
 import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -61,23 +56,9 @@ public class AdminService {
     public Page<UserDto> getUserList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("userJoinDate").descending());
 
-        QUser user = QUser.user;
         Page<UserDto> userDtoPage = null;
         if(type == null){
-            List<UserDto> content = queryFactory
-                    .selectFrom(user)
-                    .where(user.userDelYn.isFalse())
-                    .fetch()
-                    .stream().map(UserDto::new)
-                    .collect(Collectors.toList());
-
-
-            JPAQuery<Long> countQuery = queryFactory
-                    .select(user.count())
-                    .from(user);
-
-            return PageableExecutionUtils.getPage(content, pageRequest, countQuery::fetchOne);
-
+            userDtoPage = userRepository.findAll(pageRequest).map(UserDto::new);
         } else if(type.equals("id")){
             userDtoPage = userRepository.findByUserIdContains(text, pageRequest).map(UserDto::new);
         } else if(type.equals("name")){
