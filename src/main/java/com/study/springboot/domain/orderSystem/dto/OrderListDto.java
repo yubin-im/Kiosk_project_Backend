@@ -22,6 +22,6 @@ public class OrderListDto {
         this.orderListTime = entity.getOrderListTime();
         this.orderListTotalPrice = entity.getOrderListTotalPrice();
         this.orderListStatus = entity.getOrderListStatus().toString();
-        this.userId = entity.getUser().getUserId();
+        this.userId = (entity.getUser()!=null ? entity.getUser().getUserId():"");
     }
 }
