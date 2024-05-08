@@ -23,7 +23,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final MessageService messageService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -68,6 +67,17 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public Optional<UserDto> findByUserId(String userId){
+
+        Optional<User> optional = userRepository.findByUserId(userId);
+        System.out.println("bool " + optional.get().getUserDelYn());
+
+        if(optional.isEmpty() || optional.get().getUserDelYn() ==  null) {
+            return Optional.empty();
+        }
+        if(optional.get().getUserDelYn()) {
+            return Optional.empty();
+        }
+
         return userRepository.findByUserId(userId).map(UserDto::new);
     }
 
@@ -95,8 +105,6 @@ public class UserService {
                 userRepository.findByUserId(userId)).get().orElseThrow(()-> new BadCredentialsException("유저 없음"));
 
         if(!bCryptPasswordEncoder.matches(userPw, userEntity.getPassword())){
-
-            //throw new BadCredentialsException("비밀번호 틀림");
             return Optional.ofNullable(null);
         }
 

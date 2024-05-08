@@ -59,13 +59,18 @@ public class User implements UserDetails {
     private UserRole userRole;
 
 
+
     @Getter
     @OneToMany(mappedBy = "user")
     private List<OrderList> orderList = new ArrayList<>();
 
+    @Getter
+    @Column(name = "user_del_yn")
+    private Boolean userDelYn;
+
 
     @Builder
-    private User(Long id, String userId, String userName, String userPw, LocalDate userJoinDate, Integer userPoint, UserRole userRole, List<OrderList> orderList) {
+    private User(Long id, String userId, String userName, String userPw, LocalDate userJoinDate, Integer userPoint, UserRole userRole, List<OrderList> orderList, Boolean userDelYn) {
         this.id = id;
         this.userId = userId;
         this.userName = userName;
@@ -74,6 +79,7 @@ public class User implements UserDetails {
         this.userPoint = userPoint;
         this.userRole = userRole;
         this.orderList = orderList;
+        this.userDelYn = userDelYn;
     }
 
     public String getUserName() {
@@ -87,6 +93,7 @@ public class User implements UserDetails {
                 .userPw(userPw)
                 .userRole(UserRole.ADMIN)
                 .userJoinDate(LocalDate.now())
+                .userDelYn(false)
                 .build();
 
         return user;
@@ -100,6 +107,7 @@ public class User implements UserDetails {
                 .userRole(UserRole.USER)
                 .userJoinDate(LocalDate.now())
                 .userPoint(0)
+                .userDelYn(false)
                 .build();
 
         return user;
@@ -143,6 +151,20 @@ public class User implements UserDetails {
                 .userRole(this.userRole)
                 .orderList(this.orderList)
                 .userPoint(this.userPoint)
+                .build();
+    }
+
+    public User deleteUser(){
+        return User.builder()
+                .id(this.id)
+                .userId(userId)
+                .userName(userName)
+                .userPw(userPw)
+                .userJoinDate(userJoinDate)
+                .userRole(this.userRole)
+                .orderList(this.orderList)
+                .userPoint(this.userPoint)
+                .userDelYn(true)
                 .build();
     }
 
