@@ -48,4 +48,18 @@ public class OrderItem {
     public void updateOrderPrice(Integer orderPrice) {
         this.orderPrice = orderPrice;
     }
+
+
+    @Builder
+    public OrderItem(Integer orderPrice, Integer orderAmount, Product product, OrderList orderList) {
+        this.orderPrice = orderPrice;
+        this.orderAmount = orderAmount;
+        this.product = product;
+        this.orderList = orderList;
+    }
+
+    // orderListId 부여를 위한 메소드
+    public void updateOrderList(OrderList orderList) {
+        this.orderList = orderList;
+    }
 }

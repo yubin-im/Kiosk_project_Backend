@@ -4,7 +4,6 @@ package com.study.springboot.domain.user;
 import com.study.springboot.config.JwtUtil;
 import com.study.springboot.datas.Message;
 
-
 import com.study.springboot.datas.MessageService;
 import com.study.springboot.datas.UserToken;
 import com.study.springboot.domain.user.dto.RequestAddUserDto;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.Optional;
 
 
@@ -31,14 +29,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Message> userLogin(@ModelAttribute RequestLoginDto dto){
-        System.out.println("dto.getUserId() = " + dto.getUserId());
         Optional<UserDto> isMember = userService.findByUserId(dto.getUserId());
-
 
         Message message = null;
 
         //멤버가 존재하지 않는다면
-        if(!isMember.isPresent()){
+        if(isMember.isEmpty()){
             message = messageService.userNotFound();
             return ResponseEntity.ok(message);
         }
@@ -61,10 +57,6 @@ public class UserController {
 
         return ResponseEntity.ok(message);
     }
-
-
-
-
 
 
     @PostMapping("/register")

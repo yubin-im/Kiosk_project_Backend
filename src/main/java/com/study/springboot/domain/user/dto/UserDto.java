@@ -21,6 +21,7 @@ public class UserDto {
     private LocalDate userJoinDate;
     private Integer userPoint;
     private UserRole userRole;
+    private Boolean userDelYn;
 
     public UserDto(User entity){
 
@@ -31,19 +32,7 @@ public class UserDto {
         this.userJoinDate=entity.getUserJoinDate();
         this.userPoint = entity.getUserPoint();
         this.userRole=entity.getUserRole();
+        this.userDelYn = entity.getUserDelYn();
     }
 
-
-    // public User toEntity(){
-    //     return User.builder()
-    //             .id(this.id)
-    //             .userId(this.userId)
-    //             .userId(this.userId)
-    //             .userPw(this.userPw)
-    //             .userRole(this.userRole)
-    //             .userName(this.userName)
-    //             .userJoinDate(this.userJoinDate)
-    //             .orderList(this.orderList)
-    //             .build();
-    // }
 }

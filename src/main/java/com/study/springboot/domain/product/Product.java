@@ -35,6 +35,8 @@ public class Product {
     @Enumerated(EnumType.STRING)
     private ProductCategory category;
 
+    @Column
+    private boolean productDelYn = false;
 
     @Builder
     public Product(Long id, String productName, Integer productPrice, String productCode, String productImgUrl, ProductCategory category) {
@@ -44,5 +46,9 @@ public class Product {
         this.productCode = productCode;
         this.productImgUrl = productImgUrl;
         this.category = category;
+    }
+
+    public void delete(){
+        this.productDelYn = true;
     }
 }

@@ -18,11 +18,11 @@ import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.domain.product.service.ProductService;
 import com.study.springboot.domain.user.User;
 import com.study.springboot.domain.user.dto.UserDto;
-import com.study.springboot.domain.user.dto.UserListDto;
 import com.study.springboot.domain.user.repository.UserRepository;
 import com.study.springboot.enumeration.OrderListStatus;
 import com.study.springboot.enumeration.ProductCategory;
 import com.study.springboot.enumeration.SearchCategory;
+import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,11 +30,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,7 +44,6 @@ public class AdminService {
     private final OrderListRepository orderListRepository;
     private final OrderItemRepository orderItemRepository;
     private final UserRepository userRepository;
-
     private final JPAQueryFactory queryFactory;
 
 
@@ -56,10 +53,10 @@ public class AdminService {
 
     //회원 목록 조회
     @Transactional
-    public Message getUserList(String type, String text, int page){
+    public Page<UserDto> getUserList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("userJoinDate").descending());
 
-        Page<UserDto> userDtoPage=null;
+        Page<UserDto> userDtoPage = null;
         if(type == null){
             userDtoPage = userRepository.findAll(pageRequest).map(UserDto::new);
         } else if(type.equals("id")){
@@ -68,61 +65,44 @@ public class AdminService {
             userDtoPage = userRepository.findByUserNameContains(text, pageRequest).map(UserDto::new);
         }
 
-       if(userDtoPage==null){
-           Message message = AdminMessage.userListNotFoundMessage();
-           return message;
-       }
+        return userDtoPage;
 
-        Message message = AdminMessage.userListFoundSuccessMessage(
-                UserListDto.builder()
-                .userDtoList(userDtoPage)
-                .build());
-        return message;
     }
 
     //회원 상세 조회
-    public Message getUser(Long id){
+    public Optional<User> getUser(Long id){
         Optional<User> optional = userRepository.findById(id);
-        if(optional.isEmpty()){
-            Message message = AdminMessage.userNotFoundMessage();
-            return message;
-        }
-        User user = optional.get();
-        Message message = AdminMessage.userFoundSuccessMessage(new UserDto(user));
-        return message;
+        return optional;
+
     }
 
     //회원 삭제
     @Transactional
-    public Message deleteUser(Long id){
-        Optional<User> optional = userRepository.findById(id);
-
-        if(optional.isEmpty()){
-            Message message = AdminMessage.userNotFoundMessage();
-            return message;
+    public Optional<User> deleteUser(String userId){
+        Optional<User> optional = userRepository.findByUserId(userId);
+        if(optional.isPresent())
+        {
+            User user = optional.get();
+            user = user.deleteUser();
+            userRepository.save(user);
+            return Optional.ofNullable(user);
         }
 
-        User user = optional.get();
-        userRepository.delete(user);
-        Message message = AdminMessage.userDeleteSuccessMessage();
-        return message;
-
+        return Optional.ofNullable(null);
     }
 
     //회원 수정
     @Transactional
-    public Message updateUser(Long id, UserDto dto){
+    public Optional<User> updateUser(Long id, UserDto dto){
         Optional<User> optional = userRepository.findById(id);
 
-        if(optional.isEmpty() || id!=optional.get().getId()){
-            Message message = AdminMessage.userNotFoundMessage();
-            return message;
+        if(optional.isEmpty()){
+            return Optional.empty();
         }
-        User user = optional.get();
-        user.update(dto);
 
-        Message message = AdminMessage.userUpdateSuccessMessage();
-        return message;
+        optional.get().update(dto);
+        return optional;
+
     }
 
 
@@ -130,61 +110,71 @@ public class AdminService {
     Product
      */
 
+    //상품 상세 조회
     @Transactional(readOnly = true)
-    public List<ProductDto> findAllProduct(){
-        return productRepository.findAll().stream().map(ProductDto::new).collect(Collectors.toList());
+    public Optional<Product> findById(Long id){
+        return productRepository.findById(id);
     }
 
+    //상품 목록 조회
+    @Transactional(readOnly = true)
+    public Page<ProductDto> findAllProduct(int page, String orderBy){
+        PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(orderBy).ascending());
+        System.out.println("orderBy" + orderBy);
 
+        Page<ProductDto> productDtoPage =  productRepository.findAll(pageRequest).map(ProductDto::new);
+        return productDtoPage;
+    }
+
+    //상품 삭제
     @Transactional
-    public Message setRemoveProductMessage(String productCode, String productName){
+    public Optional<ProductDto> removeProduct(String productCode){
         Optional<Product> optional = productService.findByCode(productCode);
 
-        //존재하지 않는 코드
-        if(!optional.isPresent()){
-            Message message = messageService.productNotFoundMessage();
-            return message;
+        if(optional.isEmpty()){
+            return Optional.empty();
         }
-
 
         Product product = optional.get();
+        product.delete();
 
-        //코드명과 코드번호 불일치
-        if(!product.getProductName().equals(productName)){
-            Message message = messageService.productCodeMisMatchMessage();
-            return message;
-        }
-
-        //삭제 성공
-        productRepository.delete(product);
-        Message message = messageService.productRemoveSuccessMessage();
-        return message;
+        return Optional.ofNullable(new ProductDto(product));
     }
 
+    //상품코드로 상품 조회
     @Transactional(readOnly = true)
     Optional<Product> findProductByCode(String code){
         return productRepository.findProductByProductCode(code);
     }
 
-
+    //상품 수정
     @Transactional
-    Message editProduct(RequestProductEditDto dto){
+    Optional<ProductDto> editProduct(RequestProductEditDto dto){
         Optional<Product> optional = productRepository.findProductByProductCode(dto.getProductCode());
 
-        if(!optional.isPresent()){
-            return messageService.productNotFoundMessage();
+        if(optional.isEmpty()){
+            return Optional.empty();
         }
 
         Product product = optional.get();
         Long id = product.getId();
 
-        product = dto.toEntity(id);
-        productRepository.save(product);
+        ProductCategory newCategory= null;
+        for(ProductCategory p : ProductCategory.values()){
+            if(p.getValue().equals(dto.getCategory())){
+                newCategory = p;
+                break;
+            }
+        }
 
-        return messageService.productEditSuccess();
+        product = dto.toEntity(id);
+        Product result = productRepository.save(product);
+
+        return Optional.ofNullable(new ProductDto(result));
 
     }
 
+    //상품 검색
     @Transactional(readOnly = true)
     List<Product> findProductsBy(final SearchCategory searchCategory, final ProductCategory productCategory, final String searchKeyword, final int page, final int pageSize){
 
@@ -213,96 +203,91 @@ public class AdminService {
 
     //주문 목록 조회
     @Transactional
-    public Message getOrderList(String type, String text, int page){
+    public OrderListResponseDto getOrderList(String type, String text, int page){
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by("orderListTime").descending());
+        int total = 0;
 
         Page<OrderListDto> orderListDtoPage=null;
         if(type==null){
             orderListDtoPage = orderListRepository.findAll(pageRequest).map(OrderListDto::new);
+            total = orderListRepository.findAll().size();
         } else if(type.equals("status")){
             OrderListStatus status = OrderListStatus.valueOf(text.toUpperCase());
             orderListDtoPage = orderListRepository.findByOrderListStatus(status, pageRequest).map(OrderListDto::new);
+            total = orderListRepository.findByOrderListStatus(status).size();
         }
 
-        if(orderListDtoPage==null){
-            Message message = AdminMessage.orderListNotFoundMessage();
-            return message;
-        }
+        OrderListResponseDto orderListResponseDto = OrderListResponseDto.builder()
+                .totalCount(total)
+                .orderList(orderListDtoPage)
+                .build();
 
-        Message message = AdminMessage.orderListFoundSuccessMessage(orderListDtoPage.getContent());
-        return message;
+        return orderListResponseDto;
     }
 
     //주문 상세 조회
-    public Message getOrder(Long id){
+    public Optional<OrderListDetailDto> getOrder(Long id){
         Optional<OrderList> optional = orderListRepository.findById(id);
-        if(optional.isEmpty()){
-            Message message = AdminMessage.orderListNotFoundMessage();
-            return message;
-        }
+        if(optional.isEmpty()) return Optional.empty();
 
-        OrderList orderList = optional.get();
-        Message message = AdminMessage.orderFoundSuccessMessage(orderList);
-        return message;
+        OrderListDetailDto orderListDetailDto = OrderListDetailDto.builder()
+                .orderList(optional.get())
+                .items(optional.get().getOrderItems())
+                .build();
+
+        return Optional.ofNullable(orderListDetailDto);
     }
 
     //주문 삭제
     @Transactional
-    public Message deleteOrderList(Long id){
+    public Optional<OrderList> deleteOrderList(Long id){
         Optional<OrderList> optional =orderListRepository.findById(id);
-
-        if(optional.isEmpty()){
-            Message message = AdminMessage.orderListNotFoundMessage();
-            return message;
+        if(optional.isPresent()){
+            OrderList list = optional.get();
+            list.delete();
+            return optional;
         }
-
-        OrderList orderList = optional.get();
-        orderListRepository.delete(orderList);
-
-        Message message = AdminMessage.orderListDeleteSuccessMessage();
-        return message;
+        return Optional.ofNullable(null);
 
     }
 
     //주문 수정
     @Transactional
-    public Message updateOrderList(Long id, OrderListUpdateDto dto){
+    public Optional<OrderList> updateOrderList(Long id, OrderListUpdateDto dto){
         Optional<OrderList> optional = orderListRepository.findById(id);
 
-        if(optional.isEmpty()||id!=dto.getId()){
-            Message message = AdminMessage.orderListNotFoundMessage();
-            return message;
+        if(optional.isPresent()){
+            OrderList orderList = optional.get();
+            orderList.update(dto.getOrderListTime(),dto.getOrderListTotalPrice(), OrderListStatus.valueOf(dto.getOrderListStatus()));
+            return optional;
         }
 
-        OrderList orderList = optional.get();
-        orderList.update(dto.getOrderListTime(),dto.getOrderListTotalPrice(), OrderListStatus.valueOf(dto.getOrderListStatus()));
-        Message message = AdminMessage.orderListUpdateSuccessMessage();
+        return Optional.ofNullable(null);
 
-        return message;
     }
 
     //주문 상세 수정
     @Transactional
-    public Message updateOrderItem(Long orderListId,OrderItemUpdateRequestDto dto){
+    public Optional<OrderItem> updateOrderItem(Long orderListId,OrderItemUpdateRequestDto dto){
         Optional<OrderItem> optional = orderItemRepository.findById(dto.getId());
 
         if(!optional.isPresent()){
-            return AdminMessage.orderItemNotFoundMessage();
+            return Optional.ofNullable(null);
         }
 
         OrderItem orderItem = optional.get();
 
-        if(orderItem.getOrderList().getId()!=orderListId){
-            return AdminMessage.orderItemOrderListMisMatchMessage();
+        if(!orderItem.getOrderList().getId().equals(orderListId)){
+            return Optional.ofNullable(null);
         }
 
         orderItem.updateAmountAndPrice(dto.getOrderItemAmount(), dto.getOrderItemPrice());
 
-        return AdminMessage.orderItemUpdateSuccessMessage();
+        return Optional.of(orderItem);
     }
 
     //주문 통계 - 날짜별 주문 수입 조회
-    public Message getOrderRevenue(String type, int year, int month){
+    public Optional<OrderRevenueListDto> getOrderRevenue(String type, int year, int month){
 
         List<OrderRevenueResponseDto> result = new ArrayList<>();
         List<Object[]> summary = null;
@@ -315,8 +300,7 @@ public class AdminService {
         }
 
         if(summary==null){
-            Message message = AdminMessage.orderStatisticsListNotFoundMessage();
-            return message;
+            return Optional.ofNullable(null);
         }
 
         for(Object[] dto : summary){
@@ -327,19 +311,16 @@ public class AdminService {
             result.add(resDto);
         }
 
-        Message message = AdminMessage.orderRevenueListFoundSuccessMessage(
-                OrderRevenueListDto.builder()
-                        .type(type)
-                        .year(year)
-                        .month(month)
-                        .OrderRevenueList(result)
-                        .build()
-        );
-        return message;
+        return Optional.of(OrderRevenueListDto.builder()
+                .type(type)
+                .year(year)
+                .month(month)
+                .OrderRevenueList(result)
+                .build());
     }
 
     //주문 통계 - 날짜별 주문 횟수 조회
-    public Message getOrderCount(String type, int year, int month){
+    public Optional<OrderCountListDto> getOrderCount(String type, int year, int month){
 
         List<OrderCountResponseDto> result = new ArrayList<>();
         List<Object[]> summary = null;
@@ -353,8 +334,7 @@ public class AdminService {
         }
 
         if(summary==null){
-            Message message = AdminMessage.orderStatisticsListNotFoundMessage();
-            return message;
+            return Optional.ofNullable(null);
         }
 
         for(Object[] dto : summary){
@@ -365,16 +345,20 @@ public class AdminService {
             result.add(resDto);
         }
 
-        Message message = AdminMessage.orderCountListFoundSuccessMessage(
-                OrderCountListDto.builder()
-                        .type(type)
-                        .year(year)
-                        .month(month)
-                        .OrderCountList(result)
-                        .build()
-        );
+        return Optional.ofNullable(OrderCountListDto.builder()
+                .type(type)
+                .year(year)
+                .month(month)
+                .OrderCountList(result)
+                .build());
+    }
 
-        return message;
+    //주문 아이템 수정 완료
+    public Message orderItemUpdateSuccessMessage(){
+        return new AdminMessage(
+                StatusCode.ORDER_ITEM_UPDATE_SUCCESS,
+                StatusCode.ORDER_ITEM_UPDATE_SUCCESS.getValue(),
+                "주문 아이템 수정 성공");
     }
 }
 

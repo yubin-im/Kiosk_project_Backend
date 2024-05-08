@@ -1,11 +1,15 @@
 package com.study.springboot.domain.product.service;
 
 
+import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.core.types.dsl.NumberExpression;
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.study.springboot.datas.Message;
 import com.study.springboot.domain.orderSystem.OrderItem;
 import com.study.springboot.domain.orderSystem.OrderList;
 import com.study.springboot.domain.orderSystem.repository.OrderListRepository;
 import com.study.springboot.domain.product.Product;
+import com.study.springboot.domain.product.QProduct;
 import com.study.springboot.domain.product.dto.*;
 import com.study.springboot.domain.product.repository.ProductRepository;
 import com.study.springboot.enumeration.ProductCategory;
@@ -13,6 +17,7 @@ import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,6 +33,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final OrderListRepository orderListRepository;
+    private final JPAQueryFactory queryFactory;
 
 
     @Transactional(readOnly = true)
@@ -38,53 +44,71 @@ public class ProductService {
 
 
     @Transactional(readOnly = true)
+    public Optional<Product> findById(Long id){
+        return productRepository.findById(id);
+    }
+
+    @Transactional(readOnly = true)
     public Optional<Product> findByCode(String code){
         return productRepository.findProductByProductCode(code);
     }
 
     // 제품 9개 랜덤 추천 기능 (함께 즐기면 더욱 좋습니다!)
     @Transactional
-    public Message recommendProduct() {
-        List<Product> productList = productRepository.findAll();
+    public List<RecommendProductDto> recommendProduct() {
+
+        QProduct qproduct = QProduct.product;
+        List<Product> productList = queryFactory
+                .selectFrom(qproduct)
+                .distinct()
+                .orderBy(Expressions.numberTemplate(Double.class, "function('rand')").asc())
+                .limit(9)
+                .fetch();
+
+
+//        List<Product> productList = productRepository.findAll();
         List<RecommendProductDto> randomProducts = new ArrayList<>();
-        Random random = new Random();
+        randomProducts = productList.stream().map(RecommendProductDto::new).collect(Collectors.toList());
+//        Random random = new Random();
 
         // 랜덤으로 9개의 제품 출력
-        for (int i = 0; i < 9; i++) {
-            int randomIndex = random.nextInt(productList.size());
-            Product product = productList.get(randomIndex);
+//        for (int i = 0; i < 9; i++) {
+//            int randomIndex = random.nextInt(productList.size());
+//            Product product = productList.get(randomIndex);
+//
+//            RecommendProductDto recommendProductDto = RecommendProductDto.builder()
+//                    .productCode(product.getProductCode())
+//                    .productName(product.getProductName())
+//                    .productPrice(product.getProductPrice())
+//                    .productImgUrl(product.getProductImgUrl())
+//                    .build();
+//            randomProducts.add(recommendProductDto);
+//        }
 
-            RecommendProductDto recommendProductDto = RecommendProductDto.builder()
-                    .id(product.getId())
-                    .productName(product.getProductName())
-                    .productPrice(product.getProductPrice())
-                    .productImgUrl(product.getProductImgUrl())
-                    .build();
-            randomProducts.add(recommendProductDto);
-        }
+        randomProducts.stream().forEach(recommendProductDto -> {
+            System.out.println(recommendProductDto.getProductName());
+        });
 
         // Message에 추가
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("추천 상품 조회 성공!")
-                .result(randomProducts)
-                .build();
 
-        return message;
+
+        return randomProducts;
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 사용자 이름 출력, 총가격 및 총수량 출력
     @Transactional
-    public Message getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
+    public Optional<ProductsResDto> getProductsByCategory(ProductCategory category, Pageable pageable, Long orderListId) {
         Page<Product> products = productRepository.findByCategory(category, pageable);
         OrderList orderList = orderListRepository.findById(orderListId).orElse(null);
+        if(orderList == null){
+            return Optional.empty();
+        }
         List<OrderItem> orderItemList = orderList.getOrderItems();
 
         // 카테고리별 9개씩 제품 출력
         List<ProductsByCategoryDto> productDtos = products.getContent().stream()
                 .map(product -> new ProductsByCategoryDto(
-                        product.getId(),
+                        product.getProductCode(),
                         product.getProductName(),
                         product.getProductPrice(),
                         product.getProductImgUrl()))
@@ -110,40 +134,29 @@ public class ProductService {
                 .orderListTotalPrice(orderListTotalPrice)
                 .build();
 
-        // Message에 추가
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("상품 조회가 완료되었습니다!")
-                .result(productsResDto)
-                .build();
-
-        return message;
+        return Optional.ofNullable(productsResDto);
     }
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
     @Transactional
-    public Message onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
+    public Page<ProductsByCategoryDto> onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
+        System.out.println("cat : " + category);
         Page<Product> products = productRepository.findByCategory(category, pageable);
 
         // 카테고리별 9개씩 제품 출력
-        List<ProductsByCategoryDto> productDtos = products.getContent().stream()
+        Page<ProductsByCategoryDto> productDtos = products
                 .map(product -> new ProductsByCategoryDto(
-                        product.getId(),
+                        product.getProductCode(),
                         product.getProductName(),
                         product.getProductPrice(),
-                        product.getProductImgUrl()))
-                .collect(Collectors.toList());
+                        product.getProductImgUrl()));
 
-        // Message에 추가
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("상품 조회가 완료되었습니다!")
-                .result(productDtos)
-                .build();
 
-        return message;
+        productDtos.stream().forEach(o->{
+            System.out.println(o.getProductName() );
+        });
+        return productDtos;
+
     }
 
 
