@@ -68,6 +68,17 @@ public class UserService {
      */
     @Transactional(readOnly = true)
     public Optional<UserDto> findByUserId(String userId){
+
+        Optional<User> optional = userRepository.findByUserId(userId);
+        System.out.println("bool " + optional.get().getUserDelYn());
+
+        if(optional.isEmpty() || optional.get().getUserDelYn() ==  null) {
+            return Optional.empty();
+        }
+        if(optional.get().getUserDelYn()) {
+            return Optional.empty();
+        }
+
         return userRepository.findByUserId(userId).map(UserDto::new);
     }
 

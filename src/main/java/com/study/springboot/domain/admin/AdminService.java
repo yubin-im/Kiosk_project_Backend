@@ -86,8 +86,9 @@ public class AdminService {
         if(optional.isPresent())
         {
             User user = optional.get();
-            userRepository.delete(user);
-            return optional;
+            user = user.deleteUser();
+            userRepository.save(user);
+            return Optional.ofNullable(user);
         }
 
         return Optional.ofNullable(null);

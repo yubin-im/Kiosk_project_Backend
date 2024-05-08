@@ -24,6 +24,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<com.study.springboot.domain.orderSystem.OrderList, com.study.springboot.domain.orderSystem.QOrderList> orderList = this.<com.study.springboot.domain.orderSystem.OrderList, com.study.springboot.domain.orderSystem.QOrderList>createList("orderList", com.study.springboot.domain.orderSystem.OrderList.class, com.study.springboot.domain.orderSystem.QOrderList.class, PathInits.DIRECT2);
 
+    public final BooleanPath userDelYn = createBoolean("userDelYn");
+
     public final StringPath userId = createString("userId");
 
     public final DatePath<java.time.LocalDate> userJoinDate = createDate("userJoinDate", java.time.LocalDate.class);

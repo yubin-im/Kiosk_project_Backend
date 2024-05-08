@@ -31,14 +31,12 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<Message> userLogin(@ModelAttribute RequestLoginDto dto){
-        System.out.println("dto.getUserId() = " + dto.getUserId());
         Optional<UserDto> isMember = userService.findByUserId(dto.getUserId());
-
 
         Message message = null;
 
         //멤버가 존재하지 않는다면
-        if(!isMember.isPresent()){
+        if(isMember.isEmpty()){
             message = messageService.userNotFound();
             return ResponseEntity.ok(message);
         }
