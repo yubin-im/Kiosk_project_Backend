@@ -139,7 +139,8 @@ public class AdminService {
         Product product = optional.get();
 
         //삭제 성공
-        productRepository.delete(product);
+//        productRepository.delete(product);
+        product.delete();
 
         return Optional.ofNullable(new ProductDto(product));
     }
