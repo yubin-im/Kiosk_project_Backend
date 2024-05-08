@@ -139,18 +139,17 @@ public class ProductService {
 
     // 메인 화면- 카테고리 별 제품 전체 출력(페이징 9개씩), 부가 기능없이 제품만 출력하는 메소드
     @Transactional
-    public List<ProductsByCategoryDto> onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
+    public Page<ProductsByCategoryDto> onlyGetProductsByCategory(ProductCategory category, Pageable pageable) {
         System.out.println("cat : " + category);
         Page<Product> products = productRepository.findByCategory(category, pageable);
 
         // 카테고리별 9개씩 제품 출력
-        List<ProductsByCategoryDto> productDtos = products.getContent().stream()
+        Page<ProductsByCategoryDto> productDtos = products
                 .map(product -> new ProductsByCategoryDto(
                         product.getProductCode(),
                         product.getProductName(),
                         product.getProductPrice(),
-                        product.getProductImgUrl()))
-                .collect(Collectors.toList());
+                        product.getProductImgUrl()));
 
 
         productDtos.stream().forEach(o->{

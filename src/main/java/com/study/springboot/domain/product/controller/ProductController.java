@@ -8,6 +8,7 @@ import com.study.springboot.domain.product.service.ProductService;
 import com.study.springboot.enumeration.ProductCategory;
 import com.study.springboot.enumeration.error.StatusCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -67,19 +68,14 @@ public class ProductController {
 
         System.out.println("onlyGetProductsReqCa = " + onlyGetProductsReq.getCategory());
         System.out.println("onlyGetProductsReq.getPage() = " + onlyGetProductsReq.getPage());
-        List<ProductsByCategoryDto> list = productService.onlyGetProductsByCategory(productCategory, pageable);
+        Page<ProductsByCategoryDto> list = productService.onlyGetProductsByCategory(productCategory, pageable);
 
         if(list.isEmpty()){
             Message message = messageService.productNotFoundMessage();
             return ResponseEntity.ok(message);
         }
 
-        Message message = Message.builder()
-                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
-                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
-                .message("상품 조회가 완료되었습니다!")
-                .result(list)
-                .build();
+        Message message = MessageService.productFetchSuccess(list);
 
         return ResponseEntity.ok(message);
     }

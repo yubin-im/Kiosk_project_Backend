@@ -3,6 +3,7 @@ package com.study.springboot.datas;
 
 import com.study.springboot.domain.orderSystem.dto.*;
 import com.study.springboot.domain.product.dto.ProductDto;
+import com.study.springboot.domain.product.dto.ProductsByCategoryDto;
 import com.study.springboot.domain.product.dto.ProductsResDto;
 import com.study.springboot.domain.product.dto.RecommendProductDto;
 import com.study.springboot.domain.user.dto.UserDto;
@@ -48,8 +49,13 @@ public class MessageService {
     }
 
     //상품 Fetch 성공
-    public static Message productFetchSuccess(){
-        return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "성공");
+    public static Message productFetchSuccess(Page<ProductsByCategoryDto> list){
+        return Message.builder()
+                .status(StatusCode.PRODUCT_CHECK_SUCCESS)
+                .code(StatusCode.PRODUCT_CHECK_SUCCESS.getValue())
+                .message("상품 조회가 완료되었습니다!")
+                .result(list)
+                .build();
     }
 
     //회원 없음
