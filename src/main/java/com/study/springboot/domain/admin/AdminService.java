@@ -247,7 +247,8 @@ public class AdminService {
         Optional<OrderList> optional =orderListRepository.findById(id);
         if(optional.isPresent()){
             OrderList list = optional.get();
-            orderListRepository.delete(list);
+//            orderListRepository.delete(list);
+            list.delete();
             return optional;
         }
         return Optional.ofNullable(null);
