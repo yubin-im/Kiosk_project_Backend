@@ -25,6 +25,8 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath productCode = createString("productCode");
 
+    public final BooleanPath productDelYn = createBoolean("productDelYn");
+
     public final StringPath productImgUrl = createString("productImgUrl");
 
     public final StringPath productName = createString("productName");

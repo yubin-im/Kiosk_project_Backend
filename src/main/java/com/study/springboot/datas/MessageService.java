@@ -238,6 +238,14 @@ public class MessageService {
                 dto);
     }
 
+    //상품 별 주문 횟수 통계 조회 성공
+    public Message orderProductCountListFoundSuccessMessage(OrderProductCountListDto dto){
+        return new AdminMessage(StatusCode.ORDER_COUNT_LIST_FOUND_SUCCESS,
+                StatusCode.ORDER_COUNT_LIST_FOUND_SUCCESS.getValue(),
+                "주문 횟수 목록 조회 성공",
+                dto);
+    }
+
     //상품 조회 성공
     public Message productFoundSuccessMessage(ProductDto dto){
         return new AdminMessage(StatusCode.PRODUCT_CHECK_SUCCESS, StatusCode.PRODUCT_CHECK_SUCCESS.getValue(), "상품 조회 성공", dto);
