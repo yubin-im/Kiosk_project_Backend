@@ -70,7 +70,7 @@
 <summary><strong>UseCase Diagram</strong></summary>
 <div markdown="1">
 
-![KioskUseCase](https://github.com/Kiosk-Project/KioskBE/assets/140530127/d84dc675-4044-4d16-af83-ea560848afc7)
+![KioskUseCase_Color](https://github.com/Kiosk-Project/KioskBE/assets/140530127/19c06297-b2dc-479d-a58a-9351a2c102e6)
 
 </div>
 </details>
