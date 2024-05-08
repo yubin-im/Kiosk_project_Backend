@@ -23,7 +23,6 @@ import java.util.Optional;
 public class UserService {
 
     private final UserRepository userRepository;
-    private final MessageService messageService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final JPAQueryFactory jpaQueryFactory;
 
@@ -106,8 +105,6 @@ public class UserService {
                 userRepository.findByUserId(userId)).get().orElseThrow(()-> new BadCredentialsException("유저 없음"));
 
         if(!bCryptPasswordEncoder.matches(userPw, userEntity.getPassword())){
-
-            //throw new BadCredentialsException("비밀번호 틀림");
             return Optional.ofNullable(null);
         }
 
