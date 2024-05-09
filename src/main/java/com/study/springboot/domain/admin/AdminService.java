@@ -58,7 +58,7 @@ public class AdminService {
 
         Page<UserDto> userDtoPage = null;
         if(type == null){
-            userDtoPage = userRepository.findAll(pageRequest).map(UserDto::new);
+            userDtoPage = userRepository.findUsersByUserDelYn(false, pageRequest).map(UserDto::new);
         } else if(type.equals("id")){
             userDtoPage = userRepository.findByUserIdContains(text, pageRequest).map(UserDto::new);
         } else if(type.equals("name")){
