@@ -10,6 +10,8 @@
 
 관리자 페이지가 별도로 존재합니다.
 
+<a href="https://github.com/Kiosk-Project/KioskFE"><strong>📬 프론트 레포지토리로 가기! (클릭)</strong></a>
+
 ## 🚀 Member (2024.04.26 ~ 2024.05.09)
 
 |                             팀원                              |       주요 역할       |
