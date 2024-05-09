@@ -1,4 +1,4 @@
-# 🌟 Digital Hana 路 3기: 8조 백엔드 실습 게시판 프로젝트 🌟
+# 🌟 Digital Hana 路 3기: 8조 게시판 프로젝트 🌟
 
 ## 📍 Overview
 
@@ -31,7 +31,7 @@
     <img src="https://img.shields.io/badge/JPA-005F0F?style=for-the-badge&logo=jpa&logoColor=white">
 </p>
 
-#### [Front-End]
+#### [Front-end]
 
 <p>
     <img src="https://img.shields.io/badge/vite-%23646CFF.svg?style=for-the-badge&logo=vite&logoColor=white"/>
