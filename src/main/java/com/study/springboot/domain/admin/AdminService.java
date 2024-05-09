@@ -122,7 +122,7 @@ public class AdminService {
         PageRequest pageRequest = PageRequest.of(page, 5, Sort.by(orderBy).ascending());
         System.out.println("orderBy" + orderBy);
 
-        Page<ProductDto> productDtoPage =  productRepository.findAll(pageRequest).map(ProductDto::new);
+        Page<ProductDto> productDtoPage =  productRepository.findProductByProductDelYn(false, pageRequest).map(ProductDto::new);
         return productDtoPage;
     }
 
